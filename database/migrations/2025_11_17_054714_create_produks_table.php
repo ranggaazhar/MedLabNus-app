@@ -19,6 +19,9 @@ return new class extends Migration
                   ->constrained('pabrikans', 'pabrikan_id')
                   ->onDelete('cascade');
             $table->timestamps(); 
+
+
+            
             
             $table->index('nama_produk');
             $table->index('model_produk');

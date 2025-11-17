@@ -1,0 +1,116 @@
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #ffffff;
+    overflow-x: hidden;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #1a1a1a;
+    font-weight: 500;
+}
+
+.nav-shop-btn {
+    padding: 10px 22px;
+    background: #b41f24;
+    border-radius: 25px;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 70px 60px;
+}
+
+.hero-text h1 {
+    font-size: 48px;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.1;
+}
+
+.hero-text p {
+    margin-top: 10px;
+    color: #555;
+    font-size: 16px;
+}
+
+.hero-text .btn-shop {
+    margin-top: 25px;
+    display: inline-block;
+    background: #b41f24;
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.hero-image {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.hero-image img {
+    width: 900px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #1a1a1a;
+    font-weight: 500;
+    transition: 0.2s ease-in-out;
+}
+
+nav ul li a:hover {
+    font-weight: 700;
+    color: #000000;
+}
+
+.icon-shop {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    display: block;
+    filter: invert(1) brightness(100);
+}
+
+.nav-shop-btn {
+    padding: 10px 22px;
+    background: #b41f24;
+    border-radius: 25px;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+
+    display: flex;         /* buat icon + teks sejajar */
+    align-items: center;   /* rata tengah vertikal */
+    gap: 8px;              /* jarak icon & teks */
+}
+
