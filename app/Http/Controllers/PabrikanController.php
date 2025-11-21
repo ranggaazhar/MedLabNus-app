@@ -20,7 +20,7 @@ class PabrikanController extends Controller
 
         $pabrikans = $query->latest()->paginate(10);
 
-        return view('admin.pabrikan.index', compact('pabrikans'));
+        return view('admin.pabrikan.list-pabrik', compact('pabrikans'));
     }
 
     public function create()
@@ -58,10 +58,10 @@ class PabrikanController extends Controller
         return view('admin.pabrikan.show', compact('pabrikan'));
     }
 
-    public function edit(Pabrikan $pabrikan)
-    {
-        return view('admin.pabrikan.edit', compact('pabrikan'));
-    }
+    // public function edit(Pabrikan $pabrikan)
+    // {
+    //     return view('admin.pabrikan.edit', compact('pabrikan'));
+    // }
 
     public function update(UpdatePabrikanRequest $request, Pabrikan $pabrikan)
     {

@@ -11,7 +11,7 @@ class StorePabrikanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,11 @@ class StorePabrikanRequest extends FormRequest
      */
     public function rules(): array
     {
+        // Pastikan aturan validasi Anda sesuai dengan database baru (tanpa alamat)
         return [
-            //
+            'nama_pabrikan' => ['required', 'string', 'max:255', 'unique:pabrikans,nama_pabrikan'],
+            'asal_negara' => ['required', 'string', 'max:100'],
+            'logo_pabrikan' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ];
     }
 }
