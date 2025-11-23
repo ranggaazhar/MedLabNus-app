@@ -1,10 +1,12 @@
 @props(['pabrikan'])
 
 {{-- Card container --}}
-<div class="bg-white rounded-2xl shadow-md p-6 flex flex-col justify-between h-60 transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-[1.01] border border-gray-100">
+{{-- Diperkecil: h-60 -> h-52, p-6 -> p-5 --}}
+<div class="bg-white rounded-2xl shadow-md p-5 flex flex-col justify-between h-52 transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-[1.01] border border-gray-100">
     
     {{-- Bagian Atas: Logo (Telah Menyatu dengan Nama di dalam Gambar) dan Ikon Panah --}}
-    <div class="flex items-center justify-between mb-4">
+    {{-- Diperkecil: mb-4 -> mb-3 --}}
+    <div class="flex items-center justify-between mb-3">
         {{-- Logo Pabrikan --}}
         <div class="flex items-center space-x-2">
             @if ($pabrikan->logo_pabrikan)
@@ -40,13 +42,16 @@
         </p>
     </div>
 
-    {{-- Bagian Bawah: Tombol Aksi (Dibuat lebih Tipis dan Ramping) --}}
-    <div class="flex justify-start space-x-3 mt-4">
-        {{-- Tombol Edit (Tampilan Black/Dark) --}}
+    {{-- Bagian Bawah: Tombol Aksi (Tanpa Shadow) --}}
+    {{-- Diperkecil: mt-4 -> mt-3 --}}
+    <div class="flex justify-start space-x-3 mt-3">
+        
+        {{-- Tombol Edit (Tanpa Shadow) --}}
         <button type="button" title="Edit Data Pabrikan"
-            class="edit-button bg-gray-900 hover:bg-gray-800 text-white font-medium py-2 px-5 rounded-lg 
-                   shadow-md hover:shadow-lg transition duration-300 ease-in-out 
-                   flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-gray-300 transform hover:scale-[1.01]"
+            class="edit-button bg-gray-800 text-white hover:bg-gray-900 
+                   font-medium py-2 px-5 rounded-lg 
+                   transition duration-300 ease-in-out flex items-center space-x-2 
+                   focus:outline-none focus:ring-2 focus:ring-gray-300 transform hover:scale-[1.03]"
             data-id="{{ $pabrikan->id }}" 
             data-nama="{{ $pabrikan->nama_pabrikan }}"
             data-negara="{{ $pabrikan->asal_negara }}"
@@ -56,15 +61,15 @@
             <span class="text-sm">Edit</span>
         </button>
 
-        {{-- Tombol Hapus (Tampilan Red) --}}
+        {{-- Tombol Hapus (Tanpa Shadow) --}}
         <form action="{{ route('pabrikan.destroy', $pabrikan) }}" method="POST"
             onsubmit="return confirm('Yakin ingin menghapus pabrikan {{ $pabrikan->nama_pabrikan }}? Tindakan ini tidak dapat dibatalkan.');">
             @csrf
             @method('DELETE')
             <button type="submit" title="Hapus Data Pabrikan"
                 class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-5 rounded-lg 
-                       shadow-md hover:shadow-lg transition duration-300 ease-in-out 
-                       flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-red-300 transform hover:scale-[1.01]">
+                       transition duration-300 ease-in-out 
+                       flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-red-300 transform hover:scale-[1.03]">
                 {{-- Menggunakan ikon yang lebih kecil (text-xs) --}}
                 <i class="fas fa-trash-alt text-xs"></i>
                 <span class="text-sm">Delete</span>
