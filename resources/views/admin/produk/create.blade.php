@@ -95,21 +95,6 @@
                     @error('pabrikan_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
-                {{-- 4. Negara --}}
-                <div>
-                    <label for="negara" class="block text-sm font-semibold text-gray-700 mb-2">Negara</label>
-                    <select name="negara" id="negara" required
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:border-red-500 focus:ring-red-500 transition duration-150 shadow-sm">
-                        <option value="">Pilih Negara Asal</option>
-                        {{-- Data Negara (Contoh Statis) --}}
-                        <option value="Indonesia" {{ old('negara') == 'Indonesia' ? 'selected' : '' }}>Contoh: Indonesia</option>
-                        <option value="China" {{ old('negara') == 'China' ? 'selected' : '' }}>China</option>
-                        <option value="Jerman" {{ old('negara') == 'Jerman' ? 'selected' : '' }}>Jerman</option>
-                        <option value="Amerika Serikat" {{ old('negara') == 'Amerika Serikat' ? 'selected' : '' }}>Amerika Serikat</option>
-                    </select>
-                    @error('negara') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                </div>
-
             </div>
             
             {{-- 5. Deskripsi (Full Width) --}}

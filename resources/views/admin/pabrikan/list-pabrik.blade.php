@@ -44,11 +44,6 @@
                     <i class="fas fa-filter"></i> Filter
                 </button>
 
-                {{-- Reset Link --}}
-                <a href="{{ route('pabrikan.index') }}"
-                    class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 px-4 rounded-xl transition duration-150">
-                    Reset
-                </a>
 
                 
                 {{-- Tombol Tambah Pabrikan - Diubah ke style ikon dan warna merah --}}
