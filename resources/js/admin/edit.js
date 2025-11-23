@@ -1,46 +1,62 @@
 document.addEventListener('DOMContentLoaded', function () {
+    console.log("Edit Pabrikan Script Loaded.");
+
     const modal = document.getElementById('editModal');
-    const editButtons = document.querySelectorAll('.edit-button');
+    // .edit-button sekarang ada di dalam komponen pabrikan-card
+    const editButtons = document.querySelectorAll('.edit-button'); 
     const closeModalButtons = document.querySelectorAll('.close-modal');
     const editForm = document.getElementById('editForm');
     const modalNamaPabrikan = document.getElementById('modal_nama_pabrikan');
     const modalAsalNegara = document.getElementById('modal_asal_negara');
     const currentLogoContainer = document.getElementById('current_logo_container');
     const modalCurrentLogo = document.getElementById('modal_current_logo');
+    
+    // URL Placeholder Icon default (jika tidak ada logo di database)
+    const DEFAULT_LOGO_PLACEHOLDER = 'https://placehold.co/64x64/f3f4f6/374151?text=NO+LOGO';
 
 
-    // Fungsi untuk menampilkan modal
+    // Fungsi untuk menampilkan modal dengan transisi
     const openModal = (pabrikan) => {
-        // Set action form untuk PUT request ke route update yang benar
-        // Catatan: Pastikan server-side route Laravel sudah terdefinisi dengan benar
+        
+        // 1. Set action form untuk PUT request
+        // Sesuaikan dengan rute Laravel Anda, misalnya: /admin/pabrikan/123
         editForm.action = `/admin/pabrikan/${pabrikan.id}`; 
         
-        // Isi form dengan data pabrikan
+        // 2. Isi form dengan data pabrikan
         modalNamaPabrikan.value = pabrikan.nama;
         modalAsalNegara.value = pabrikan.negara;
         
-        // Tampilkan logo saat ini (jika ada)
+        // 3. Penanganan Logo saat ini
         if (pabrikan.logo) {
-            // Tampilkan gambar logo saat ini
+            // Jika ada logo dari database
             modalCurrentLogo.src = pabrikan.logo;
-            modalCurrentLogo.classList.remove('hidden');
-            currentLogoContainer.querySelector('p').textContent = 'Logo Saat Ini:'; // Reset text
+            currentLogoContainer.querySelector('p').textContent = 'Logo Saat Ini:';
         } else {
-            // Tampilkan placeholder jika tidak ada logo
-            modalCurrentLogo.src = 'https://placehold.co/64x64/d1d5db/374151?text=N/A';
-            modalCurrentLogo.classList.remove('hidden');
+            // Jika tidak ada logo, tampilkan placeholder
+            modalCurrentLogo.src = DEFAULT_LOGO_PLACEHOLDER;
             currentLogoContainer.querySelector('p').textContent = 'Tidak Ada Logo Saat Ini';
         }
-
+        
+        // 4. Tampilkan modal dengan transisi
         modal.classList.remove('hidden');
+        // Tambahkan opacity setelah sedikit delay untuk mengaktifkan transisi CSS
+        setTimeout(() => {
+            modal.classList.add('opacity-100');
+        }, 10);
     };
 
-    // Fungsi untuk menyembunyikan modal
+    // Fungsi untuk menyembunyikan modal dengan transisi
     const closeModal = () => {
-        modal.classList.add('hidden');
+        // Hilangkan opacity lebih dulu
+        modal.classList.remove('opacity-100');
+        
+        // Tambahkan 'hidden' setelah transisi selesai (300ms, sesuai transisi Tailwind default)
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
     };
 
-    // Event listener untuk tombol 'Edit' di baris tabel
+    // Event listener untuk tombol 'Edit'
     editButtons.forEach(button => {
         button.addEventListener('click', function () {
             const pabrikanData = {
@@ -60,6 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Event listener untuk menutup modal saat klik di luar area modal
     modal.addEventListener('click', function(e) {
+        // Hanya tutup jika yang diklik adalah backdrop (modal itu sendiri)
         if (e.target === modal) {
             closeModal();
         }

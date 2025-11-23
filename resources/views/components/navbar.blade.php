@@ -8,9 +8,14 @@
             <i class="fas fa-bars text-xl"></i>
         </button>
 
-        {{-- Judul Halaman --}}
-        <h1 class="text-xl font-bold text-gray-800">
-            DASHBOARD
+        {{-- Judul Halaman DINAMIS: Mengambil dari @section('title') di view --}}
+        {{-- **Perubahan: Menambahkan kelas 'capitalize' dan menghapus strtoupper()** --}}
+        <h1 class="text-xl font-bold text-gray-800 capitalize">
+            {{-- 
+                Judul akan ditampilkan dengan format yang dikirim dari @section('title').
+                Kelas CSS 'capitalize' akan memastikan huruf pertama setiap kata menjadi kapital.
+            --}}
+            {{ View::yieldContent('title', 'Dashboard') }}
         </h1>
     </div>
 
