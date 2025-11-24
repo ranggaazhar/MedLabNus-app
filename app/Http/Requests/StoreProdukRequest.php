@@ -15,7 +15,6 @@ class StoreProdukRequest extends FormRequest
     {
         return [
             'nama_produk' => 'required|string|max:255',
-            'model_produk' => 'required|string|max:100|unique:produks,model_produk',
             'deskripsi_singkat' => 'nullable|string',
             'gambar_utama' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'kategori' => 'required|in:reagen,alat',
@@ -30,8 +29,6 @@ class StoreProdukRequest extends FormRequest
     {
         return [
             'nama_produk.required' => 'Nama produk wajib diisi',
-            'model_produk.required' => 'Model produk wajib diisi',
-            'model_produk.unique' => 'Model produk sudah digunakan',
             'kategori.required' => 'Kategori wajib dipilih',
             'kategori.in' => 'Kategori harus reagen atau alat',
             'pabrikan_id.required' => 'Pabrikan wajib dipilih',

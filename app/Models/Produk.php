@@ -14,7 +14,6 @@ class Produk extends Model
 
     protected $fillable = [
         'nama_produk',
-        'model_produk',
         'deskripsi_singkat',
         'gambar_utama',
         'kategori',
@@ -56,7 +55,6 @@ class Produk extends Model
     {
         return $query->where(function($q) use ($search) {
             $q->where('nama_produk', 'like', "%{$search}%")
-              ->orWhere('model_produk', 'like', "%{$search}%")
               ->orWhere('deskripsi_singkat', 'like', "%{$search}%");
         });
     }

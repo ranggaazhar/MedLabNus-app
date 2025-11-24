@@ -70,16 +70,7 @@
                     @error('nama_produk') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
-                {{-- 2. Model Product --}}
-                <div>
-                    <label for="model_produk" class="block text-sm font-semibold text-gray-700 mb-2">Model Product</label>
-                    <input type="text" name="model_produk" id="model_produk" placeholder="Contoh: A15" 
-                        value="{{ old('model_produk') }}"
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:border-red-500 focus:ring-red-500 transition duration-150 shadow-sm">
-                    @error('model_produk') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                </div>
-
-                {{-- 3. Merk (Pabrikan) --}}
+                {{-- 2. Merk (Pabrikan) --}}
                 <div>
                     <label for="pabrikan_id" class="block text-sm font-semibold text-gray-700 mb-2">Merk</label>
                     <select name="pabrikan_id" id="pabrikan_id" required
