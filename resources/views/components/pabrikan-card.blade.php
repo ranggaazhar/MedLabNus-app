@@ -46,20 +46,15 @@
     {{-- Diperkecil: mt-4 -> mt-3 --}}
     <div class="flex justify-start space-x-3 mt-3">
         
-        {{-- Tombol Edit (Tanpa Shadow) --}}
-        <button type="button" title="Edit Data Pabrikan"
-            class="edit-button bg-gray-800 text-white hover:bg-gray-900 
+        {{-- Tombol Edit: navigasi ke halaman edit --}}
+        <a href="{{ route('pabrikan.edit', $pabrikan) }}" title="Edit Data Pabrikan"
+            class="bg-gray-800 text-white hover:bg-gray-900 
                    font-medium py-2 px-5 rounded-lg 
                    transition duration-300 ease-in-out flex items-center space-x-2 
-                   focus:outline-none focus:ring-2 focus:ring-gray-300 transform hover:scale-[1.03]"
-            data-id="{{ $pabrikan->id }}" 
-            data-nama="{{ $pabrikan->nama_pabrikan }}"
-            data-negara="{{ $pabrikan->asal_negara }}"
-            data-logo="{{ $pabrikan->logo_pabrikan ? asset('storage/' . $pabrikan->logo_pabrikan) : '' }}">
-            {{-- Menggunakan ikon yang lebih kecil (text-xs) --}}
-            <i class="fas fa-pencil-alt text-xs"></i> 
+                   focus:outline-none focus:ring-2 focus:ring-gray-300 transform hover:scale-[1.03]">
+            <i class="fas fa-pencil-alt text-xs"></i>
             <span class="text-sm">Edit</span>
-        </button>
+        </a>
 
         {{-- Tombol Hapus (Tanpa Shadow) --}}
         <form action="{{ route('pabrikan.destroy', $pabrikan) }}" method="POST"

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdatePabrikanRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdatePabrikanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +22,22 @@ class UpdatePabrikanRequest extends FormRequest
      */
     public function rules(): array
     {
+        $pabrikanId = null;
+        $routeParam = $this->route('pabrikan');
+        if ($routeParam) {
+            // route model binding may provide model or id
+            $pabrikanId = is_object($routeParam) ? $routeParam->pabrikan_id : $routeParam;
+        }
+
         return [
-            //
+            'nama_pabrikan' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('pabrikans', 'nama_pabrikan')->ignore($pabrikanId, 'pabrikan_id'),
+            ],
+            'asal_negara' => ['required', 'string', 'max:100'],
+            'logo_pabrikan' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ];
     }
 }
