@@ -20,6 +20,7 @@
     },
     "dependencies": {
         "patch-package": "^8.0.1",
-        "postinstall-postinstall": "^2.1.0"
+        "postinstall-postinstall": "^2.1.0",
+        "sweetalert2": "^11.26.3"
     }
 }

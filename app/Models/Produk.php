@@ -11,6 +11,8 @@ class Produk extends Model
 
     protected $table = 'produks';
     protected $primaryKey = 'produk_id';
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     protected $fillable = [
         'nama_produk',
@@ -20,42 +22,37 @@ class Produk extends Model
         'pabrikan_id',
     ];
 
-    protected $casts = [
-        'kategori' => 'string',
-    ];
+    // Override route key name untuk Laravel routing
+    public function getRouteKeyName()
+    {
+        return 'produk_id';
+    }
 
-    // Relationship: Produk belongs to Pabrikan
+    // Relationships
     public function pabrikan()
     {
         return $this->belongsTo(Pabrikan::class, 'pabrikan_id', 'pabrikan_id');
     }
 
-    // Relationship: Produk has many Spesifikasi
     public function spesifikasis()
     {
         return $this->hasMany(Spesifikasi::class, 'produk_id', 'produk_id');
     }
 
-    // Accessor untuk URL gambar
-    public function getGambarUrlAttribute()
-    {
-        return $this->gambar_utama 
-            ? asset('storage/' . $this->gambar_utama)
-            : asset('images/default-product.png');
-    }
-
-    // Scope untuk filter kategori
+    // Scopes
     public function scopeKategori($query, $kategori)
     {
         return $query->where('kategori', $kategori);
     }
 
-    // Scope untuk pencarian
     public function scopeSearch($query, $search)
     {
         return $query->where(function($q) use ($search) {
             $q->where('nama_produk', 'like', "%{$search}%")
-              ->orWhere('deskripsi_singkat', 'like', "%{$search}%");
+              ->orWhere('deskripsi_singkat', 'like', "%{$search}%")
+              ->orWhereHas('pabrikan', function($q2) use ($search) {
+                  $q2->where('nama_pabrikan', 'like', "%{$search}%");
+              });
         });
     }
 }

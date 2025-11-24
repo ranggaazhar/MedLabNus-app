@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdateProdukRequest extends FormRequest
 {
@@ -14,23 +13,15 @@ class UpdateProdukRequest extends FormRequest
 
     public function rules(): array
     {
-        $produkId = $this->route('produk'); // Ambil ID dari route parameter
-
         return [
             'nama_produk' => 'required|string|max:255',
-            'model_produk' => [
-                'required',
-                'string',
-                'max:100',
-                Rule::unique('produks', 'model_produk')->ignore($produkId, 'produk_id')
-            ],
             'deskripsi_singkat' => 'nullable|string',
             'gambar_utama' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'kategori' => 'required|in:reagen,alat',
             'pabrikan_id' => 'required|exists:pabrikans,pabrikan_id',
             'spesifikasi' => 'nullable|array',
-            'spesifikasi.*.nama_spesifikasi' => 'required|string|max:100',
-            'spesifikasi.*.nilai' => 'required|string',
+            'spesifikasi.*.nama_spesifikasi' => 'required_with:spesifikasi|string|max:100',
+            'spesifikasi.*.nilai' => 'required_with:spesifikasi|string',
         ];
     }
 
@@ -38,10 +29,14 @@ class UpdateProdukRequest extends FormRequest
     {
         return [
             'nama_produk.required' => 'Nama produk wajib diisi',
-            'model_produk.required' => 'Model produk wajib diisi',
-            'model_produk.unique' => 'Model produk sudah digunakan',
             'kategori.required' => 'Kategori wajib dipilih',
+            'kategori.in' => 'Kategori harus reagen atau alat',
             'pabrikan_id.required' => 'Pabrikan wajib dipilih',
+            'pabrikan_id.exists' => 'Pabrikan tidak ditemukan',
+            'gambar_utama.image' => 'File harus berupa gambar',
+            'gambar_utama.max' => 'Ukuran gambar maksimal 2MB',
+            'spesifikasi.*.nama_spesifikasi.required_with' => 'Nama spesifikasi wajib diisi',
+            'spesifikasi.*.nilai.required_with' => 'Nilai spesifikasi wajib diisi',
         ];
     }
 }

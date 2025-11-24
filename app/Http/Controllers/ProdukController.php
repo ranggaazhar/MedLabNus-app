@@ -13,27 +13,11 @@ use Illuminate\Support\Facades\DB;
 
 class ProdukController extends Controller
 {
-    public function index(Request $request)
-    {
-        $query = Produk::with(['pabrikan', 'spesifikasis']);
-
-        if ($request->has('kategori') && $request->kategori != 'semua') {
-            $query->kategori($request->kategori);
-        }
-
-        // Pencarian
-        if ($request->has('search') && $request->search) {
-            $query->search($request->search);
-        }
-
-        $produks = $query->latest()->paginate(10);
-
-        return view('admin.produk.index', compact('produks'));
-    }
+    
 
     public function create()
     {
-        $pabrikans = Pabrikan::all();
+        $pabrikans = Pabrikan::orderBy('nama_pabrikan')->get();
         return view('admin.produk.create', compact('pabrikans'));
     }
 
@@ -51,12 +35,19 @@ class ProdukController extends Controller
 
             $produk = Produk::create($data);
 
-            if ($request->has('spesifikasi')) {
+            if ($request->has('spesifikasi') && is_array($request->spesifikasi)) {
                 foreach ($request->spesifikasi as $spec) {
-                    $produk->spesifikasis()->create($spec);
+                    if (!empty($spec['nama_spesifikasi']) && !empty($spec['nilai'])) {
+                        $produk->spesifikasis()->create([
+                            'nama_spesifikasi' => $spec['nama_spesifikasi'],
+                            'nilai' => $spec['nilai']
+                        ]);
+                    }
                 }
             }
+
             DB::commit();
+            
             return redirect()
                 ->route('produk.index')
                 ->with('success', 'Produk berhasil ditambahkan');
@@ -64,21 +55,27 @@ class ProdukController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             
+            if (isset($data['gambar_utama'])) {
+                Storage::disk('public')->delete($data['gambar_utama']);
+            }
+            
             return redirect()
                 ->back()
                 ->withInput()
                 ->with('error', 'Gagal menambahkan produk: ' . $e->getMessage());
         }
     }
+
     public function show(Produk $produk)
     {
         $produk->load(['pabrikan', 'spesifikasis']);
         return view('admin.produk.show', compact('produk'));
     }
+
     public function edit(Produk $produk)
     {
         $produk->load('spesifikasis');
-        $pabrikans = Pabrikan::all();
+        $pabrikans = Pabrikan::orderBy('nama_pabrikan')->get();
         return view('admin.produk.edit', compact('produk', 'pabrikans'));
     }
 
@@ -90,32 +87,40 @@ class ProdukController extends Controller
             $data = $request->validated();
 
             if ($request->hasFile('gambar_utama')) {
-                if ($produk->gambar_utama) {
+                if ($produk->gambar_utama && Storage::disk('public')->exists($produk->gambar_utama)) {
                     Storage::disk('public')->delete($produk->gambar_utama);
                 }
                 
                 $data['gambar_utama'] = $request->file('gambar_utama')
                     ->store('products', 'public');
             }
-
             $produk->update($data);
 
-            if ($request->has('spesifikasi')) {
+            if ($request->has('spesifikasi') && is_array($request->spesifikasi)) {
                 $produk->spesifikasis()->delete();
 
                 foreach ($request->spesifikasi as $spec) {
-                    $produk->spesifikasis()->create($spec);
+                    if (!empty($spec['nama_spesifikasi']) && !empty($spec['nilai'])) {
+                        $produk->spesifikasis()->create([
+                            'nama_spesifikasi' => $spec['nama_spesifikasi'],
+                            'nilai' => $spec['nilai']
+                        ]);
+                    }
                 }
             }
 
             DB::commit();
 
             return redirect()
-                ->route('produk.index')
+                ->route('produk.show', $produk->produk_id)
                 ->with('success', 'Produk berhasil diupdate');
 
         } catch (\Exception $e) {
             DB::rollBack();
+
+            if (isset($data['gambar_utama']) && $data['gambar_utama'] != $produk->gambar_utama) {
+                Storage::disk('public')->delete($data['gambar_utama']);
+            }
             
             return redirect()
                 ->back()
@@ -127,19 +132,23 @@ class ProdukController extends Controller
     public function destroy(Produk $produk)
     {
         try {
-            // Hapus gambar jika ada
-            if ($produk->gambar_utama) {
+            DB::beginTransaction();
+
+            if ($produk->gambar_utama && Storage::disk('public')->exists($produk->gambar_utama)) {
                 Storage::disk('public')->delete($produk->gambar_utama);
             }
 
-            // Hapus produk (spesifikasi akan terhapus otomatis karena cascade)
             $produk->delete();
+
+            DB::commit();
 
             return redirect()
                 ->route('produk.index')
                 ->with('success', 'Produk berhasil dihapus');
 
         } catch (\Exception $e) {
+            DB::rollBack();
+            
             return redirect()
                 ->back()
                 ->with('error', 'Gagal menghapus produk: ' . $e->getMessage());

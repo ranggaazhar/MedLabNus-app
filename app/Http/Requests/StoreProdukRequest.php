@@ -20,8 +20,8 @@ class StoreProdukRequest extends FormRequest
             'kategori' => 'required|in:reagen,alat',
             'pabrikan_id' => 'required|exists:pabrikans,pabrikan_id',
             'spesifikasi' => 'nullable|array',
-            'spesifikasi.*.nama_spesifikasi' => 'required|string|max:100',
-            'spesifikasi.*.nilai' => 'required|string',
+            'spesifikasi.*.nama_spesifikasi' => 'required_with:spesifikasi|string|max:100',
+            'spesifikasi.*.nilai' => 'required_with:spesifikasi|string',
         ];
     }
 
@@ -35,6 +35,8 @@ class StoreProdukRequest extends FormRequest
             'pabrikan_id.exists' => 'Pabrikan tidak ditemukan',
             'gambar_utama.image' => 'File harus berupa gambar',
             'gambar_utama.max' => 'Ukuran gambar maksimal 2MB',
+            'spesifikasi.*.nama_spesifikasi.required_with' => 'Nama spesifikasi wajib diisi',
+            'spesifikasi.*.nilai.required_with' => 'Nilai spesifikasi wajib diisi',
         ];
     }
 }

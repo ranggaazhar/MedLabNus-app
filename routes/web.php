@@ -32,7 +32,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/pabrikan/{pabrikan}', [PabrikanController::class, 'destroy'])->name('pabrikan.destroy');
 
     // ========== PRODUK ROUTES ==========
-    Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
+    // Map produk index to dashboard controller so dashboard displays product list
+    Route::get('/produk', [DashboardController::class, 'index'])->name('produk.index');
     Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.create');
     Route::post('/produk', [ProdukController::class, 'store'])->name('produk.store');
     Route::get('/produk/{produk}', [ProdukController::class, 'show'])->name('produk.show');

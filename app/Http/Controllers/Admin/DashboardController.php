@@ -2,20 +2,46 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Produk;
-use App\Models\Pabrikan;
-use App\Models\Spesifikasi;
 use App\Http\Controllers\Controller;
+use App\Models\Produk;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('dashboard', [
-            'totalProduk' => Produk::count(),
-            'totalPabrikan' => Pabrikan::count(),
-            'produkTerbaru' => Produk::latest()->paginate(10),
-            'pabrikanTerbaru' => Pabrikan::latest()->take(5)->get(),
-        ]);
+
+        $totalProduk = Produk::count();
+        $totalAlat = Produk::where('kategori', 'alat')->count();
+        $totalReagen = Produk::where('kategori', 'reagen')->count();
+        $query = Produk::with(['pabrikan', 'spesifikasis']);
+
+        if ($request->filled('kategori') && $request->kategori !== 'semua') {
+            $query->where('kategori', $request->kategori);
+        }
+        if ($request->has('kategori') && $request->kategori != 'semua') {
+            $query->where('kategori', $request->kategori);
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama_produk', 'like', "%{$search}%")
+                  ->orWhere('deskripsi_singkat', 'like', "%{$search}%")
+                  ->orWhereHas('pabrikan', function($q2) use ($search) {
+                      $q2->where('nama_pabrikan', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+
+        $produkTerbaru = $query->latest()->paginate(10)->withQueryString();
+
+        return view('dashboard', compact(
+            'totalProduk',
+            'totalAlat',
+            'totalReagen',
+            'produkTerbaru'
+        ));
     }
 }
