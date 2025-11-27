@@ -58,10 +58,10 @@ class PabrikanController extends Controller
         return view('admin.pabrikan.show', compact('pabrikan'));
     }
 
-    // public function edit(Pabrikan $pabrikan)
-    // {
-    //     return view('admin.pabrikan.edit', compact('pabrikan'));
-    // }
+    public function edit(Pabrikan $pabrikan)
+    {
+        return view('admin.pabrikan.edit', compact('pabrikan'));
+    }
 
     public function update(UpdatePabrikanRequest $request, Pabrikan $pabrikan)
     {
