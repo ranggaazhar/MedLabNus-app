@@ -1,0 +1,192 @@
+/* =========================================
+   FOOTER SECTION STYLING
+   ========================================= */
+
+/* --- IMPORT FONT (Opsional jika di welcome.css belum ada) --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+.footer-section {
+    /* --- HAPUS WARNA SOLID LAMA --- */
+    /* background-color: #2b0a0c; */ 
+
+    /* --- GANTI DENGAN GRADASI --- */
+    /* to bottom = Dari Atas ke Bawah */
+    /* 0% (Atas): #2b0a0c (Merah Sangat Gelap/Hampir Hitam) */
+    /* 100% (Bawah): #751519 (Merah yang lebih Terang/Menyala) */
+    background: linear-gradient(to bottom, #221B1B 40%, #B1252E 100%);
+    
+    padding: 80px 60px;
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+    overflow: hidden;
+    margin-top: auto; 
+    
+    /* Garis Merah di Atas (Tetap Ada) */
+    border-top: 10px solid #B1252E; 
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 60px;
+}
+
+/* --- BAGIAN KIRI (INFO) --- */
+.footer-left {
+    flex: 1.2; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Header (Logo & Desc) */
+.footer-header { margin-bottom: 40px; }
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.footer-logo img { width: 40px; height: auto; }
+
+.footer-logo h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    color: #fff;
+}
+
+.footer-desc {
+    color: #d1d1d1;
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 500px;
+}
+
+.link-learn {
+    color: #fff;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+/* Grid 3 Kolom Info */
+.footer-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 0.8fr 1.5fr; 
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.info-col { display: flex; flex-direction: column; gap: 15px; }
+
+.info-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+/* Titik hiasan di sebelah judul */
+.dot-red {
+    width: 8px; height: 8px;
+    border: 2px solid #fff; 
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.info-list {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.info-list li, .info-list li a, .address-text {
+    color: #d1d1d1;
+    font-size: 14px;
+    line-height: 1.6;
+    text-decoration: none;
+}
+
+.link-red {
+    color: #b41f24; /* Merah terang untuk link aksi */
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 5px;
+    display: inline-block;
+}
+
+/* Social Icons */
+.social-icons {
+    display: flex;
+    gap: 20px;
+    position: relative;
+    padding-left: 20px;
+}
+
+/* Garis Merah Vertikal di samping icon sosmed */
+.social-icons::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background-color: #b41f24;
+    border-radius: 2px;
+}
+
+.social-link img {
+    width: 20px; height: 20px;
+    filter: invert(1); /* Memutihkan icon svg hitam */
+    opacity: 0.7;
+    transition: 0.3s;
+}
+
+.social-link:hover img { opacity: 1; transform: scale(1.1); }
+
+
+/* --- BAGIAN KANAN (PETA) --- */
+.footer-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.map-wrapper {
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    background: #fff;
+    border-radius: 30px;
+    overflow: hidden;
+    padding: 10px; /* Frame putih */
+}
+
+/* GANTI .map-img MENJADI .map-wrapper iframe */
+.map-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px; /* Agar peta ikut melengkung */
+    display: block;      /* Menghilangkan celah garis bawah */
+}
+
+/* --- RESPONSIVE MOBILE --- */
+@media (max-width: 768px) {
+    .footer-section { padding: 60px 20px; }
+    .footer-container { flex-direction: column; gap: 40px; }
+    .footer-info-grid {
+        grid-template-columns: 1fr; /* Tumpuk 1 kolom */
+        gap: 30px;
+    }
+    .social-icons { margin-top: 20px; }
+    .map-wrapper { min-height: 250px; }
+}
