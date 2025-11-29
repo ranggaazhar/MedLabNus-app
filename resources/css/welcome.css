@@ -1,5 +1,5 @@
-/* 1. IMPORT FONT POPPINS */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+/* 1. IMPORT FONT MONTSERRAT */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
 
 /* --- RESET & GLOBAL --- */
 * { box-sizing: border-box; }
@@ -9,7 +9,8 @@ html::-webkit-scrollbar { display: none; }
 
 body {
     margin: 0; padding: 0;
-    font-family: 'Poppins', sans-serif;
+    /* PERUBAHAN DI SINI */
+    font-family: 'Montserrat', sans-serif;
     background: #ffffff;
     overflow-x: hidden; 
 }
@@ -71,6 +72,17 @@ nav ul li a:hover { font-weight: 700; color: #b41f24; }
     opacity: 0; animation: slideInRight 1s ease-out forwards 0.8s;
 }
 .hero-image img { width: 100%; display: block; }
+
+/* --- ANIMASI KHUSUS SVG DI HERO SECTION (PENAMBAHAN BARU) --- */
+.hero > div:first-child { 
+    /* Initial state for slideInRight */
+    opacity: 0; 
+    transform: translateX(50px); 
+    filter: blur(10px); 
+    
+    /* Apply animation with 0.8s delay (matching .hero-image) */
+    animation: slideInRight 1s ease-out forwards 0.8s; 
+}
 
 /* --- SCROLL REVEAL ANIMATION CLASSES --- */
 .reveal {
