@@ -2,292 +2,284 @@
 
 @section('title', 'Add Product')
 
+{{-- CSS FIX: Mencegah Navbar Lompat/Bergeser --}}
+@section('styles')
+<style>
+    /* Memaksa scrollbar selalu ada secara sistem agar layout stabil */
+    html {
+        overflow-y: scroll; 
+    }
+
+    /* Sembunyikan visual scrollbar di Chrome/Safari/Opera biar bersih */
+    html::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Sembunyikan di Firefox/IE/Edge */
+    html {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
+@endsection
+
 @section('content')
 
-    {{-- Form Pembungkus --}}
     <form id="productForm" action="{{ route('produk.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         
+        {{-- SECTION 1: HEADER & SAVE BUTTON --}}
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-            
             <div class="mb-4 md:mb-0">
-                {{-- Breadcrumb --}}
                 <p class="text-sm text-gray-500">
-                    <a href="{{ route('dashboard') }}" class="hover:text-red-700 transition duration-150">
-                        Dashboard
-                    </a>
+                    <a href="{{ route('dashboard') }}" class="hover:text-red-700 transition duration-150">Dashboard</a>
                     / Add Product
                 </p>
-                
-                {{-- Title & Subtitle --}}
                 <h1 class="text-3xl font-extrabold text-gray-800 mt-1">Tambah Product</h1>
                 <p class="text-gray-500">Lengkapi informasi produk medical equipment</p>
             </div>
             
-            {{-- Tombol Save Product --}}
             <button type="submit" form="productForm" class="bg-red-700 hover:bg-red-800 text-white rounded-lg px-6 py-3 text-base font-medium shadow-md transition-colors flex items-center gap-2">
                 <i class="fas fa-save"></i> Save Product
             </button>
         </div>
 
-        {{-- Tab Navigation --}}
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-1 mb-8">
-            <div class="flex text-gray-500 font-semibold text-sm">
+       {{-- SECTION 2: TAB NAVIGATION --}}
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 px-6 mb-6">
+            
+            {{-- PERUBAHAN: Gunakan Grid 3 Kolom agar Spesifikasi PAS di Tengah --}}
+            <nav class="-mb-px grid grid-cols-3 w-full" aria-label="Tabs">
                 
-                <button type="button" data-tab="info-dasar" class="tab-btn px-6 py-3 cursor-pointer text-gray-800 border-b-2 border-red-600 transition-colors">
+                {{-- Tab 1: Info Dasar (Rata Kiri / justify-self-start) --}}
+                <button type="button" data-tab="info-dasar" 
+                    class="tab-btn justify-self-start py-4 px-2 border-b-2 font-bold text-sm transition-colors duration-200 border-red-600 text-gray-900">
                     INFO DASAR
                 </button>
-                
-                <button type="button" data-tab="spesifikasi" class="tab-btn px-6 py-3 cursor-pointer text-gray-500 hover:text-gray-800 hover:bg-gray-50 rounded-lg transition-colors">
+
+                {{-- Tab 2: Spesifikasi (Rata Tengah / justify-self-center) --}}
+                <button type="button" data-tab="spesifikasi" 
+                    class="tab-btn justify-self-center py-4 px-2 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors duration-200">
                     SPESIFIKASI
                 </button>
-                
-                <button type="button" data-tab="gambar" class="tab-btn px-6 py-3 cursor-pointer text-gray-500 hover:text-gray-800 hover:bg-gray-50 rounded-lg transition-colors">
+
+                {{-- Tab 3: Gambar (Rata Kanan / justify-self-end) --}}
+                <button type="button" data-tab="gambar" 
+                    class="tab-btn justify-self-end py-4 px-2 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors duration-200">
                     GAMBAR
                 </button>
-
-            </div>
+            </nav>
         </div>
 
-        {{-- TAB CONTENT 1: INFO DASAR --}}
-        <div id="tab-info-dasar" class="tab-content bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-            <h2 class="text-xl font-bold text-gray-800 mb-6">Informasi Utama</h2>
+        {{-- SECTION 3: CONTENT AREA --}}
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
             
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-                {{-- 1. Nama Product --}}
-                <div>
-                    <label for="nama_produk" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Nama Product <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" name="nama_produk" id="nama_produk" 
-                        placeholder="Contoh: Chemistry Analyzer" 
-                        value="{{ old('nama_produk') }}" required
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:border-red-500 focus:ring-red-500 transition duration-150 shadow-sm">
-                    @error('nama_produk') 
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p> 
-                    @enderror
-                </div>
-
-                {{-- 2. Merk (Pabrikan) --}}
-                <div>
-                    <label for="pabrikan_id" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Merk <span class="text-red-500">*</span>
-                    </label>
-                    <select name="pabrikan_id" id="pabrikan_id" required
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:border-red-500 focus:ring-red-500 transition duration-150 shadow-sm">
-                        <option value="">Pilih Merk / Pabrikan</option>
-                        @foreach ($pabrikans as $pabrikan)
-                            <option value="{{ $pabrikan->pabrikan_id }}" {{ old('pabrikan_id') == $pabrikan->pabrikan_id ? 'selected' : '' }}>
-                                {{ $pabrikan->nama_pabrikan }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('pabrikan_id') 
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p> 
-                    @enderror
-                </div>
-
-                {{-- 3. Kategori --}}
-                <div>
-                    <label for="kategori" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Kategori <span class="text-red-500">*</span>
-                    </label>
-                    <select name="kategori" id="kategori" required
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:border-red-500 focus:ring-red-500 transition duration-150 shadow-sm">
-                        <option value="">Pilih Kategori</option>
-                        <option value="reagen" {{ old('kategori') == 'reagen' ? 'selected' : '' }}>Reagen</option>
-                        <option value="alat" {{ old('kategori') == 'alat' ? 'selected' : '' }}>Alat</option>
-                    </select>
-                    @error('kategori') 
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p> 
-                    @enderror
-                </div>
-
-            </div>
-            
-            {{-- 5. Deskripsi Singkat (Full Width) --}}
-            <div class="mt-6">
-                <label for="deskripsi_singkat" class="block text-sm font-semibold text-gray-700 mb-2">
-                    Deskripsi Singkat
-                </label>
-                <textarea name="deskripsi_singkat" id="deskripsi_singkat" rows="5" 
-                    placeholder="Deskripsi singkat produk..."
-                    class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:border-red-500 focus:ring-red-500 transition duration-150 shadow-sm">{{ old('deskripsi_singkat') }}</textarea>
-                @error('deskripsi_singkat') 
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p> 
-                @enderror
-            </div>
-        </div>
-
-        {{-- TAB CONTENT 2: SPESIFIKASI --}}
-        <div id="tab-spesifikasi" class="tab-content hidden bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold text-gray-800">Spesifikasi Produk</h2>
-                <button type="button" id="addSpecBtn" 
-                    class="bg-red-700 hover:bg-red-800 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors flex items-center gap-2">
-                    <i class="fas fa-plus"></i> Tambah Spesifikasi
-                </button>
-            </div>
-
-            <div id="specContainer" class="space-y-4">
-                {{-- Spesifikasi akan ditambahkan di sini via JavaScript --}}
-                @if(old('spesifikasi'))
-                    @foreach(old('spesifikasi') as $index => $spec)
-                        <div class="spec-item bg-gray-50 rounded-lg border border-gray-200 p-4">
-                            <div class="grid grid-cols-1 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Spesifikasi</label>
-                                    <input type="text" name="spesifikasi[{{ $index }}][nama_spesifikasi]" 
-                                        placeholder="Contoh: Throughput, Kapasitas, Dimensi" 
-                                        value="{{ $spec['nama_spesifikasi'] ?? '' }}"
-                                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-red-500 focus:ring-red-500">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Nilai Spesifikasi</label>
-                                    <input type="text" name="spesifikasi[{{ $index }}][nilai]" 
-                                        placeholder="Contoh: 200 tests/hour, 500 mL, 30 x 40 x 50 cm" 
-                                        value="{{ $spec['nilai'] ?? '' }}"
-                                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-red-500 focus:ring-red-500">
-                                </div>
-                                <div class="flex justify-end">
-                                    <button type="button" class="removeSpecBtn text-red-600 hover:text-red-800 transition-colors text-sm font-medium flex items-center gap-1">
-                                        <i class="fas fa-trash"></i> Hapus
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                @endif
-            </div>
-
-            <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <p class="text-sm text-blue-800">
-                    <i class="fas fa-info-circle"></i> 
-                    <strong>Tips:</strong> Tambahkan spesifikasi teknis seperti throughput, kapasitas, dimensi, berat, voltase, dll.
-                </p>
-            </div>
-        </div>
-
-        {{-- TAB CONTENT 3: GAMBAR --}}
-        <div id="tab-gambar" class="tab-content hidden bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-            <h2 class="text-xl font-bold text-gray-800 mb-6">Upload Gambar Produk</h2>
-            
-            <div class="max-w-2xl">
-                <div class="mb-6">
-                    <label for="gambar_utama" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Gambar Utama Produk
-                    </label>
-                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-red-500 transition-colors">
-                        <input type="file" name="gambar_utama" id="gambar_utama" accept="image/*" class="hidden">
-                        <label for="gambar_utama" class="cursor-pointer">
-                            <div class="flex flex-col items-center">
-                                <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
-                                <p class="text-sm text-gray-600 mb-1">Klik untuk upload gambar</p>
-                                <p class="text-xs text-gray-500">Format: JPG, PNG, GIF (Max: 2MB)</p>
-                            </div>
-                        </label>
-                    </div>
-                    @error('gambar_utama') 
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p> 
-                    @enderror
-                </div>
+            {{-- KONTEN 1: INFO DASAR --}}
+            <div id="tab-info-dasar" class="tab-content block">
+                <h2 class="text-xl font-bold text-gray-800 mb-6">Informasi Utama</h2>
                 
-                {{-- Preview Gambar --}}
-                <div id="imagePreview" class="hidden">
-                    <p class="text-sm font-semibold text-gray-700 mb-3">Preview Gambar:</p>
-                    <div class="relative inline-block">
-                        <img src="" alt="Preview" class="h-48 w-auto object-cover rounded-lg border-2 border-gray-200 shadow-md">
-                        <button type="button" id="removeImageBtn" class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-2 hover:bg-red-700 transition-colors shadow-lg">
-                            <i class="fas fa-times"></i>
-                        </button>
+                @php
+                    $styleTrigger = "w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-left flex items-center justify-between transition duration-150 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500";
+                    $styleItem    = "cursor-pointer px-4 py-2.5 text-sm text-gray-700 hover:bg-red-50 hover:text-red-700 flex justify-between items-center transition-colors duration-150";
+                    $styleActive  = "font-bold text-red-600 bg-red-50"; 
+                @endphp
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {{-- Nama Product --}}
+                    <div>
+                        <label for="nama_produk" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Nama Product <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" name="nama_produk" id="nama_produk" 
+                            placeholder="Contoh: Chemistry Analyzer" 
+                            value="{{ old('nama_produk') }}" required
+                            class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:border-red-500 focus:ring-red-500 transition duration-150 shadow-sm">
+                        @error('nama_produk') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    {{-- Pabrikan (Dropdown) --}}
+                    <div class="relative" 
+                        x-data="{ selectedId: '{{ old('pabrikan_id') }}', selectedName: '{{ old('pabrikan_id') ? $pabrikans->firstWhere('pabrikan_id', old('pabrikan_id'))->nama_pabrikan : 'Pilih Pabrikan' }}' }">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Pabrik <span class="text-red-500">*</span></label>
+                        <input type="hidden" name="pabrikan_id" id="pabrikan_id" :value="selectedId">
+                        
+                        <div class="relative z-20"> 
+                            <x-dropdown align="left" width="w-full" contentClasses="py-1 bg-white border border-gray-200 shadow-xl max-h-60 overflow-y-auto z-50">
+                                <x-slot name="trigger">
+                                    <button type="button" class="{{ $styleTrigger }}">
+                                        <span class="truncate block" x-text="selectedName" :class="!selectedId ? 'text-gray-500' : 'text-gray-900 font-medium'"></span>
+                                        <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                                    </button>
+                                </x-slot>
+                                <x-slot name="content">
+                                    <div class="cursor-pointer px-4 py-2.5 text-sm text-gray-500 hover:bg-gray-100 border-b border-gray-100" @click="selectedId = ''; selectedName = 'Pilih Pabrikan'; open = false">-- Reset Pilihan --</div>
+                                    @forelse ($pabrikans as $pabrikan)
+                                        <div class="{{ $styleItem }}" :class="selectedId == '{{ $pabrikan->pabrikan_id }}' ? '{{ $styleActive }}' : ''" @click="selectedId = '{{ $pabrikan->pabrikan_id }}'; selectedName = '{{ $pabrikan->nama_pabrikan }}'; open = false">
+                                            <span>{{ $pabrikan->nama_pabrikan }}</span>
+                                            <span x-show="selectedId == '{{ $pabrikan->pabrikan_id }}'"><svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span>
+                                        </div>
+                                    @empty
+                                        <div class="px-4 py-4 text-center text-sm text-gray-500 italic">Data Pabrikan belum ada.</div>
+                                    @endforelse
+                                </x-slot>
+                            </x-dropdown>
+                        </div>
+                        @error('pabrikan_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    {{-- Kategori (Dropdown) --}}
+                    <div class="relative" 
+                         x-data="{ selectedId: '{{ old('kategori') }}', selectedName: '{{ old('kategori') == 'reagen' ? 'Reagen' : (old('kategori') == 'alat' ? 'Alat' : 'Pilih Kategori') }}' }">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Kategori <span class="text-red-500">*</span></label>
+                        <input type="hidden" name="kategori" id="kategori" :value="selectedId">
+
+                        <div class="relative z-10">
+                            <x-dropdown align="left" width="w-full" contentClasses="py-1 bg-white border border-gray-200 shadow-xl z-50">
+                                <x-slot name="trigger">
+                                    <button type="button" class="{{ $styleTrigger }}">
+                                        <span class="truncate block" x-text="selectedName" :class="!selectedId ? 'text-gray-500' : 'text-gray-900 font-medium'"></span>
+                                        <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                                    </button>
+                                </x-slot>
+                                <x-slot name="content">
+                                    <div class="{{ $styleItem }}" :class="selectedId == 'reagen' ? '{{ $styleActive }}' : ''" @click="selectedId = 'reagen'; selectedName = 'Reagen'; open = false">
+                                        <span>Reagen</span> <span x-show="selectedId == 'reagen'"><svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span>
+                                    </div>
+                                    <div class="{{ $styleItem }}" :class="selectedId == 'alat' ? '{{ $styleActive }}' : ''" @click="selectedId = 'alat'; selectedName = 'Alat'; open = false">
+                                        <span>Alat</span> <span x-show="selectedId == 'alat'"><svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></span>
+                                    </div>
+                                </x-slot>
+                            </x-dropdown>
+                        </div>
+                        @error('kategori') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <label for="deskripsi_singkat" class="block text-sm font-semibold text-gray-700 mb-2">Deskripsi Singkat</label>
+                    <textarea name="deskripsi_singkat" id="deskripsi_singkat" rows="5" placeholder="Deskripsi singkat produk..." class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:border-red-500 focus:ring-red-500 transition duration-150 shadow-sm">{{ old('deskripsi_singkat') }}</textarea>
+                    @error('deskripsi_singkat') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            {{-- KONTEN 2: SPESIFIKASI --}}
+            <div id="tab-spesifikasi" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">Spesifikasi Produk</h2>
+                    <button type="button" id="addSpecBtn" class="bg-red-700 hover:bg-red-800 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors flex items-center gap-2">
+                        <i class="fas fa-plus"></i> Tambah Spesifikasi
+                    </button>
+                </div>
+
+                <div id="specContainer" class="space-y-4">
+                    @if(old('spesifikasi'))
+                        @foreach(old('spesifikasi') as $index => $spec)
+                            <div class="spec-item bg-gray-50 rounded-lg border border-gray-200 p-4">
+                                <div class="grid grid-cols-1 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Spesifikasi</label>
+                                        <input type="text" name="spesifikasi[{{ $index }}][nama_spesifikasi]" value="{{ $spec['nama_spesifikasi'] ?? '' }}" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-red-500 focus:ring-red-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Nilai Spesifikasi</label>
+                                        <input type="text" name="spesifikasi[{{ $index }}][nilai]" value="{{ $spec['nilai'] ?? '' }}" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-red-500 focus:ring-red-500">
+                                    </div>
+                                    <div class="flex justify-end">
+                                        <button type="button" class="removeSpecBtn text-red-600 hover:text-red-800 transition-colors text-sm font-medium flex items-center gap-1"><i class="fas fa-trash"></i> Hapus</button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
+                </div>
+
+                <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <p class="text-sm text-blue-800"><i class="fas fa-info-circle"></i> <strong>Tips:</strong> Tambahkan spesifikasi teknis seperti throughput, kapasitas, dimensi, berat, voltase, dll.</p>
+                </div>
+            </div>
+
+            {{-- KONTEN 3: GAMBAR --}}
+            <div id="tab-gambar" class="tab-content hidden">
+                <h2 class="text-xl font-bold text-gray-800 mb-6">Upload Gambar Produk</h2>
+                <div class="">
+                    <div class="mb-6">
+                        <label for="gambar_utama" class="block text-sm font-semibold text-gray-700 mb-2">Gambar Utama Produk</label>
+                        <div class="w-full border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-red-500 transition-colors">
+                            <input type="file" name="gambar_utama" id="gambar_utama" accept="image/*" class="hidden">
+                            <label for="gambar_utama" class="cursor-pointer">
+                                <div class="flex flex-col items-center">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-300 mb-2"></i>
+                                    <p class="text-sm text-gray-600 mb-1">Drag your file(s) or <span class="text-red-600 font-semibold">browse</span></p>
+                                    <p class="text-xs text-gray-400">Max 10 MB files are allowed</p>
+                                </div>
+                            </label>
+                        </div>
+                        @error('gambar_utama') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                    <div id="imagePreview" class="hidden">
+                        <p class="text-sm font-semibold text-gray-700 mb-3">Preview Gambar:</p>
+                        <div class="relative inline-block">
+                            <img src="" alt="Preview" class="h-48 w-auto object-cover rounded-lg border-2 border-gray-200 shadow-md">
+                            <button type="button" id="removeImageBtn" class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-2 hover:bg-red-700 transition-colors shadow-lg"><i class="fas fa-times"></i></button>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
     </form>
 
     @section('scripts')
     <script>
-        // ==================== TAB NAVIGATION ====================
         document.addEventListener('DOMContentLoaded', function() {
+            // TAB SWITCHING LOGIC
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabContents = document.querySelectorAll('.tab-content');
+
+            const activeClasses = ['border-red-600', 'text-gray-900', 'font-bold'];
+            const inactiveClasses = ['border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'font-medium'];
 
             tabButtons.forEach(button => {
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
                     const targetTab = this.getAttribute('data-tab');
-                    
-                    console.log('Switching to tab:', targetTab); // Debug
-                    
-                    // Reset semua tab button
+
                     tabButtons.forEach(btn => {
-                        btn.classList.remove('text-gray-800', 'border-b-2', 'border-red-600');
-                        btn.classList.add('text-gray-500');
+                        btn.classList.remove(...activeClasses);
+                        btn.classList.add(...inactiveClasses);
                     });
-                    
-                    // Aktifkan tab yang diklik
-                    this.classList.remove('text-gray-500');
-                    this.classList.add('text-gray-800', 'border-b-2', 'border-red-600');
-                    
-                    // Hide semua content
-                    tabContents.forEach(content => {
-                        content.classList.add('hidden');
-                    });
-                    
-                    // Show content yang dipilih
+
+                    this.classList.remove(...inactiveClasses);
+                    this.classList.add(...activeClasses);
+
+                    tabContents.forEach(content => content.classList.add('hidden'));
                     const targetContent = document.getElementById('tab-' + targetTab);
-                    if (targetContent) {
-                        targetContent.classList.remove('hidden');
-                    }
+                    if (targetContent) targetContent.classList.remove('hidden');
                 });
             });
 
-            // ==================== SPESIFIKASI MANAGEMENT ====================
+            // SPECIFICATION & IMAGE LOGIC
             let specIndex = {{ old('spesifikasi') ? count(old('spesifikasi')) : 0 }};
-
-            // Tambah Spesifikasi
             document.getElementById('addSpecBtn').addEventListener('click', function() {
                 const container = document.getElementById('specContainer');
                 const newSpec = `
                     <div class="spec-item bg-gray-50 rounded-lg border border-gray-200 p-4">
                         <div class="grid grid-cols-1 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Spesifikasi</label>
-                                <input type="text" name="spesifikasi[${specIndex}][nama_spesifikasi]" 
-                                    placeholder="Contoh: Throughput, Kapasitas, Dimensi" 
-                                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-red-500 focus:ring-red-500">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Nilai Spesifikasi</label>
-                                <input type="text" name="spesifikasi[${specIndex}][nilai]" 
-                                    placeholder="Contoh: 200 tests/hour, 500 mL, 30 x 40 x 50 cm" 
-                                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-red-500 focus:ring-red-500">
-                            </div>
-                            <div class="flex justify-end">
-                                <button type="button" class="removeSpecBtn text-red-600 hover:text-red-800 transition-colors text-sm font-medium flex items-center gap-1">
-                                    <i class="fas fa-trash"></i> Hapus
-                                </button>
-                            </div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">Nama Spesifikasi</label><input type="text" name="spesifikasi[${specIndex}][nama_spesifikasi]" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-red-500 focus:ring-red-500"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">Nilai Spesifikasi</label><input type="text" name="spesifikasi[${specIndex}][nilai]" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-red-500 focus:ring-red-500"></div>
+                            <div class="flex justify-end"><button type="button" class="removeSpecBtn text-red-600 hover:text-red-800 transition-colors text-sm font-medium flex items-center gap-1"><i class="fas fa-trash"></i> Hapus</button></div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
                 container.insertAdjacentHTML('beforeend', newSpec);
                 specIndex++;
             });
-
-            // Hapus Spesifikasi
             document.addEventListener('click', function(e) {
-                if (e.target.closest('.removeSpecBtn')) {
-                    if (confirm('Hapus spesifikasi ini?')) {
-                        e.target.closest('.spec-item').remove();
-                    }
+                if (e.target.closest('.removeSpecBtn') && confirm('Hapus spesifikasi ini?')) {
+                    e.target.closest('.spec-item').remove();
                 }
             });
 
-            // ==================== IMAGE PREVIEW ====================
+            // Image Preview
             const fileInput = document.getElementById('gambar_utama');
             const preview = document.getElementById('imagePreview');
             const previewImg = preview.querySelector('img');
@@ -296,42 +288,23 @@
             fileInput.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
-                    // Validasi ukuran file (2MB)
-                    if (file.size > 2048000) {
-                        alert('Ukuran file maksimal 2MB!');
-                        fileInput.value = '';
-                        return;
-                    }
-
+                    if (file.size > 2048000) { alert('Ukuran file maksimal 2MB!'); fileInput.value = ''; return; }
                     const reader = new FileReader();
-                    reader.onload = function(e) {
-                        previewImg.src = e.target.result;
-                        preview.classList.remove('hidden');
-                    }
+                    reader.onload = function(e) { previewImg.src = e.target.result; preview.classList.remove('hidden'); }
                     reader.readAsDataURL(file);
                 }
             });
+            removeBtn.addEventListener('click', function() { fileInput.value = ''; preview.classList.add('hidden'); previewImg.src = ''; });
 
-            // Hapus preview dan reset input
-            removeBtn.addEventListener('click', function() {
-                fileInput.value = '';
-                preview.classList.add('hidden');
-                previewImg.src = '';
-            });
-
-            // ==================== FORM VALIDATION ====================
+            // Form Validation
             document.getElementById('productForm').addEventListener('submit', function(e) {
                 const nama = document.getElementById('nama_produk').value.trim();
                 const pabrikan = document.getElementById('pabrikan_id').value;
                 const kategori = document.getElementById('kategori').value;
-
                 if (!nama || !pabrikan || !kategori) {
                     e.preventDefault();
-                    alert('Mohon lengkapi field yang wajib diisi (Nama Product, Merk, dan Kategori)');
-                    
-                    // Kembali ke tab info dasar
+                    alert('Mohon lengkapi field yang wajib diisi (Nama Product, Pabrik, dan Kategori)');
                     document.querySelector('[data-tab="info-dasar"]').click();
-                    return false;
                 }
             });
         });
