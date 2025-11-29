@@ -19,7 +19,7 @@
         <ul>
             <li><a href="#">Home</a></li>
             <li><a href="#">Visi & Misi</a></li>
-            <li><a href="#">Products</a></li>
+            <li><a href="{{ route('products.public') }}">Products</a></li>
         </ul>
 
         <a href="#" class="nav-shop-btn">

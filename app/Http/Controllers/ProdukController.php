@@ -154,4 +154,20 @@ class ProdukController extends Controller
                 ->with('error', 'Gagal menghapus produk: ' . $e->getMessage());
         }
     }
+
+    public function publicIndex(Request $request)
+    {
+        // Query dasar
+        $query = Produk::with('pabrikan');
+
+        // Fitur Search (Opsional, sesuai gambar ada kolom search)
+        if ($request->has('search')) {
+            $query->where('nama_produk', 'like', '%' . $request->search . '%');
+        }
+
+        // Pagination 9 item per halaman (sesuai gambar: Showing 1-9)
+        $produks = $query->paginate(9);
+
+        return view('public.products', compact('produks'));
+    }
 }
