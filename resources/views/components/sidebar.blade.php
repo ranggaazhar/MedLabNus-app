@@ -7,7 +7,7 @@
     
     {{-- Logo --}}
     {{-- Tambahkan flex-shrink-0 agar logo tidak gepeng jika ruang sempit --}}
-    <img src="{{ asset('images/logom.png') }}" 
+    <img src="{{ asset('images/logo2.png') }}" 
             alt="Logo Medlab" 
             class="w-8 h-8 rounded-full object-cover flex-shrink-0">
 

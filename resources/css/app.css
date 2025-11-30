@@ -3,3 +3,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import 'custom-utilities.css';
+@import 'dashboard.css';

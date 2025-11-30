@@ -13,19 +13,36 @@
 
     <nav>
         <div class="logo">
-            <img src="{{ asset('images/logom.png') }}" alt="Logo" style="width: 50px;">
+            <img src="{{ asset('images/logo2.png') }}" alt="Logo" style="width: 50px;">
         </div>
 
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Visi & Misi</a></li>
-            <li><a href="#">Products</a></li>
-        </ul>
+        {{-- WADAH MENU MOBILE --}}
+        <div class="nav-links-wrapper" id="navLinks">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Visi & Misi</a></li>
+                <li><a href="#">Products</a></li>
+            </ul>
 
-        <a href="#" class="nav-shop-btn">
-            <img src="{{ asset('icons/shop.svg') }}" class="icon-shop" alt="icon">
-            Shop
-        </a>
+            {{-- Pindahkan tombol shop ke dalam wrapper agar mudah diatur di mobile --}}
+            <a href="#" class="nav-shop-btn desktop-only">
+                <img src="{{ asset('icons/shop.svg') }}" class="icon-shop" alt="icon">
+                Shop
+            </a>
+        </div>
+
+        {{-- IKON HAMBURGER (Hanya muncul di mobile) --}}
+        <div class="menu-icon-wrapper">
+            <span class="nav-shop-btn mobile-shop-btn">
+                <img src="{{ asset('icons/shop.svg') }}" class="icon-shop" alt="icon">
+                Shop
+            </span>
+            <button class="hamburger-menu" id="hamburgerMenu">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
     </nav>
 
     <section class="hero">
@@ -151,16 +168,23 @@
         <div class="slider-container reveal delay-200">
             <div class="slider-track" id="sliderTrack">
 
-                {{-- LOOPING BLADE DIMULAI DI SINI --}}
-                @foreach($produks as $index => $produk)
-                    <div class="gallery-item {{ $index === 0 ? 'active' : '' }}">
-                        {{-- Menggunakan 'gambar_utama' dari variabel $produk --}}
-                        <img src="{{ asset('storage/' . $produk->gambar_utama) }}" alt="{{ $produk->nama_produk ?? 'Product Image' }}">
+                {{-- LOOPING UNTUK 3 GAMBAR DIMULAI DI SINI --}}
+                @php
+                    $imagePaths = [
+                        'images/collections2.png', // Index 0
+                        'images/collections1.png', // Index 1
+                        'images/collections3.png', // Index 2
+                    ];
+                    $activeIndex = 1; // Mengatur indeks aktif ke 1 (gambar kedua)
+                @endphp
+
+                @foreach($imagePaths as $index => $path)
+                    <div class="gallery-item {{ $index === $activeIndex ? 'active' : '' }}">
+                        {{-- Mengambil foto dari folder public/ berdasarkan path yang ditentukan --}}
+                        <img src="{{ asset($path) }}" alt="Product Collection Image {{ $index + 1 }}">
                     </div>
                 @endforeach
-                {{-- LOOPING BLADE SELESAI --}}
-
-                {{-- Catatan: Jika $produks kosong, slider-track akan kosong --}}
+                {{-- LOOPING 3 GAMBAR SELESAI --}}
 
             </div>
         </div>
@@ -183,17 +207,42 @@
                 </div>
                 <div class="feature-card-wrapper reveal delay-200">
                     <div class="product-card">
-                        <img src="{{ asset('images/alatw.png') }}" alt="Alat Medis">
+
+                        @if(isset($produks) && $produks->count() > 0)
+                            <img src="{{ asset('storage/' . $produks->first()->gambar_utama) }}"
+                                alt="{{ $produks->first()->nama_produk ?? 'Alat Medis' }}">
+                        @else
+                            {{-- Fallback image jika koleksi $produks kosong --}}
+                            <img src="{{ asset('images/default-alat.png') }}" alt="Default Alat Medis">
+                        @endif
                     </div>
                 </div>
             </div>
 
             <div class="feature-block">
+                {{-- Memastikan urutan terbalik di desktop (gambar di kiri, info di kanan) --}}
                 <div class="feature-card-wrapper reveal">
                     <div class="product-card">
-                        <img src="{{ asset('images/alatw.png') }}" alt="Reagen Medis">
+
+                        @php
+                            // 1. Filter koleksi $produks untuk mencari item dengan kategori 'Reagen'.
+                            // 2. Ambil produk pertama yang ditemukan.
+                            $reagen_utama = (isset($produks) && $produks->count() > 0)
+                                ? $produks->where('kategori', 'reagen')->first()
+                                : null;
+                        @endphp
+
+                        @if ($reagen_utama)
+                            {{-- Tampilkan gambar dari database jika produk Reagen ditemukan --}}
+                            <img src="{{ asset('storage/' . $reagen_utama->gambar_utama) }}"
+                                alt="{{ $reagen_utama->nama_produk ?? 'Reagen Medis' }}">
+                        @else
+                            {{-- Fallback image jika koleksi kosong atau tidak ada produk Reagen --}}
+                            <img src="{{ asset('images/default-reagen.png') }}" alt="Default Reagen Medis">
+                        @endif
                     </div>
                 </div>
+
                 <div class="feature-info reveal delay-200">
                     <h3>REAGEN</h3>
                     <p>Reagen berkualitas tinggi untuk memastikan hasil pengujian yang konsisten dan dapat diandalkan.
@@ -212,8 +261,8 @@
     <script>
         /* --- 1. SLIDER LOGIC --- */
         // Inisialisasi awal ke indeks 0, karena jumlah produk dinamis
-        let currentIndex = 0; 
-        
+        let currentIndex = 1;
+
         const track = document.getElementById('sliderTrack');
         const container = document.querySelector('.slider-container');
         let items; // Variabel ini akan di-update di createDots
@@ -223,9 +272,9 @@
         function createDots() {
             // Ambil ulang item setiap kali dipanggil (penting karena konten Blade sudah dirender)
             items = document.querySelectorAll('.gallery-item');
-            
+
             // Bersihkan dots lama
-            dotsContainer.innerHTML = ''; 
+            dotsContainer.innerHTML = '';
 
             // Jika tidak ada item, hentikan
             if (items.length === 0) return;
@@ -243,13 +292,13 @@
                     dot.classList.add('active');
                 }
                 // Tambahkan event listener untuk menggeser slide
-                dot.onclick = function() {
+                dot.onclick = function () {
                     moveSlide(index);
                 };
                 dotsContainer.appendChild(dot);
             });
         }
-        
+
         function updateSlider() {
             items = document.querySelectorAll('.gallery-item');
             if (items.length === 0) return; // Lindungi jika tidak ada produk
@@ -257,34 +306,34 @@
             // Ambil ukuran real-time
             const containerWidth = container.offsetWidth;
             const itemWidth = items[0].offsetWidth; // Asumsi semua item memiliki lebar yang sama
-            
+
             // Baca Gap dari CSS
             const style = window.getComputedStyle(track);
-            const gap = parseFloat(style.gap) || 20; 
-            
+            const gap = parseFloat(style.gap) || 20;
+
             // Hitung total lebar semua item hingga item sebelum item saat ini
             let itemPosition = 0;
             for (let i = 0; i < currentIndex; i++) {
                 itemPosition += (items[i].offsetWidth + gap);
             }
-            
+
             // Kalkulasi posisi geser untuk menempatkan item saat ini di tengah
             const centerOffset = (containerWidth / 2) - (itemWidth / 2);
             const moveAmount = -(itemPosition - centerOffset);
-            
+
             // Terapkan geseran
             track.style.transform = `translateX(${moveAmount}px)`;
 
             // Update Class Active (Gambar)
             items.forEach(item => item.classList.remove('active'));
-            if(items[currentIndex]) {
+            if (items[currentIndex]) {
                 items[currentIndex].classList.add('active');
             }
 
             // Update Class Active (Dots)
             const dots = document.querySelectorAll('.dot');
             dots.forEach(dot => dot.classList.remove('active'));
-            if(dots[currentIndex]) {
+            if (dots[currentIndex]) {
                 dots[currentIndex].classList.add('active');
             }
         }
@@ -299,11 +348,11 @@
         }
 
         /* --- 2. SCROLL ANIMATION LOGIC (INTERSECTION OBSERVER) --- */
-        window.addEventListener('load', () => { 
+        window.addEventListener('load', () => {
             // Init Dots dan Slider (Penting: Panggil createDots sebelum updateSlider)
             createDots();
             // Memberi sedikit waktu untuk rendering sebelum menghitung posisi
-            setTimeout(updateSlider, 100); 
+            setTimeout(updateSlider, 100);
 
             // Init Animation
             const reveals = document.querySelectorAll('.reveal');
@@ -325,6 +374,30 @@
             // Panggil createDots dan updateSlider saat resize
             createDots();
             updateSlider();
+        });
+
+        const hamburger = document.getElementById('hamburgerMenu');
+        const navLinks = document.getElementById('navLinks');
+        const body = document.body;
+
+        // 2. Tambahkan event listener untuk menu
+        if (hamburger) {
+            hamburger.addEventListener('click', () => {
+                // Toggle class 'open' pada body atau navLinks untuk styling di CSS
+                navLinks.classList.toggle('open');
+                body.classList.toggle('no-scroll'); // Opsional: Mencegah scroll saat menu terbuka
+            });
+        }
+
+        window.addEventListener('resize', () => {
+            // Cek apakah lebar viewport melebihi batas mobile (misalnya, 768px)
+            if (window.innerWidth > 768) {
+                // Hapus kelas 'open' dan 'no-scroll' untuk mengembalikan tampilan desktop
+                if (navLinks.classList.contains('open')) {
+                    navLinks.classList.remove('open');
+                    body.classList.remove('no-scroll');
+                }
+            }
         });
     </script>
 

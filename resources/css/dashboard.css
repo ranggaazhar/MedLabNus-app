@@ -1,0 +1,51 @@
+/* --- CSS Khusus untuk Table Mobile (Card View) --- */
+
+@media (max-width: 768px) {
+    /* Sembunyikan Header Tabel di Mobile */
+    .table thead {
+        display: none;
+    }
+
+    /* Ubah setiap baris (tr) menjadi blok card */
+    .table tbody tr {
+        display: block;
+        margin-bottom: 1rem; /* Jarak antar card */
+        border: 1px solid #e5e7eb;
+        border-radius: 0.75rem; /* rounded-xl */
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+    }
+
+    /* Ubah setiap kolom (td) menjadi item dalam card */
+    .table tbody td {
+        display: block;
+        text-align: right !important; /* Rata kanan di mobile */
+        padding: 0.75rem 1.5rem; /* py-3 px-6 */
+        border-bottom: 1px solid #f3f4f6; /* Garis pemisah antar data */
+        position: relative;
+    }
+    
+    /* Tambahkan label header (nama kolom) di sebelah kiri */
+    .table tbody td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: 700; /* font-bold */
+        text-transform: uppercase;
+        font-size: 0.75rem; /* text-xs */
+        color: #6b7280; /* text-gray-500 */
+    }
+    
+    /* Perbaikan tampilan kolom Action dan kolom Product */
+    .table tbody td:last-child {
+        border-bottom: none; /* Hilangkan garis bawah di item terakhir (Action) */
+    }
+
+    /* Perbaiki tampilan kolom Product (harus rata kiri) */
+    .table tbody td:nth-child(1) {
+        text-align: left !important;
+        /* Hapus label 'Product' yang ditambahkan oleh ::before */
+        padding-left: 1.5rem; 
+    }
+    .table tbody td:nth-child(1)::before {
+        content: ''; /* Hapus label untuk kolom Product */
+    }
+}
