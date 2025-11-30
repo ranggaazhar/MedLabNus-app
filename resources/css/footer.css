@@ -1,29 +1,21 @@
 /* =========================================
-   FOOTER SECTION STYLING
+   FOOTER SECTION STYLING (FINAL COMPLETE)
    ========================================= */
 
-/* --- IMPORT FONT (Opsional jika di welcome.css belum ada) --- */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 .footer-section {
-    /* --- HAPUS WARNA SOLID LAMA --- */
-    /* background-color: #2b0a0c; */ 
-
-    /* --- GANTI DENGAN GRADASI --- */
-    /* to bottom = Dari Atas ke Bawah */
-    /* 0% (Atas): #2b0a0c (Merah Sangat Gelap/Hampir Hitam) */
-    /* 100% (Bawah): #751519 (Merah yang lebih Terang/Menyala) */
-    background: linear-gradient(to bottom, #221B1B 40%, #B1252E 100%);
-    
+    /* Gradasi: Gelap di atas (20%), Terang di bawah */
+    background: linear-gradient(to bottom, #2b0a0c 20%, #751519 100%);
     padding: 80px 60px;
     color: #ffffff;
     font-family: 'Poppins', sans-serif;
     position: relative;
     overflow: hidden;
-    margin-top: auto; 
+    margin-top: auto;
     
-    /* Garis Merah di Atas (Tetap Ada) */
-    border-top: 10px solid #B1252E; 
+    /* Garis Merah Tebal di Atas Footer */
+    border-top: 10px solid #b41f24; 
 }
 
 .footer-container {
@@ -34,47 +26,23 @@
     gap: 60px;
 }
 
-/* --- BAGIAN KIRI (INFO) --- */
+/* --- BAGIAN KIRI --- */
 .footer-left {
-    flex: 1.2; 
+    flex: 1.2;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
-/* Header (Logo & Desc) */
+/* Header */
 .footer-header { margin-bottom: 40px; }
-
-.footer-logo {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
+.footer-logo { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
 .footer-logo img { width: 40px; height: auto; }
+.footer-logo h2 { font-size: 24px; font-weight: 700; margin: 0; color: #fff; }
+.footer-desc { color: #d1d1d1; font-size: 14px; line-height: 1.6; max-width: 500px; }
+.link-learn { color: #fff; text-decoration: underline; font-weight: 500; }
 
-.footer-logo h2 {
-    font-size: 24px;
-    font-weight: 700;
-    margin: 0;
-    color: #fff;
-}
-
-.footer-desc {
-    color: #d1d1d1;
-    font-size: 14px;
-    line-height: 1.6;
-    max-width: 500px;
-}
-
-.link-learn {
-    color: #fff;
-    text-decoration: underline;
-    font-weight: 500;
-}
-
-/* Grid 3 Kolom Info */
+/* Grid Info */
 .footer-info-grid {
     display: grid;
     grid-template-columns: 1fr 0.8fr 1.5fr; 
@@ -82,63 +50,26 @@
     margin-bottom: 40px;
 }
 
-.info-col { display: flex; flex-direction: column; gap: 15px; }
-
-.info-title {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #fff;
-    text-transform: uppercase;
+.info-col { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+    height: 100%; /* Agar tombol bisa didorong ke bawah */
 }
 
-/* Titik hiasan di sebelah judul */
-.dot-red {
-    width: 8px; height: 8px;
-    border: 2px solid #fff; 
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.info-list {
-    list-style: none;
-    padding: 0; margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.info-list li, .info-list li a, .address-text {
-    color: #d1d1d1;
-    font-size: 14px;
-    line-height: 1.6;
-    text-decoration: none;
-}
-
-.link-red {
-    color: #b41f24; /* Merah terang untuk link aksi */
-    font-weight: 600;
-    text-decoration: none;
-    margin-top: 5px;
-    display: inline-block;
-}
-
-/* Social Icons */
-.social-icons {
-    display: flex;
-    gap: 20px;
+/* === KOLOM CONTACT US (Garis Merah & Sosmed) === */
+.footer-info-grid .info-col:first-child {
     position: relative;
-    padding-left: 20px;
+    padding-left: 35px; /* Jarak agar teks tidak nabrak ikon sosmed */
 }
 
-/* Garis Merah Vertikal di samping icon sosmed */
-.social-icons::before {
+/* Garis Merah Vertikal Pendek */
+.footer-info-grid .info-col:first-child::before {
     content: '';
     position: absolute;
-    left: 0; top: 0; bottom: 0;
+    left: 8px;      /* Posisi garis (kira-kira di tengah ikon) */
+    top: 0px;       /* Sejajar Judul */
+    height: 25px;   /* Tinggi setara judul */
     width: 4px;
     background-color: #ffffff;
     border-radius: 2px;
@@ -150,10 +81,38 @@
     transition: 0.3s;
 }
 
+.social-link img { width: 20px; height: 20px; filter: invert(1); opacity: 0.7; transition: 0.3s; display: block; }
 .social-link:hover img { opacity: 1; transform: scale(1.1); }
 
 
-/* --- BAGIAN KANAN (PETA) --- */
+/* Title & Text */
+.info-title {
+    font-size: 12px; font-weight: 700; letter-spacing: 1px;
+    display: flex; align-items: center; gap: 8px; color: #fff; text-transform: uppercase;
+    height: 25px; line-height: 25px;
+}
+.dot-red { width: 8px; height: 8px; border: 2px solid #fff; border-radius: 50%; display: inline-block; }
+
+.info-list {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 10px;
+}
+.info-list li, .info-list li a, .address-text {
+    color: #d1d1d1; font-size: 14px; line-height: 1.6; text-decoration: none;
+}
+
+/* === TOMBOL LINK MERAH (SEJAJAR) === */
+.link-red {
+    color: #b41f24; font-weight: 600; text-decoration: none;
+    
+    /* KUNCI AGAR SEJAJAR: Mendorong tombol ke posisi terbawah container */
+    margin-top: auto; 
+    
+    display: inline-block; transition: 0.3s;
+}
+.link-red:hover { color: #ff4d4d; text-decoration: underline; }
+
+/* --- BAGIAN KANAN (PETA - TANPA FRAME PUTIH) --- */
 .footer-right {
     flex: 1;
     display: flex;
@@ -164,28 +123,31 @@
     width: 100%;
     height: 100%;
     min-height: 300px;
-    background: #fff;
-    border-radius: 30px;
+    
+    /* HAPUS background putih dan padding agar tidak ada frame */
+    /* background: #fff; */
+    /* padding: 10px; */
+    
+    /* Cukup beri border radius agar peta tidak kotak kaku (opsional) */
+    border-radius: 20px; 
     overflow: hidden;
-    padding: 10px; /* Frame putih */
+    
+    /* Tambahkan shadow tipis agar peta tetap terlihat timbul (opsional) */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
 }
 
-/* GANTI .map-img MENJADI .map-wrapper iframe */
 .map-wrapper iframe {
     width: 100%;
     height: 100%;
-    border-radius: 20px; /* Agar peta ikut melengkung */
-    display: block;      /* Menghilangkan celah garis bawah */
+    display: block;
+    /* Pastikan iframe mengisi penuh tanpa border */
+    border: none; 
 }
 
 /* --- RESPONSIVE MOBILE --- */
 @media (max-width: 768px) {
     .footer-section { padding: 60px 20px; }
     .footer-container { flex-direction: column; gap: 40px; }
-    .footer-info-grid {
-        grid-template-columns: 1fr; /* Tumpuk 1 kolom */
-        gap: 30px;
-    }
-    .social-icons { margin-top: 20px; }
+    .footer-info-grid { grid-template-columns: 1fr; gap: 30px; }
     .map-wrapper { min-height: 250px; }
 }

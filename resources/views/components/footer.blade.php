@@ -18,12 +18,22 @@
             <div class="footer-info-grid">
 
                 <div class="info-col">
-                    <div class="info-title"><span class="dot-red"></span> CONTACT US</div>
+                    <div class="info-title">
+                        <span class="dot-red"></span> CONTACT US
+                    </div>
+                    
                     <ul class="info-list">
                         <li>+62 8217 7629 753</li>
                         <li>nusantaramedlab@gmail.com</li>
-                        <li><a href="#" class="link-red">Get a call</a></li>
                     </ul>
+                    
+                    <a href="#" class="link-red">Get a call</a>
+
+                    <div class="social-icons">
+                        <a href="#" class="social-link"><img src="{{ asset('icons/facebook.svg') }}" alt="FB"></a>
+                        <a href="#" class="social-link"><img src="{{ asset('icons/instagram.svg') }}" alt="IG"></a>
+                        <a href="#" class="social-link"><img src="{{ asset('icons/tiktok.svg') }}" alt="TT"></a>
+                    </div>
                 </div>
 
                 <div class="info-col">

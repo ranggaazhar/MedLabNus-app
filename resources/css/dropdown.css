@@ -1,0 +1,50 @@
+/* resources/css/dropdown.css */
+
+@layer components {
+    /* --- 1. Trigger Button (Input Tampilan Awal) --- */
+    .custom-select-trigger {
+        @apply w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-left flex items-center justify-between transition duration-150 shadow-sm outline-none;
+    }
+    
+    /* State Focus (saat diklik/aktif) */
+    .custom-select-trigger:focus, 
+    .custom-select-trigger[aria-expanded="true"] {
+        @apply ring-2 ring-red-500 border-red-500;
+    }
+
+    /* Text di dalam trigger */
+    .custom-select-text {
+        @apply truncate block;
+    }
+    .custom-select-text.placeholder {
+        @apply text-gray-500;
+    }
+    .custom-select-text.filled {
+        @apply text-gray-900 font-medium;
+    }
+
+    /* --- 2. Dropdown Menu Container (Kotak Putih yang Muncul) --- */
+    .custom-select-menu {
+        @apply py-1 bg-white border border-gray-200 shadow-xl max-h-60 overflow-y-auto rounded-md mt-1 z-50;
+    }
+
+    /* --- 3. Item List (Pilihan) --- */
+    .custom-select-item {
+        @apply cursor-pointer px-4 py-2.5 text-sm text-gray-700 flex justify-between items-center transition-colors duration-150;
+    }
+
+    /* Hover State */
+    .custom-select-item:hover {
+        @apply bg-red-50 text-red-700;
+    }
+
+    /* Selected State (Jika item dipilih) */
+    .custom-select-item.selected {
+        @apply font-bold text-red-600 bg-red-50;
+    }
+
+    /* Empty State (Jika data kosong) */
+    .custom-select-empty {
+        @apply px-4 py-4 text-center text-sm text-gray-500 italic;
+    }
+}

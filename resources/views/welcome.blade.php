@@ -16,13 +16,11 @@
             <img src="{{ asset('images/logo2.png') }}" alt="Logo" style="width: 50px;">
         </div>
 
-        {{-- WADAH MENU MOBILE --}}
-        <div class="nav-links-wrapper" id="navLinks">
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Visi & Misi</a></li>
-                <li><a href="#">Products</a></li>
-            </ul>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Visi & Misi</a></li>
+            <li><a href="{{ route('products.public') }}">Products</a></li>
+        </ul>
 
             {{-- Pindahkan tombol shop ke dalam wrapper agar mudah diatur di mobile --}}
             <a href="#" class="nav-shop-btn desktop-only">
