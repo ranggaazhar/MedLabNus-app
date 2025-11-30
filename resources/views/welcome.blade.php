@@ -16,25 +16,31 @@
             <img src="{{ asset('images/logo2.png') }}" alt="Logo" style="width: 50px;">
         </div>
 
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Visi & Misi</a></li>
-            <li><a href="{{ route('products.public') }}">Products</a></li>
-        </ul>
+        {{-- WRAPPER UNTUK NAVIGATION LINKS & SHOP BUTTON DESKTOP --}}
+        {{-- BERI ID agar bisa di-toggle/diakses oleh JavaScript mobile --}}
+        <div class="nav-links-wrapper" id="navLinks">
 
-            {{-- Pindahkan tombol shop ke dalam wrapper agar mudah diatur di mobile --}}
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Visi & Misi</a></li>
+                <li><a href="{{ route('products.public') }}">Products</a></li>
+            </ul>
+
+            {{-- Tombol Shop DESKTOP --}}
             <a href="#" class="nav-shop-btn desktop-only">
                 <img src="{{ asset('icons/shop.svg') }}" class="icon-shop" alt="icon">
                 Shop
             </a>
         </div>
+        {{-- END: nav-links-wrapper --}}
 
-        {{-- IKON HAMBURGER (Hanya muncul di mobile) --}}
+        {{-- IKON HAMBURGER & SHOP MOBILE (Hanya muncul di mobile) --}}
         <div class="menu-icon-wrapper">
-            <span class="nav-shop-btn mobile-shop-btn">
+            {{-- Tombol Shop MOBILE --}}
+            <a href="#" class="nav-shop-btn mobile-shop-btn">
                 <img src="{{ asset('icons/shop.svg') }}" class="icon-shop" alt="icon">
                 Shop
-            </span>
+            </a>
             <button class="hamburger-menu" id="hamburgerMenu">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
