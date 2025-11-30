@@ -15,9 +15,6 @@
         <div class="logo">
             <img src="{{ asset('images/logo2.png') }}" alt="Logo" style="width: 50px;">
         </div>
-
-        {{-- WRAPPER UNTUK NAVIGATION LINKS & SHOP BUTTON DESKTOP --}}
-        {{-- BERI ID agar bisa di-toggle/diakses oleh JavaScript mobile --}}
         <div class="nav-links-wrapper" id="navLinks">
 
             <ul>
