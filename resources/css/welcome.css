@@ -157,7 +157,7 @@ nav ul li a:hover {
     position: relative;
     z-index: 10;
     width: 50%;
-    padding-bottom: 50px;
+    padding: 0 0 50px 30px;
     opacity: 0;
     animation: fadeInUp 1s ease-out forwards 0.5s;
 }
@@ -237,16 +237,18 @@ nav ul li a:hover {
 }
 .profile-container {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 80px;
-    max-width: 1200px;
-    margin: 0 auto;
+    align-items: flex-start;
+justify-content: flex-start; /* <--- Ganti ini */
+    gap: 40px;
+    max-width: none;
+margin: 0; /* Hilangkan pemusatan, biarkan menempel ke kiri (dibatasi padding section) */
+    width: 100%;
+    padding: 0 30px;
 }
 .profile-image-wrapper {
-    flex: 1;
+    flex: 0.5;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
 .profile-image-wrapper img {
     width: 400px;
@@ -257,6 +259,7 @@ nav ul li a:hover {
 }
 .profile-text {
     flex: 1;
+    text-align: left;
 }
 .profile-text h2 {
     font-size: 48px;
@@ -275,7 +278,7 @@ nav ul li a:hover {
 
 /* --- VISI & MISI SECTION --- */
 .visi-misi-section {
-    padding: 80px 60px;
+    padding: 50px 90px 80px 90px;
     background-color: #ffffff;
 }
 .section-title {
@@ -283,23 +286,22 @@ nav ul li a:hover {
     font-size: 42px;
     font-weight: 700;
     color: #000;
-    margin-bottom: 80px;
+    margin-bottom:90px;
 }
 .visi-misi-container {
-    max-width: 1100px;
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 100px;
+    width: 100%;
 }
 .vm-row {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 60px;
+    align-items: flex-start; /* Sejajarkan ke atas */
+    justify-content: flex-start; /* Mulai dari kiri */
+    gap: 60px; /* Pertahankan gap antar kolom, atau kurangi jika perlu */
 }
 .vm-content {
-    flex: 1;
+    flex: 1.2;
 }
 .accent-line {
     width: 60px;
@@ -330,9 +332,9 @@ nav ul li a:hover {
     padding-left: 10px;
 }
 .vm-image-box {
-    flex: 1;
+    flex: 0.8; /* Alokasikan 40% ruang untuk gambar */
     display: flex;
-    justify-content: center;
+    justify-content: flex-start; /* Pastikan gambar rata kiri di dalam kotaknya */
 }
 .vm-image-box img {
     width: 100%;
@@ -412,9 +414,9 @@ nav ul li a:hover {
 /* === PRODUCT SLIDER === */
 .slider-container {
     width: 100%;
-    max-width: 1000px;
-    margin: 0 auto 30px auto;
-    padding: 40px 20px 80px 20px;
+    margin: 0 0 30px 0;
+    /* PENTING: Padding bawah 80px agar bayangan gambar tidak terpotong garis */
+    padding: 40px 40px 80px 5px;
     overflow: hidden;
 }
 .slider-track {
@@ -475,8 +477,7 @@ nav ul li a:hover {
     display: flex;
     flex-direction: column;
     gap: 100px;
-    max-width: 1000px;
-    margin: 0 auto;
+margin: 0;
 }
 .feature-block {
     display: flex;
@@ -618,9 +619,8 @@ nav ul li a:hover {
         padding: 60px 20px;
     }
     .profile-container {
-        flex-direction: column;
+flex-direction: column;
         gap: 40px;
-        text-align: center;
     }
     .profile-image-wrapper img {
         width: 280px;

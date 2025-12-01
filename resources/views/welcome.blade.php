@@ -16,9 +16,6 @@
         <div class="logo">
             <img src="{{ asset('images/logo2.png') }}" alt="Logo" style="width: 50px;">
         </div>
-
-        {{-- 2. MENU TENGAH (CENTER) --}}
-        {{-- Kita bungkus ul di sini agar bisa di-center absolute --}}
         <div class="nav-links-wrapper" id="navLinks">
             <ul>
                 <li><a href="{{ url('/#home') }}">Home</a></li>
@@ -259,149 +256,13 @@
     </section>
 
     <x-footer />
+    {{-- 1. MEMUAT LIBRARY EKSTERNAL (GSAP) --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
-    <script>
-        /* --- 1. SLIDER LOGIC --- */
-        // Inisialisasi awal ke indeks 0, karena jumlah produk dinamis
-        let currentIndex = 1;
+    {{-- 2. MEMUAT FILE JAVASCRIPT LOKAL BARU ANDA DENGAN VITE --}}
+    {{-- PASTIKAN ANDA SUDAH MENAMBAHKAN FILE slider.js KE DALAM vite.config.js --}}
+    @vite(['resources/js/slider.js'])
 
-        const track = document.getElementById('sliderTrack');
-        const container = document.querySelector('.slider-container');
-        let items; // Variabel ini akan di-update di createDots
-        let dotsContainer = document.querySelector('.gallery-dots');
-
-        // Fungsi untuk membuat DOTS secara dinamis
-        function createDots() {
-            // Ambil ulang item setiap kali dipanggil (penting karena konten Blade sudah dirender)
-            items = document.querySelectorAll('.gallery-item');
-
-            // Bersihkan dots lama
-            dotsContainer.innerHTML = '';
-
-            // Jika tidak ada item, hentikan
-            if (items.length === 0) return;
-
-            // Pastikan currentIndex tidak melebihi batas
-            if (currentIndex >= items.length) {
-                currentIndex = 0;
-            }
-
-            // Buat dots baru sesuai jumlah item
-            items.forEach((item, index) => {
-                const dot = document.createElement('span');
-                dot.classList.add('dot');
-                if (index === currentIndex) {
-                    dot.classList.add('active');
-                }
-                // Tambahkan event listener untuk menggeser slide
-                dot.onclick = function () {
-                    moveSlide(index);
-                };
-                dotsContainer.appendChild(dot);
-            });
-        }
-
-        function updateSlider() {
-            items = document.querySelectorAll('.gallery-item');
-            if (items.length === 0) return; // Lindungi jika tidak ada produk
-
-            // Ambil ukuran real-time
-            const containerWidth = container.offsetWidth;
-            const itemWidth = items[0].offsetWidth; // Asumsi semua item memiliki lebar yang sama
-
-            // Baca Gap dari CSS
-            const style = window.getComputedStyle(track);
-            const gap = parseFloat(style.gap) || 20;
-
-            // Hitung total lebar semua item hingga item sebelum item saat ini
-            let itemPosition = 0;
-            for (let i = 0; i < currentIndex; i++) {
-                itemPosition += (items[i].offsetWidth + gap);
-            }
-
-            // Kalkulasi posisi geser untuk menempatkan item saat ini di tengah
-            const centerOffset = (containerWidth / 2) - (itemWidth / 2);
-            const moveAmount = -(itemPosition - centerOffset);
-
-            // Terapkan geseran
-            track.style.transform = `translateX(${moveAmount}px)`;
-
-            // Update Class Active (Gambar)
-            items.forEach(item => item.classList.remove('active'));
-            if (items[currentIndex]) {
-                items[currentIndex].classList.add('active');
-            }
-
-            // Update Class Active (Dots)
-            const dots = document.querySelectorAll('.dot');
-            dots.forEach(dot => dot.classList.remove('active'));
-            if (dots[currentIndex]) {
-                dots[currentIndex].classList.add('active');
-            }
-        }
-
-        function moveSlide(index) {
-            items = document.querySelectorAll('.gallery-item');
-            // Batasi indeks agar tidak melebihi batas
-            if (index >= 0 && index < items.length) {
-                currentIndex = index;
-                updateSlider();
-            }
-        }
-
-        /* --- 2. SCROLL ANIMATION LOGIC (INTERSECTION OBSERVER) --- */
-        window.addEventListener('load', () => {
-            // Init Dots dan Slider (Penting: Panggil createDots sebelum updateSlider)
-            createDots();
-            // Memberi sedikit waktu untuk rendering sebelum menghitung posisi
-            setTimeout(updateSlider, 100);
-
-            // Init Animation
-            const reveals = document.querySelectorAll('.reveal');
-            const revealOnScroll = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
-            }, {
-                threshold: 0.15,
-                rootMargin: "0px 0px -50px 0px"
-            });
-
-            reveals.forEach(reveal => revealOnScroll.observe(reveal));
-        });
-
-        window.addEventListener('resize', () => {
-            // Panggil createDots dan updateSlider saat resize
-            createDots();
-            updateSlider();
-        });
-
-        const hamburger = document.getElementById('hamburgerMenu');
-        const navLinks = document.getElementById('navLinks');
-        const body = document.body;
-
-        // 2. Tambahkan event listener untuk menu
-        if (hamburger) {
-            hamburger.addEventListener('click', () => {
-                // Toggle class 'open' pada body atau navLinks untuk styling di CSS
-                navLinks.classList.toggle('open');
-                body.classList.toggle('no-scroll'); // Opsional: Mencegah scroll saat menu terbuka
-            });
-        }
-
-        window.addEventListener('resize', () => {
-            // Cek apakah lebar viewport melebihi batas mobile (misalnya, 768px)
-            if (window.innerWidth > 768) {
-                // Hapus kelas 'open' dan 'no-scroll' untuk mengembalikan tampilan desktop
-                if (navLinks.classList.contains('open')) {
-                    navLinks.classList.remove('open');
-                    body.classList.remove('no-scroll');
-                }
-            }
-        });
-    </script>
 
 </body>
 
