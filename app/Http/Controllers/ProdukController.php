@@ -155,19 +155,41 @@ class ProdukController extends Controller
         }
     }
 
-    public function publicIndex(Request $request)
+      /**
+     * Display a listing of products for public view
+     */
+public function publicIndex(Request $request)
+{
+    // Ambil SEMUA produk dengan relasi pabrikan
+    $produks = Produk::with('pabrikan')
+        ->orderBy('nama_produk', 'asc')
+        ->get();
+
+    // Transform data untuk JavaScript (bersihkan dari Blade syntax di view)
+    $productsJson = $produks->map(function($produk) {
+        return [
+            'id' => $produk->produk_id,
+            'name' => $produk->nama_produk,
+            'brand' => $produk->pabrikan ? $produk->pabrikan->nama_pabrikan : 'Unknown',
+            'description' => $produk->deskripsi_singkat ?? 'No description available',
+            'image' => $produk->gambar_utama 
+                ? asset('storage/' . $produk->gambar_utama) 
+                : asset('images/default-product.png')
+        ];
+    });
+
+    return view('public.products', compact('productsJson'));
+}
+    public function publicShow($produk_id)
     {
-        // Query dasar
-        $query = Produk::with('pabrikan');
+        $produk = Produk::with(['pabrikan', 'spesifikasis'])->findOrFail($produk_id);
+        
+        // Get related products (same category, exclude current)
+        $relatedProducts = Produk::where('kategori', $produk->kategori)
+            ->where('produk_id', '!=', $produk_id)
+            ->limit(3)
+            ->get();
 
-        // Fitur Search (Opsional, sesuai gambar ada kolom search)
-        if ($request->has('search')) {
-            $query->where('nama_produk', 'like', '%' . $request->search . '%');
-        }
-
-        // Pagination 9 item per halaman (sesuai gambar: Showing 1-9)
-        $produks = $query->paginate(9);
-
-        return view('public.products', compact('produks'));
+        return view('public.product-detail', compact('produk', 'relatedProducts'));
     }
 }

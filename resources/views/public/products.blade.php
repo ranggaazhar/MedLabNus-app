@@ -1,314 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products - PT Medlab Nusantara</title>
-
-    {{-- Tetap load CSS welcome agar Navbar & Footer konsisten --}}
-    @vite(['resources/css/welcome.css', 'resources/css/footer.css'])
-
+    
+    {{-- Tailwind CSS CDN --}}
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    {{-- Alpine.js for interactivity --}}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
     <style>
-        /* CSS KHUSUS HALAMAN PRODUK (Agar mirip desain referensi) */
-        body {
-            background-color: #fff;
-            font-family: sans-serif; /* Sesuaikan dengan font project Anda */
-            color: #333;
-        }
-
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            margin-top: 80px; /* Jarak dari Navbar */
-        }
-
-        /* Breadcrumb & Header */
-        .page-header {
-            margin-bottom: 30px;
-        }
-        .breadcrumb {
-            font-size: 14px;
-            color: #888;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-        .breadcrumb span {
-            color: #999;
-        }
-        
-        .toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .result-count {
-            color: #888;
-            font-size: 14px;
-        }
-
-        /* Filter & Search Area kanan */
-        .filter-area {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        .sort-by {
-            font-size: 14px;
-            color: #666;
-            cursor: pointer;
-        }
-        .search-box {
-            position: relative;
-        }
-        .search-box input {
-            padding: 8px 15px 8px 35px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            outline: none;
-            color: #666;
-            width: 200px;
-        }
-        .search-icon {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 14px;
-            opacity: 0.5;
-        }
-
-        /* PRODUCT GRID */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-
-        .product-card {
-            background: #F8F9FA; /* Warna abu-abu sangat muda seperti di gambar */
-            border-radius: 10px;
-            padding: 30px;
-            display: flex;
-            flex-direction: column; /* Ubah ke column agar teks di kanan/bawah rapi */
-            align-items: flex-start; /* Rata kiri */
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            min-height: 250px;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            background: #fff; /* Jadi putih saat hover biar elegan */
-        }
-
-        /* Layout Kartu: Gambar di Kiri/Atas, Teks di Kanan/Bawah */
-        .card-content {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            gap: 20px;
-        }
-        
-        .card-image {
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
-            flex-shrink: 0;
-        }
-
-        .card-details {
-            flex-grow: 1;
-        }
-
-        .product-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #B1252E; /* Merah Brand */
-            margin: 0 0 5px 0;
-            text-transform: uppercase;
-        }
-
-        .product-brand {
-            font-size: 14px;
-            color: #999;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .product-desc {
-            font-size: 12px;
-            color: #555;
-            line-height: 1.6;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        /* CUSTOM PAGINATION (Kotak-kotak angka) */
-        .pagination-wrapper {
-            display: flex;
-            justify-content: center;
-            margin-top: 40px;
-            gap: 10px;
-        }
-        .page-link {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #eee;
-            border-radius: 5px;
-            color: #333;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-        .page-link.active {
-            background-color: #B1252E;
-            color: white;
-            border-color: #B1252E;
-        }
-        .page-link:hover:not(.active) {
-            background-color: #f0f0f0;
-        }
-
-        /* Responsive untuk HP */
-        @media (max-width: 768px) {
-            .card-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            .product-grid {
-                grid-template-columns: 1fr;
-            }
-            .toolbar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
+<body class="min-h-screen bg-white" x-data="productApp()" x-cloak>
 
-<body>
-
-    {{-- 1. NAVBAR (Sama Persis dengan Welcome) --}}
-    <nav>
-        <div class="logo">
-            <img src="{{ asset('images/logom.png') }}" alt="Logo" style="width: 50px;">
-        </div>
-
-        <ul>
-            <li><a href="{{ route('welcome') }}">Home</a></li>
-            <li><a href="#">Visi & Misi</a></li>
-            <li><a href="{{ route('products.public') }}" class="active-nav">Products</a></li>
-        </ul>
-
-        <a href="#" class="nav-shop-btn">
-            <img src="{{ asset('icons/shop.svg') }}" class="icon-shop" alt="icon">
-            Shop
-        </a>
-    </nav>
-
-    {{-- 2. MAIN CONTENT (Sesuai Desain Gambar) --}}
-    <div class="main-container">
+    {{-- Navbar --}}
+    <x-public-navbar :active="'products'" />
+    
+    {{-- Main Content - Full Width --}}
+    <main class="w-full px-6 lg:px-12 pt-32 pb-16">
         
-        {{-- Header Section --}}
-        <div class="page-header">
-            <div class="breadcrumb">
-                HOME / <span style="color: #333; font-weight: bold;">PRODUCT</span>
+        {{-- Breadcrumb --}}
+        <div class="mb-10">
+            <p class="text-xs tracking-widest text-gray-500">
+                HOME / <span class="text-[#B1252E] font-semibold">PRODUCT</span>
+            </p>
+        </div>
+
+        {{-- Toolbar --}}
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-12 pb-6 border-b border-gray-200">
+            <div class="text-gray-600">
+                <span x-text="`Showing ${filteredProducts.length > 0 ? startIndex + 1 : 0}-${Math.min(endIndex, filteredProducts.length)} of ${filteredProducts.length} result${filteredProducts.length !== 1 ? 's' : ''}`"></span>
             </div>
 
-            <div class="toolbar">
-                <div class="result-count">
-                    {{-- Menampilkan info "Showing 1-9 of 57 result" --}}
-                    Showing {{ $produks->firstItem() ?? 0 }}-{{ $produks->lastItem() ?? 0 }} of {{ $produks->total() }} result
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                <div class="flex items-center gap-2 text-gray-600 text-sm cursor-pointer hover:text-[#B1252E] transition-colors">
+                    Product by <span>></span>
                 </div>
-
-                <div class="filter-area">
-                    <div class="sort-by">
-                        Product by <span style="margin-left:5px;">&gt;</span>
-                    </div>
-                    <form action="{{ route('products.public') }}" method="GET">
-                        <div class="search-box">
-                            {{-- Icon Search SVG --}}
-                            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                            </svg>
-                            <input type="text" name="search" placeholder="Search" value="{{ request('search') }}">
-                        </div>
-                    </form>
+                
+                {{-- Search Box --}}
+                <div class="relative">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input 
+                        type="text" 
+                        x-model="searchQuery"
+                        @input="handleSearch()"
+                        placeholder="Search products..." 
+                        class="pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg outline-none focus:border-[#B1252E] transition-colors w-full sm:w-60 text-sm text-gray-700"
+                    />
                 </div>
             </div>
         </div>
 
-        {{-- Grid Produk --}}
-        <div class="product-grid">
-            @forelse($produks as $produk)
-                <div class="product-card">
-                    <div class="card-content">
-                        {{-- Gambar Produk --}}
-                        <img src="{{ asset('storage/' . $produk->gambar_utama) }}" alt="{{ $produk->nama_produk }}" class="card-image">
-                        
-                        {{-- Detail Produk --}}
-                        <div class="card-details">
-                            <h3 class="product-title">{{ $produk->nama_produk }}</h3>
-                            <span class="product-brand">{{ $produk->pabrikan->nama_pabrikan ?? 'No Brand' }}</span>
+        {{-- Product Grid - Responsive & Full Width --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8 mb-16">
+            <template x-if="currentProducts.length === 0">
+                <div class="col-span-full text-center py-20">
+                    <p class="text-gray-400">Tidak ada produk ditemukan.</p>
+                </div>
+            </template>
+
+            <template x-for="product in currentProducts" :key="product.id">
+                <div class="bg-[#F8F9FA] rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:bg-white hover:border-2 hover:border-[#B1252E] cursor-pointer group h-full min-h-[220px] border-2 border-transparent">
+                    <div class="flex items-center gap-6 h-full">
+                        {{-- Product Image --}}
+                        <div class="flex-shrink-0 w-24 h-24">
+                            <img :src="product.image" :alt="product.name" class="w-full h-full object-contain" />
+                        </div>
+
+                        {{-- Product Details --}}
+                        <div class="flex-1 flex flex-col justify-center gap-1.5">
+                            <h3 class="text-[#B1252E] font-bold text-lg tracking-wide uppercase leading-tight" x-text="product.name"></h3>
                             
-                            {{-- Deskripsi atau Placeholder text jika kosong --}}
-                            <p class="product-desc">
-                                {{ $produk->deskripsi ?? 'Lorem Ipsum Dolor Sit Amet Consectetur Adipiscing Elit Malesuada Integer Id Diam.' }}
-                            </p>
+                            <span class="text-[#AAAAAA] text-[11px] font-medium tracking-widest uppercase" x-text="product.brand"></span>
+                            
+                            <p class="text-gray-600 text-xs leading-relaxed mt-2 line-clamp-3" x-text="product.description"></p>
                         </div>
                     </div>
                 </div>
-            @empty
-                <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
-                    <p>Tidak ada produk ditemukan.</p>
-                </div>
-            @endforelse
+            </template>
         </div>
 
-        {{-- Pagination Custom --}}
-        <div class="pagination-wrapper">
-             {{-- Laravel Links (akan menggunakan styling default tailwind jika tidak di customize, 
-                  tapi logika di bawah ini meniru gaya kotak-kotak di gambar) --}}
-             
-             {{-- Tombol Previous --}}
-             @if ($produks->onFirstPage())
-                <span class="page-link disabled">&lt;</span>
-             @else
-                <a href="{{ $produks->previousPageUrl() }}" class="page-link">&lt;</a>
-             @endif
+        {{-- Pagination --}}
+        <div x-show="totalPages > 1" class="flex justify-center items-center gap-2 mt-16">
+            {{-- Previous Button --}}
+            <button 
+                @click="changePage(currentPage - 1)"
+                :disabled="currentPage === 1"
+                class="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 hover:border-[#B1252E] hover:text-[#B1252E] transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-gray-300 disabled:hover:text-gray-600"
+            >
+                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
 
-             {{-- Nomor Halaman (Simple loop) --}}
-             @foreach ($produks->getUrlRange(1, $produks->lastPage()) as $page => $url)
-                <a href="{{ $url }}" class="page-link {{ $page == $produks->currentPage() ? 'active' : '' }}">
-                    {{ $page }}
-                </a>
-             @endforeach
+            {{-- Page Numbers --}}
+            <template x-for="page in totalPages" :key="page">
+                <button 
+                    @click="changePage(page)"
+                    :class="page === currentPage 
+                        ? 'bg-[#B1252E] text-white border-[#B1252E]' 
+                        : 'border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-[#B1252E] hover:text-[#B1252E]'"
+                    class="w-11 h-11 flex items-center justify-center border rounded-lg font-medium transition-all"
+                    x-text="page"
+                ></button>
+            </template>
 
-             {{-- Tombol Next --}}
-             @if ($produks->hasMorePages())
-                <a href="{{ $produks->nextPageUrl() }}" class="page-link">&gt;</a>
-             @else
-                <span class="page-link disabled">&gt;</span>
-             @endif
+            {{-- Next Button --}}
+            <button 
+                @click="changePage(currentPage + 1)"
+                :disabled="currentPage === totalPages"
+                class="w-11 h-11 flex items-center justify-center border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 hover:border-[#B1252E] hover:text-[#B1252E] transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-gray-300 disabled:hover:text-gray-600"
+            >
+                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
         </div>
 
-    </div>
+    </main>
 
-    {{-- 3. FOOTER (Sama seperti Welcome) --}}
+    {{-- Footer --}}
     <x-footer />
+
+    <script>
+        function productApp() {
+            return {
+                // Data produk dari server (sudah di-transform di controller)
+                allProducts: @json($productsJson),
+                searchQuery: '',
+                currentPage: 1,
+                itemsPerPage: 9,
+
+                // Filter produk berdasarkan search query
+                get filteredProducts() {
+                    if (!this.searchQuery) {
+                        return this.allProducts;
+                    }
+                    
+                    const query = this.searchQuery.toLowerCase();
+                    return this.allProducts.filter(product => 
+                        product.name.toLowerCase().includes(query) ||
+                        product.brand.toLowerCase().includes(query) ||
+                        product.description.toLowerCase().includes(query)
+                    );
+                },
+
+                // Hitung total halaman berdasarkan produk yang sudah difilter
+                get totalPages() {
+                    return Math.ceil(this.filteredProducts.length / this.itemsPerPage);
+                },
+
+                // Index awal untuk slice
+                get startIndex() {
+                    return (this.currentPage - 1) * this.itemsPerPage;
+                },
+
+                // Index akhir untuk slice
+                get endIndex() {
+                    return this.startIndex + this.itemsPerPage;
+                },
+
+                // Produk yang ditampilkan di halaman saat ini
+                get currentProducts() {
+                    return this.filteredProducts.slice(this.startIndex, this.endIndex);
+                },
+
+                // Reset ke halaman 1 saat search
+                handleSearch() {
+                    this.currentPage = 1;
+                },
+
+                // Pindah halaman
+                changePage(page) {
+                    if (page >= 1 && page <= this.totalPages) {
+                        this.currentPage = page;
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                }
+            }
+        }
+    </script>
 
 </body>
 </html>

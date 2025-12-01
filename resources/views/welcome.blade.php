@@ -5,47 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PT Medlab Nusantara</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
 
     @vite(['resources/css/welcome.css', 'resources/css/footer.css'])
 </head>
 
 <body>
-
-    <nav>
-        <div class="logo">
-            <img src="{{ asset('images/logo2.png') }}" alt="Logo" style="width: 50px;">
-        </div>
-        <div class="nav-links-wrapper" id="navLinks">
-
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Visi & Misi</a></li>
-                <li><a href="{{ route('products.public') }}">Products</a></li>
-            </ul>
-
-            {{-- Tombol Shop DESKTOP --}}
-            <a href="#" class="nav-shop-btn desktop-only">
-                <img src="{{ asset('icons/shop.svg') }}" class="icon-shop" alt="icon">
-                Shop
-            </a>
-        </div>
-        {{-- END: nav-links-wrapper --}}
-
-        {{-- IKON HAMBURGER & SHOP MOBILE (Hanya muncul di mobile) --}}
-        <div class="menu-icon-wrapper">
-            {{-- Tombol Shop MOBILE --}}
-            <a href="#" class="nav-shop-btn mobile-shop-btn">
-                <img src="{{ asset('icons/shop.svg') }}" class="icon-shop" alt="icon">
-                Shop
-            </a>
-            <button class="hamburger-menu" id="hamburgerMenu">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-    </nav>
-
+    <x-public-navbar active="home" />
     <section class="hero">
         <div style="position: absolute; right: 0; top: 0; width: 55%; height: 100%; pointer-events: none; z-index: 0;">
             <svg style="position: absolute; right: -8%; top: 5%; width: 100%; height: 90%;" viewBox="0 0 763 772"
