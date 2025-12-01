@@ -26,7 +26,7 @@
         {{-- Breadcrumb --}}
         <div class="mb-10">
             <p class="text-xs tracking-widest text-gray-500">
-                HOME / <span class="text-[#B1252E] font-semibold">PRODUCT</span>
+                <a href="{{ route('welcome') }}" class="hover:text-[#B1252E] transition-colors">HOME</a> / <span class="text-[#B1252E] font-semibold">PRODUCT</span>
             </p>
         </div>
 
@@ -37,8 +37,43 @@
             </div>
 
             <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-                <div class="flex items-center gap-2 text-gray-600 text-sm cursor-pointer hover:text-[#B1252E] transition-colors">
-                    Product by <span>></span>
+                {{-- Category Filter Dropdown --}}
+                <div class="relative" x-data="{ open: false }">
+                    <button 
+                        @click="open = !open"
+                        class="flex items-center gap-2 text-gray-600 text-sm cursor-pointer hover:text-[#B1252E] transition-colors"
+                    >
+                        Product by <span x-show="!open">></span><span x-show="open">∨</span>
+                    </button>
+                    
+                    <div 
+                        x-show="open"
+                        @click.outside="open = false"
+                        x-transition
+                        class="absolute top-full left-0 mt-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg z-10"
+                    >
+                        <button 
+                            @click="filterCategory = 'semua'; open = false; currentPage = 1"
+                            :class="filterCategory === 'semua' ? 'bg-[#B1252E] text-white' : 'text-gray-700 hover:bg-gray-50'"
+                            class="w-full text-left px-4 py-2.5 text-sm transition-colors first:rounded-t-lg"
+                        >
+                            Semua
+                        </button>
+                        <button 
+                            @click="filterCategory = 'alat'; open = false; currentPage = 1"
+                            :class="filterCategory === 'alat' ? 'bg-[#B1252E] text-white' : 'text-gray-700 hover:bg-gray-50'"
+                            class="w-full text-left px-4 py-2.5 text-sm transition-colors border-t border-gray-200"
+                        >
+                            Alat
+                        </button>
+                        <button 
+                            @click="filterCategory = 'reagen'; open = false; currentPage = 1"
+                            :class="filterCategory === 'reagen' ? 'bg-[#B1252E] text-white' : 'text-gray-700 hover:bg-gray-50'"
+                            class="w-full text-left px-4 py-2.5 text-sm transition-colors border-t border-gray-200 last:rounded-b-lg"
+                        >
+                            Reagen
+                        </button>
+                    </div>
                 </div>
                 
                 {{-- Search Box --}}
@@ -67,8 +102,17 @@
             </template>
 
             <template x-for="product in currentProducts" :key="product.id">
-                <div class="bg-[#F8F9FA] rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:bg-white hover:border-2 hover:border-[#B1252E] cursor-pointer group h-full min-h-[220px] border-2 border-transparent">
-                    <div class="flex items-center gap-6 h-full">
+                <div class="bg-[#F8F9FA] rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:bg-white hover:border-2 hover:border-[#B1252E] cursor-pointer group h-full min-h-[220px] border-2 border-transparent flex flex-col relative">
+                    {{-- Category Badge (Top Right) --}}
+                    <span 
+                        :class="product.kategori === 'alat' 
+                            ? 'bg-blue-100 text-blue-700' 
+                            : 'bg-green-100 text-green-700'"
+                        class="absolute top-4 right-4 inline-block px-3 py-1 rounded-full text-xs font-semibold"
+                        x-text="product.kategori === 'alat' ? 'Alat' : product.kategori === 'reagen' ? 'Reagen' : 'Produk'"
+                    ></span>
+
+                    <div class="flex items-center gap-6 flex-1">
                         {{-- Product Image --}}
                         <div class="flex-shrink-0 w-24 h-24">
                             <img :src="product.image" :alt="product.name" class="w-full h-full object-contain" />
@@ -135,21 +179,33 @@
                 // Data produk dari server (sudah di-transform di controller)
                 allProducts: @json($productsJson),
                 searchQuery: '',
+                filterCategory: 'semua',
                 currentPage: 1,
-                itemsPerPage: 9,
+                itemsPerPage: 15,
 
-                // Filter produk berdasarkan search query
+                // Filter produk berdasarkan search query dan kategori
                 get filteredProducts() {
-                    if (!this.searchQuery) {
-                        return this.allProducts;
+                    let filtered = this.allProducts;
+                    
+                    // Filter berdasarkan kategori
+                    if (this.filterCategory !== 'semua') {
+                        filtered = filtered.filter(product => {
+                            // Jika kategori tidak ada di data produk, tampilkan semua
+                            return !product.kategori || product.kategori === this.filterCategory;
+                        });
                     }
                     
-                    const query = this.searchQuery.toLowerCase();
-                    return this.allProducts.filter(product => 
-                        product.name.toLowerCase().includes(query) ||
-                        product.brand.toLowerCase().includes(query) ||
-                        product.description.toLowerCase().includes(query)
-                    );
+                    // Filter berdasarkan search query
+                    if (this.searchQuery) {
+                        const query = this.searchQuery.toLowerCase();
+                        filtered = filtered.filter(product => 
+                            product.name.toLowerCase().includes(query) ||
+                            product.brand.toLowerCase().includes(query) ||
+                            product.description.toLowerCase().includes(query)
+                        );
+                    }
+                    
+                    return filtered;
                 },
 
                 // Hitung total halaman berdasarkan produk yang sudah difilter

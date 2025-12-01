@@ -172,6 +172,7 @@ public function publicIndex(Request $request)
             'name' => $produk->nama_produk,
             'brand' => $produk->pabrikan ? $produk->pabrikan->nama_pabrikan : 'Unknown',
             'description' => $produk->deskripsi_singkat ?? 'No description available',
+            'kategori' => $produk->kategori,
             'image' => $produk->gambar_utama 
                 ? asset('storage/' . $produk->gambar_utama) 
                 : asset('images/default-product.png')

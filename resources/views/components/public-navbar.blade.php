@@ -35,20 +35,22 @@
                 </li>
                 <li>
                     <a href="#visi-misi" 
-                       class="text-gray-700 hover:text-[#B1252E] transition-colors {{ $active === 'visi-misi' ? 'text-[#B1252E] font-semibold border-b-2 border-[#B1252E] pb-1' : '' }}">
+                       class="text-gray-700 hover:text-[#B1252E] transition-colors {{ $active === 'visi-misi' ? 'text-[#B1252E] font-semibold border-b-2 border-[#B1252E] pb-1' : '' }} scroll-smooth smooth-scroll"
+                       data-scroll-target="visi-misi-section">
                         Visi & Misi
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('products.public') }}" 
-                       class="text-gray-700 hover:text-[#B1252E] transition-colors {{ $active === 'products' ? 'text-[#B1252E] font-semibold border-b-2 border-[#B1252E] pb-1' : '' }}">
+                    <a href="#product-section" 
+                       class="text-gray-700 hover:text-[#B1252E] transition-colors {{ $active === 'products' ? 'text-[#B1252E] font-semibold border-b-2 border-[#B1252E] pb-1' : '' }} scroll-smooth smooth-scroll"
+                       data-scroll-target="product-section">
                         Products
                     </a>
                 </li>
             </ul>
 
             {{-- Shop Button --}}
-            <a href="#shop" class="hidden md:flex items-center gap-2 px-6 py-2.5 bg-[#B1252E] text-white rounded-full hover:bg-[#8f1d24] transition-colors">
+            <a href="{{ route('products.public') }}" class="hidden md:flex items-center gap-2 px-6 py-2.5 bg-[#B1252E] text-white rounded-full hover:bg-[#8f1d24] transition-colors">
                 <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                     <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -80,18 +82,20 @@
                 </li>
                 <li>
                     <a href="#visi-misi" 
-                       class="block py-2 text-gray-700 hover:text-[#B1252E] transition-colors {{ $active === 'visi-misi' ? 'text-[#B1252E] font-semibold' : '' }}">
+                       class="block py-2 text-gray-700 hover:text-[#B1252E] transition-colors {{ $active === 'visi-misi' ? 'text-[#B1252E] font-semibold' : '' }} smooth-scroll"
+                       data-scroll-target="visi-misi-section">
                         Visi & Misi
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('products.public') }}" 
-                       class="block py-2 text-gray-700 hover:text-[#B1252E] transition-colors {{ $active === 'products' ? 'text-[#B1252E] font-semibold' : '' }}">
+                    <a href="#product-section" 
+                       class="block py-2 text-gray-700 hover:text-[#B1252E] transition-colors {{ $active === 'products' ? 'text-[#B1252E] font-semibold' : '' }} smooth-scroll"
+                       data-scroll-target="product-section">
                         Products
                     </a>
                 </li>
                 <li>
-                    <a href="#shop" class="flex items-center gap-2 px-6 py-2.5 bg-[#B1252E] text-white rounded-full hover:bg-[#8f1d24] transition-colors w-full justify-center">
+                    <a href="{{ route('products.public') }}" class="flex items-center gap-2 px-6 py-2.5 bg-[#B1252E] text-white rounded-full hover:bg-[#8f1d24] transition-colors w-full justify-center">
                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                             <line x1="3" y1="6" x2="21" y2="6"></line>
