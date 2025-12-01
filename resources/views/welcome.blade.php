@@ -12,31 +12,29 @@
 <body>
 
     <nav>
+        {{-- 1. LOGO (KIRI) --}}
         <div class="logo">
             <img src="{{ asset('images/logo2.png') }}" alt="Logo" style="width: 50px;">
         </div>
 
-        {{-- WRAPPER UNTUK NAVIGATION LINKS & SHOP BUTTON DESKTOP --}}
-        {{-- BERI ID agar bisa di-toggle/diakses oleh JavaScript mobile --}}
+        {{-- 2. MENU TENGAH (CENTER) --}}
+        {{-- Kita bungkus ul di sini agar bisa di-center absolute --}}
         <div class="nav-links-wrapper" id="navLinks">
-
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Visi & Misi</a></li>
+                <li><a href="{{ url('/#home') }}">Home</a></li>
+                <li><a href="{{ url('/#visi-misi') }}">Visi & Misi</a></li>
                 <li><a href="{{ route('products.public') }}">Products</a></li>
             </ul>
-
-            {{-- Tombol Shop DESKTOP --}}
-            <a href="#" class="nav-shop-btn desktop-only">
-                <img src="{{ asset('icons/shop.svg') }}" class="icon-shop" alt="icon">
-                Shop
-            </a>
         </div>
-        {{-- END: nav-links-wrapper --}}
 
-        {{-- IKON HAMBURGER & SHOP MOBILE (Hanya muncul di mobile) --}}
+        {{-- 3. TOMBOL SHOP (KANAN - DESKTOP ONLY) --}}
+        <a href="#" class="nav-shop-btn desktop-only">
+            <img src="{{ asset('icons/shop.svg') }}" class="icon-shop" alt="icon">
+            Shop
+        </a>
+
+        {{-- 4. TOMBOL SHOP & HAMBURGER (KANAN - MOBILE ONLY) --}}
         <div class="menu-icon-wrapper">
-            {{-- Tombol Shop MOBILE --}}
             <a href="#" class="nav-shop-btn mobile-shop-btn">
                 <img src="{{ asset('icons/shop.svg') }}" class="icon-shop" alt="icon">
                 Shop
@@ -49,7 +47,7 @@
         </div>
     </nav>
 
-    <section class="hero">
+    <section class="hero" id="home">
         <div style="position: absolute; right: 0; top: 0; width: 55%; height: 100%; pointer-events: none; z-index: 0;">
             <svg style="position: absolute; right: -8%; top: 5%; width: 100%; height: 90%;" viewBox="0 0 763 772"
                 fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMin slice">
@@ -107,7 +105,7 @@
         </div>
     </section>
 
-    <section class="visi-misi-section">
+   <section class="visi-misi-section" id="visi-misi">
         <h2 class="section-title reveal">Visi & Misi</h2>
 
         <div class="visi-misi-container">
