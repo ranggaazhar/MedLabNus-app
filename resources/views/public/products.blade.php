@@ -191,7 +191,7 @@
 <body class="min-h-screen bg-white" x-data="productApp()" x-cloak>
 
     {{-- Navbar --}}
-    <x-public-navbar :active="'products'" />
+    <x-public-navbar active="" />
     
     {{-- Main Content - Full Width --}}
     <main class="w-full px-6 lg:px-12 pt-32 pb-16">

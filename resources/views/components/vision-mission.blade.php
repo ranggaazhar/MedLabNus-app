@@ -10,7 +10,7 @@
 
     <div class="visi-misi-container">
         {{-- Vision Row - Slide from LEFT --}}
-        <div class="vm-row">
+        <div class="vm-row vision-row">
             <div class="vm-content reveal-left">
                 <div class="vm-header">
                     <div class="icon-box">
@@ -38,7 +38,7 @@
         </div>
 
         {{-- Mission Row - Slide from RIGHT --}}
-        <div class="vm-row">
+        <div class="vm-row mission-row">
             <div class="vm-image-box reveal-left">
                 <img src="{{ asset('images/misi.jpg') }}" alt="Ilustrasi Misi">
             </div>
@@ -303,15 +303,18 @@
     
     .section-header {
         margin-bottom: 60px;
+        text-align: center;
     }
     
     .section-title {
         font-size: 40px;
+        text-align: center;
     }
     
     .title-accent-line {
         width: 80px;
         height: 5px;
+        margin: 0 auto;
     }
     
     .visi-misi-container {
@@ -319,8 +322,27 @@
     }
     
     .vm-row {
+        display: flex;
         flex-direction: column;
-        gap: 40px;
+        gap: 32px;
+    }
+    
+    /* Mobile Order: Visi - Content first, then Image */
+    .vision-row .vm-content {
+        order: 1;
+    }
+    
+    .vision-row .vm-image-box {
+        order: 2;
+    }
+    
+    /* Mobile Order: Misi - Content first, then Image */
+    .mission-row .vm-content {
+        order: 1;
+    }
+    
+    .mission-row .vm-image-box {
+        order: 2;
     }
     
     .vm-content {
@@ -369,7 +391,6 @@
         transform: translateY(0);
     }
 }
-
 @media (max-width: 480px) {
     .visi-misi-section {
         padding: 60px 20px;

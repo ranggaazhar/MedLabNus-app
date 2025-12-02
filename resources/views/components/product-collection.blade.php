@@ -240,6 +240,21 @@
     .carousel-container {
         height: 300px !important;
     }
+    
+    /* Center product feature titles on mobile */
+    .product-section .space-y-6 {
+        text-align: center;
+    }
+    
+    .product-section .space-y-6 .flex.items-center {
+        justify-content: center;
+    }
+    
+    /* Center the decorative line on mobile */
+    .product-section .space-y-6 .h-1 {
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 </style>
 

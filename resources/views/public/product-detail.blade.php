@@ -109,7 +109,7 @@
 <body class="w-full overflow-x-hidden bg-gray-50" x-data="productDetailApp()">
 
     {{-- Navbar --}}
-    <x-public-navbar :active="'products'" />
+    <x-public-navbar active="" />
 
     {{-- Main Content --}}
     <main class="w-full pt-32 pb-20 px-6 lg:px-12 xl:px-20">

@@ -205,11 +205,27 @@
     .profile-container {
         grid-template-columns: 1fr;
         gap: 48px;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Reorder elements: Header first, Image second, Text content third */
+    .profile-text {
+        display: contents;
+    }
+    
+    .text-header {
+        order: 1;
     }
     
     .profile-image-wrapper {
         max-width: 450px;
         margin: 0 auto;
+        order: 2;
+    }
+    
+    .text-content {
+        order: 3;
     }
     
     .profile-text h2 {

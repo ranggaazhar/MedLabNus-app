@@ -34,16 +34,14 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#visi-misi" 
-                       class="text-gray-700 hover:text-[#B1252E] transition-colors {{ $active === 'visi-misi' ? 'text-[#B1252E] font-semibold border-b-2 border-[#B1252E] pb-1' : '' }} scroll-smooth smooth-scroll"
-                       data-scroll-target="visi-misi-section">
+                    <a href="{{ route('welcome') }}#visi-misi-section" 
+                       class="text-gray-700 hover:text-[#B1252E] transition-colors {{ $active === 'visi-misi' ? 'text-[#B1252E] font-semibold border-b-2 border-[#B1252E] pb-1' : '' }}">
                         Visi & Misi
                     </a>
                 </li>
                 <li>
-                    <a href="#product-section" 
-                       class="text-gray-700 hover:text-[#B1252E] transition-colors {{ $active === 'products' ? 'text-[#B1252E] font-semibold border-b-2 border-[#B1252E] pb-1' : '' }} scroll-smooth smooth-scroll"
-                       data-scroll-target="product-section">
+                    <a href="{{ route('welcome') }}#product-section" 
+                       class="text-gray-700 hover:text-[#B1252E] transition-colors {{ $active === 'products' ? 'text-[#B1252E] font-semibold border-b-2 border-[#B1252E] pb-1' : '' }}">
                         Products
                     </a>
                 </li>
@@ -51,11 +49,7 @@
 
             {{-- Shop Button --}}
             <a href="{{ route('products.public') }}" class="hidden md:flex items-center gap-2 px-6 py-2.5 bg-[#B1252E] text-white rounded-full hover:bg-[#8f1d24] transition-colors">
-                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <path d="M16 10a4 4 0 0 1-8 0"></path>
-                </svg>
+                <img src="{{ asset('icons/shop.svg') }}" alt="Shop Icon" class="w-4 h-4 brightness-0 invert">
                 Shop
             </a>
         </div>
@@ -81,26 +75,20 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#visi-misi" 
-                       class="block py-2 text-gray-700 hover:text-[#B1252E] transition-colors {{ $active === 'visi-misi' ? 'text-[#B1252E] font-semibold' : '' }} smooth-scroll"
-                       data-scroll-target="visi-misi-section">
+                    <a href="{{ route('welcome') }}#visi-misi-section" 
+                       class="block py-2 text-gray-700 hover:text-[#B1252E] transition-colors {{ $active === 'visi-misi' ? 'text-[#B1252E] font-semibold' : '' }}">
                         Visi & Misi
                     </a>
                 </li>
                 <li>
-                    <a href="#product-section" 
-                       class="block py-2 text-gray-700 hover:text-[#B1252E] transition-colors {{ $active === 'products' ? 'text-[#B1252E] font-semibold' : '' }} smooth-scroll"
-                       data-scroll-target="product-section">
+                    <a href="{{ route('welcome') }}#product-section" 
+                       class="block py-2 text-gray-700 hover:text-[#B1252E] transition-colors {{ $active === 'products' ? 'text-[#B1252E] font-semibold' : '' }}">
                         Products
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('products.public') }}" class="flex items-center gap-2 px-6 py-2.5 bg-[#B1252E] text-white rounded-full hover:bg-[#8f1d24] transition-colors w-full justify-center">
-                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                            <line x1="3" y1="6" x2="21" y2="6"></line>
-                            <path d="M16 10a4 4 0 0 1-8 0"></path>
-                        </svg>
+                        <img src="{{ asset('icons/shop.svg') }}" alt="Shop Icon" class="w-4 h-4 brightness-0 invert">
                         Shop
                     </a>
                 </li>
@@ -108,3 +96,66 @@
         </div>
     </div>
 </nav>
+
+<script>
+// Handle smooth scroll when coming from another page with hash
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to perform smooth scroll to target
+    function smoothScrollToTarget(targetId) {
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+            const navbarHeight = document.querySelector('nav').offsetHeight;
+            const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 20;
+            
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+            });
+        }
+    }
+    
+    // Check if URL has a hash on page load
+    if (window.location.hash) {
+        const targetId = window.location.hash.substring(1); // Remove the # symbol
+        
+        // Wait a bit for the page to fully load
+        setTimeout(() => {
+            smoothScrollToTarget(targetId);
+        }, 100);
+    }
+    
+    // Listen for hash changes (when navigating between sections on same page)
+    window.addEventListener('hashchange', function() {
+        if (window.location.hash) {
+            const targetId = window.location.hash.substring(1);
+            
+            // Small delay to ensure smooth transition
+            setTimeout(() => {
+                smoothScrollToTarget(targetId);
+            }, 50);
+        }
+    });
+    
+    // Handle clicks on navigation links for same-page scrolling
+    document.querySelectorAll('a[href*="#"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            const url = new URL(href, window.location.origin);
+            
+            // Check if it's a same-page anchor (same pathname, has hash)
+            if (url.pathname === window.location.pathname && url.hash) {
+                e.preventDefault();
+                const targetId = url.hash.substring(1);
+                
+                // Update URL without reload
+                history.pushState(null, null, url.hash);
+                
+                // Smooth scroll to target
+                smoothScrollToTarget(targetId);
+            }
+            // If different page, let default behavior happen (navigate + hash will trigger on load)
+        });
+    });
+});
+</script>
