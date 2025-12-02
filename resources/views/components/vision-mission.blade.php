@@ -1,7 +1,7 @@
 {{-- resources/views/components/sections/vision-mission.blade.php --}}
 <section id="visi-misi-section" class="visi-misi-section">
     {{-- Section Title --}}
-    <div class="section-header reveal">
+    <div class="section-header reveal-fade">
         <h2 class="section-title">
             Visi & <span class="text-gradient">Misi</span>
         </h2>
@@ -9,9 +9,9 @@
     </div>
 
     <div class="visi-misi-container">
-        {{-- Vision Row --}}
+        {{-- Vision Row - Slide from LEFT --}}
         <div class="vm-row">
-            <div class="vm-content reveal">
+            <div class="vm-content reveal-left">
                 <div class="vm-header">
                     <div class="icon-box">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -32,18 +32,18 @@
                 </p>
             </div>
             
-            <div class="vm-image-box reveal delay-200">
+            <div class="vm-image-box reveal-right">
                 <img src="{{ asset('images/visi.jpg') }}" alt="Ilustrasi Visi">
             </div>
         </div>
 
-        {{-- Mission Row --}}
+        {{-- Mission Row - Slide from RIGHT --}}
         <div class="vm-row">
-            <div class="vm-image-box reveal">
+            <div class="vm-image-box reveal-left">
                 <img src="{{ asset('images/misi.jpg') }}" alt="Ilustrasi Misi">
             </div>
             
-            <div class="vm-content reveal delay-200">
+            <div class="vm-content reveal-right">
                 <div class="vm-header">
                     <div class="icon-box">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -127,10 +127,6 @@
     align-items: center;
     justify-content: space-between;
     gap: 80px;
-}
-
-.vm-row-reverse {
-    flex-direction: row-reverse;
 }
 
 /* VM Content */
@@ -225,7 +221,7 @@
     margin: 0;
 }
 
-/* VM Image Box - ORIGINAL SIZE & SHAPE MAINTAINED */
+/* VM Image Box */
 .vm-image-box {
     flex: 0.8;
     display: flex;
@@ -248,20 +244,41 @@
     transform: scale(1.05);
 }
 
-/* --- REVEAL ANIMATION --- */
-.reveal {
+/* --- REVEAL ANIMATIONS --- */
+/* Fade In for Title */
+.reveal-fade {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(-20px);
 }
 
-.reveal.active {
+.reveal-fade.active {
     opacity: 1;
     transform: translateY(0);
     transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.reveal.delay-200.active {
-    transition-delay: 0.2s;
+/* Slide from LEFT */
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-100px);
+}
+
+.reveal-left.active {
+    opacity: 1;
+    transform: translateX(0);
+    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Slide from RIGHT */
+.reveal-right {
+    opacity: 0;
+    transform: translateX(100px);
+}
+
+.reveal-right.active {
+    opacity: 1;
+    transform: translateX(0);
+    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* --- RESPONSIVE --- */
@@ -301,8 +318,7 @@
         gap: 80px;
     }
     
-    .vm-row,
-    .vm-row-reverse {
+    .vm-row {
         flex-direction: column;
         gap: 40px;
     }
@@ -341,6 +357,17 @@
     .misi-list li p {
         font-size: 16px;
     }
+    
+    /* Mobile: all animations from bottom */
+    .reveal-left,
+    .reveal-right {
+        transform: translateY(30px);
+    }
+    
+    .reveal-left.active,
+    .reveal-right.active {
+        transform: translateY(0);
+    }
 }
 
 @media (max-width: 480px) {
@@ -361,3 +388,26 @@
     }
 }
 </style>
+
+<script>
+// Scroll Animation Trigger
+document.addEventListener('DOMContentLoaded', function() {
+    const observerOptions = {
+        threshold: 0.15,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    // Observe all reveal elements
+    document.querySelectorAll('.reveal-fade, .reveal-left, .reveal-right').forEach(el => {
+        observer.observe(el);
+    });
+});
+</script>

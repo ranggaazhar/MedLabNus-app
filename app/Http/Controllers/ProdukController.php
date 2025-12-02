@@ -183,13 +183,34 @@ public function publicIndex(Request $request)
 }
     public function publicShow($produk_id)
     {
-        $produk = Produk::with(['pabrikan', 'spesifikasis'])->findOrFail($produk_id);
+        // Load produk dengan relasi
+        $produk = Produk::with(['pabrikan', 'spesifikasis'])
+            ->findOrFail($produk_id);
         
         // Get related products (same category, exclude current)
-        $relatedProducts = Produk::where('kategori', $produk->kategori)
+        $relatedProducts = Produk::with('pabrikan')
+            ->where('kategori', $produk->kategori)
             ->where('produk_id', '!=', $produk_id)
-            ->limit(3)
+            ->limit(4)
             ->get();
+
+        // Format spesifikasi menjadi HTML
+        $spesifikasiHtml = '';
+        if ($produk->spesifikasis && $produk->spesifikasis->count() > 0) {
+            $spesifikasiHtml .= '<div class="space-y-3">';
+            foreach ($produk->spesifikasis as $spec) {
+                $spesifikasiHtml .= '<div class="flex border-b border-gray-200 pb-2">';
+                $spesifikasiHtml .= '<span class="font-semibold text-gray-700 w-1/3">' . e($spec->nama_spesifikasi) . ':</span>';
+                $spesifikasiHtml .= '<span class="text-gray-600 w-2/3">' . e($spec->nilai) . '</span>';
+                $spesifikasiHtml .= '</div>';
+            }
+            $spesifikasiHtml .= '</div>';
+        } else {
+            $spesifikasiHtml = '<p class="text-gray-500">Spesifikasi tidak tersedia.</p>';
+        }
+
+        // Assign formatted HTML ke produk
+        $produk->spesifikasi_formatted = $spesifikasiHtml;
 
         return view('public.product-detail', compact('produk', 'relatedProducts'));
     }

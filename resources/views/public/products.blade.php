@@ -102,7 +102,7 @@
             </template>
 
             <template x-for="product in currentProducts" :key="product.id">
-                <div class="bg-[#F8F9FA] rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:bg-white hover:border-2 hover:border-[#B1252E] cursor-pointer group h-full min-h-[220px] border-2 border-transparent flex flex-col relative">
+                <a :href="`/products/${product.id}`" class="bg-[#F8F9FA] rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:bg-white hover:border-2 hover:border-[#B1252E] cursor-pointer group h-full min-h-[220px] border-2 border-transparent flex flex-col relative">
                     {{-- Category Badge (Top Right) --}}
                     <span 
                         :class="product.kategori === 'alat' 
@@ -127,7 +127,7 @@
                             <p class="text-gray-600 text-xs leading-relaxed mt-2 line-clamp-3" x-text="product.description"></p>
                         </div>
                     </div>
-                </div>
+                </a>
             </template>
         </div>
 

@@ -216,16 +216,32 @@
     }
 }
 
-/* SVG Animation */
 .animated-svg {
+    stroke: url(#paint0_linear_0_1);
+    stroke-width: 3;
+    fill: url(#paint0_linear_0_1);
     stroke-dasharray: 3000;
     stroke-dashoffset: 3000;
-    animation: drawPath 2s ease-out forwards;
+    fill-opacity: 0;
+    animation: drawStroke 1.5s ease-in-out forwards, fillShape 1.5s ease-in-out 1.5s forwards;
 }
 
-@keyframes drawPath {
+.animated-svg:nth-child(2) {
+    animation: drawStroke 1.5s ease-in-out 0.3s forwards, fillShape 1.5s ease-in-out 1.8s forwards;
+}
+
+@keyframes drawStroke {
     to {
         stroke-dashoffset: 0;
+    }
+}
+
+@keyframes fillShape {
+    from {
+        fill-opacity: 0;
+    }
+    to {
+        fill-opacity: 1;
     }
 }
 
