@@ -159,6 +159,47 @@ nav ul li a:hover {
     transition-delay: 0.2s;
 }
 
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+.hover-lift:hover {
+    transform: translateX(5px) scale(1.05);
+}
+
+/* Carousel Dots Styling */
+.carousel-dot {
+    width: 12px;
+    height: 12px;
+    background-color: #d1d5db;
+}
+
+.carousel-dot.active {
+    width: 32px;
+    height: 12px;
+    background-color: #dc2626;
+}
+
+.carousel-dot:hover {
+    transform: scale(1.2);
+}
+
+/* Reveal Animation */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.delay-200 {
+    transition-delay: 0.2s;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 /* --- RESPONSIVE MOBILE --- */
 @media (max-width: 768px) {
     nav {
@@ -170,7 +211,7 @@ nav ul li a:hover {
     /* Reset Menu Position di Mobile */
     .nav-links-wrapper {
         position: fixed;
-        left: auto; 
+        left: auto;
         transform: none;
         top: 0;
         right: -100%;
@@ -248,15 +289,63 @@ nav ul li a:hover {
     }
 
     /* Hamburger Animation */
-    .nav-links-wrapper.open ~ .menu-icon-wrapper .hamburger-menu .icon-bar:nth-child(1) {
+    .nav-links-wrapper.open
+        ~ .menu-icon-wrapper
+        .hamburger-menu
+        .icon-bar:nth-child(1) {
         transform: translateY(11px) rotate(45deg);
     }
 
-    .nav-links-wrapper.open ~ .menu-icon-wrapper .hamburger-menu .icon-bar:nth-child(2) {
+    .nav-links-wrapper.open
+        ~ .menu-icon-wrapper
+        .hamburger-menu
+        .icon-bar:nth-child(2) {
         opacity: 0;
     }
 
-    .nav-links-wrapper.open ~ .menu-icon-wrapper .hamburger-menu .icon-bar:nth-child(3) {
+    .nav-links-wrapper.open
+        ~ .menu-icon-wrapper
+        .hamburger-menu
+        .icon-bar:nth-child(3) {
         transform: translateY(-11px) rotate(-45deg);
+    }
+
+    .carousel-wrapper {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .carousel-container {
+        height: 250px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .carousel-item {
+        width: 100% !important;
+        height: 242px !important;
+        max-width: 100% !important;
+    }
+
+    .carousel-item img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+        object-position: center !important;
+    }
+
+    /* Center product feature titles on mobile */
+    .product-section .space-y-6 {
+        text-align: center;
+    }
+
+    .product-section .space-y-6 .flex.items-center {
+        justify-content: center;
+    }
+
+    /* Center the decorative line on mobile */
+    .product-section .space-y-6 .h-1 {
+        margin-left: auto;
+        margin-right: auto;
     }
 }

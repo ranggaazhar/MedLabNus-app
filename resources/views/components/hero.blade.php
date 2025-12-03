@@ -275,7 +275,7 @@
     .hero {
         min-height: auto;
         height: auto;
-        padding: 120px 24px 60px;
+        padding: 130px 24px 60px;
     }
     
     .hero-content {
@@ -314,7 +314,7 @@
 
 @media (max-width: 480px) {
     .hero {
-        padding: 80px 20px 40px;
+        padding: 100px 20px 40px;
     }
     
     .hero-text h1 {

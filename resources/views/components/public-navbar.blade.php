@@ -2,7 +2,7 @@
 @props(['active' => ''])
 
 <nav class="fixed top-0 left-0 right-0 bg-white shadow-sm z-50" x-data="{ mobileMenuOpen: false }">
-    <div class="w-full px-6 lg:px-12 py-4">
+    <div class="w-full px-6 lg:px-10 py-1">
         <div class="flex items-center justify-between">
             {{-- Logo --}}
             <a href="{{ route('welcome') }}" class="flex items-center">

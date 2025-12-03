@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class ProdukController extends Controller
 {
-    
+
 
     public function create()
     {
@@ -47,18 +47,18 @@ class ProdukController extends Controller
             }
 
             DB::commit();
-            
+
             return redirect()
                 ->route('produk.index')
                 ->with('success', 'Produk berhasil ditambahkan');
 
         } catch (\Exception $e) {
             DB::rollBack();
-            
+
             if (isset($data['gambar_utama'])) {
                 Storage::disk('public')->delete($data['gambar_utama']);
             }
-            
+
             return redirect()
                 ->back()
                 ->withInput()
@@ -90,7 +90,7 @@ class ProdukController extends Controller
                 if ($produk->gambar_utama && Storage::disk('public')->exists($produk->gambar_utama)) {
                     Storage::disk('public')->delete($produk->gambar_utama);
                 }
-                
+
                 $data['gambar_utama'] = $request->file('gambar_utama')
                     ->store('products', 'public');
             }
@@ -121,7 +121,7 @@ class ProdukController extends Controller
             if (isset($data['gambar_utama']) && $data['gambar_utama'] != $produk->gambar_utama) {
                 Storage::disk('public')->delete($data['gambar_utama']);
             }
-            
+
             return redirect()
                 ->back()
                 ->withInput()
@@ -148,45 +148,55 @@ class ProdukController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            
+
             return redirect()
                 ->back()
                 ->with('error', 'Gagal menghapus produk: ' . $e->getMessage());
         }
     }
 
-      /**
+    /**
      * Display a listing of products for public view
      */
-public function publicIndex(Request $request)
-{
-    // Ambil SEMUA produk dengan relasi pabrikan
-    $produks = Produk::with('pabrikan')
-        ->orderBy('nama_produk', 'asc')
-        ->get();
+   public function publicIndex(Request $request)
+    {
+        // 1. Ambil SEMUA produk untuk filtering Client-Side oleh Alpine.js
+        $produks = Produk::with('pabrikan')
+                            ->orderBy('nama_produk', 'asc')
+                            ->get();
 
-    // Transform data untuk JavaScript (bersihkan dari Blade syntax di view)
-    $productsJson = $produks->map(function($produk) {
-        return [
-            'id' => $produk->produk_id,
-            'name' => $produk->nama_produk,
-            'brand' => $produk->pabrikan ? $produk->pabrikan->nama_pabrikan : 'Unknown',
-            'description' => $produk->deskripsi_singkat ?? 'No description available',
-            'kategori' => $produk->kategori,
-            'image' => $produk->gambar_utama 
-                ? asset('storage/' . $produk->gambar_utama) 
-                : asset('images/default-product.png')
-        ];
-    });
+        // 2. Tentukan status awal filter dari URL (digunakan untuk inisialisasi Alpine)
+        $activeCategory = strtolower($request->query('kategori') ?? 'semua');
+        $searchQuery = $request->query('search') ?? ''; 
 
-    return view('public.products', compact('productsJson'));
-}
+        // 3. Transform data untuk JavaScript (Produk JSON)
+        $productsJson = $produks->map(function ($produk) {
+            return [
+                'id' => $produk->produk_id,
+                'name' => $produk->nama_produk,
+                'brand' => $produk->pabrikan ? $produk->pabrikan->nama_pabrikan : 'Unknown',
+                'description' => $produk->deskripsi_singkat ?? 'No description available',
+                // Pastikan kategori di JSON selalu lowercase untuk konsistensi filter
+                'kategori' => strtolower($produk->kategori), 
+                'image' => $produk->gambar_utama
+                    ? asset('storage/' . $produk->gambar_utama)
+                    : asset('images/default-product.png'),
+            ];
+        });
+
+        // Kirim data ke view
+        return view('public.products', [
+            'productsJson' => $productsJson, 
+            'activeCategory' => $activeCategory, 
+            'searchQuery' => $searchQuery, 
+        ]);
+    }
     public function publicShow($produk_id)
     {
         // Load produk dengan relasi
         $produk = Produk::with(['pabrikan', 'spesifikasis'])
             ->findOrFail($produk_id);
-        
+
         // Get related products (same category, exclude current)
         $relatedProducts = Produk::with('pabrikan')
             ->where('kategori', $produk->kategori)
@@ -214,4 +224,6 @@ public function publicIndex(Request $request)
 
         return view('public.product-detail', compact('produk', 'relatedProducts'));
     }
+
+    
 }
