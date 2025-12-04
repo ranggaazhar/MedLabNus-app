@@ -198,7 +198,7 @@
     )" x-cloak>
 
     {{-- Navbar --}}
-    < @include('components.public-navbar')
+   < @include('components.public-navbar')
 
     {{-- Main Content - Full Width --}}
     <main class="w-full px-6 lg:px-12 pt-32 pb-16">
