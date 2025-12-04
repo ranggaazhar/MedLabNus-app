@@ -4,6 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    {{-- 🔴 FAVICON 🔴 --}}
+    <link rel="icon" type="image/png" href="{{ asset('images/logo2.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo2.png') }}">
+    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @vite(['resources/css/welcome.css', 'resources/css/custom-utilities.css'])
     <title>PT Medlab Nusantara</title>
@@ -234,3 +239,6 @@
             });
         });
     </script>
+</body>
+
+</html>

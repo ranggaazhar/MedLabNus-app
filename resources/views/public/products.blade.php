@@ -4,6 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{{-- 🔴 FAVICON 🔴 --}}
+    <link rel="icon" type="image/png" href="{{ asset('images/logo2.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo2.png') }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @vite(['resources/css/welcome.css', 'resources/css/custom-utilities.css'])
     <title>Products - PT Medlab Nusantara</title>
@@ -14,137 +18,199 @@
     {{-- Alpine.js for interactivity --}}
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-   <style>
-        [x-cloak] { display: none !important; }
-        
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+
         /* Fade In Animation */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
-        
+
         /* Pulse Animation for Loading */
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
         }
-        
+
         /* Scale In Animation */
         @keyframes scaleIn {
             from {
                 opacity: 0;
                 transform: scale(0.9);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1);
             }
         }
-        
+
         /* Slide Down Animation */
         @keyframes slideDown {
             from {
                 opacity: 0;
                 transform: translateY(-10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-        
+
         .animate-fade-in-up {
             animation: fadeInUp 0.6s ease-out forwards;
         }
-        
+
         .animate-fade-in {
             animation: fadeIn 0.4s ease-out forwards;
         }
-        
+
         .animate-scale-in {
             animation: scaleIn 0.4s ease-out forwards;
         }
-        
+
         .animate-slide-down {
             animation: slideDown 0.3s ease-out forwards;
         }
-        
+
         /* Stagger delay for cards */
-        .stagger-1 { animation-delay: 0.05s; }
-        .stagger-2 { animation-delay: 0.1s; }
-        .stagger-3 { animation-delay: 0.15s; }
-        .stagger-4 { animation-delay: 0.2s; }
-        .stagger-5 { animation-delay: 0.25s; }
-        .stagger-6 { animation-delay: 0.3s; }
-        .stagger-7 { animation-delay: 0.35s; }
-        .stagger-8 { animation-delay: 0.4s; }
-        .stagger-9 { animation-delay: 0.45s; }
-        .stagger-10 { animation-delay: 0.5s; }
-        .stagger-11 { animation-delay: 0.55s; }
-        .stagger-12 { animation-delay: 0.6s; }
-        .stagger-13 { animation-delay: 0.65s; }
-        .stagger-14 { animation-delay: 0.7s; }
-        .stagger-15 { animation-delay: 0.75s; }
-        
+        .stagger-1 {
+            animation-delay: 0.05s;
+        }
+
+        .stagger-2 {
+            animation-delay: 0.1s;
+        }
+
+        .stagger-3 {
+            animation-delay: 0.15s;
+        }
+
+        .stagger-4 {
+            animation-delay: 0.2s;
+        }
+
+        .stagger-5 {
+            animation-delay: 0.25s;
+        }
+
+        .stagger-6 {
+            animation-delay: 0.3s;
+        }
+
+        .stagger-7 {
+            animation-delay: 0.35s;
+        }
+
+        .stagger-8 {
+            animation-delay: 0.4s;
+        }
+
+        .stagger-9 {
+            animation-delay: 0.45s;
+        }
+
+        .stagger-10 {
+            animation-delay: 0.5s;
+        }
+
+        .stagger-11 {
+            animation-delay: 0.55s;
+        }
+
+        .stagger-12 {
+            animation-delay: 0.6s;
+        }
+
+        .stagger-13 {
+            animation-delay: 0.65s;
+        }
+
+        .stagger-14 {
+            animation-delay: 0.7s;
+        }
+
+        .stagger-15 {
+            animation-delay: 0.75s;
+        }
+
         /* Loading Animation */
         .loading-pulse {
             animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
-        
+
         /* Smooth opacity transition */
         .opacity-transition {
             transition: opacity 0.3s ease-in-out;
         }
-        
+
         /* Badge Animation */
         @keyframes badgePop {
             0% {
                 transform: scale(0);
                 opacity: 0;
             }
+
             50% {
                 transform: scale(1.1);
             }
+
             100% {
                 transform: scale(1);
                 opacity: 1;
             }
         }
-        
+
         .badge-pop {
             animation: badgePop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
         }
-        
+
         /* Image Zoom on Hover */
         .product-image-container {
             overflow: hidden;
         }
-        
+
         .product-image {
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
+
         .product-card:hover .product-image {
             transform: scale(1.1) rotate(2deg);
         }
-        
+
         /* Shine Effect on Hover */
         .shine-effect {
             position: relative;
             overflow: hidden;
         }
-        
+
         .shine-effect::before {
             content: '';
             position: absolute;
@@ -161,17 +227,17 @@
             transform: translateX(-100%) translateY(-100%) rotate(45deg);
             transition: transform 0.6s;
         }
-        
+
         .shine-effect:hover::before {
             transform: translateX(100%) translateY(100%) rotate(45deg);
         }
-        
+
         /* Button Ripple Effect */
         .btn-ripple {
             position: relative;
             overflow: hidden;
         }
-        
+
         .btn-ripple::after {
             content: '';
             position: absolute;
@@ -184,7 +250,7 @@
             transform: translate(-50%, -50%);
             transition: width 0.6s, height 0.6s;
         }
-        
+
         .btn-ripple:active::after {
             width: 300px;
             height: 300px;
@@ -197,8 +263,8 @@
         '{{ request('search') ?? '' }}' 
     )" x-cloak>
 
-    {{-- Navbar --}}
-   < @include('components.public-navbar')
+    {{-- Navbar (Assuming you have this component) --}}
+    @include('components.public-navbar')
 
     {{-- Main Content - Full Width --}}
     <main class="w-full px-6 lg:px-12 pt-32 pb-16">
@@ -237,7 +303,7 @@
                         x-transition:leave-end="opacity-0 transform scale-95"
                         class="absolute top-full left-0 mt-2 w-40 bg-white border border-gray-300 rounded-lg shadow-2xl z-[9999] animate-slide-down"
                         style="position: absolute !important;">
-                        {{-- 🛑 MODIFIKASI: Tambahkan updateFilters() --}}
+                        
                         <button @click="filterCategory = 'semua'; updateFilters(); open = false"
                             :class="filterCategory === 'semua' ? 'bg-[#B1252E] text-white' : 'text-gray-700 hover:bg-gray-50'"
                             class="w-full text-left px-4 py-2.5 text-sm transition-all duration-200 first:rounded-t-lg hover:pl-5">
@@ -265,9 +331,9 @@
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
-                    <input type="text" x-model.debounce.300ms="searchQuery" {{-- 🛑 MODIFIKASI: Ganti @input dengan
-                        @change.debounce atau @input biasa karena updateFilters sudah dipanggil dari x-model --}}
-                        @change="updateFilters()" placeholder="Search products..."
+                    {{-- PENTING: Gunakan x-model.debounce.300ms untuk memicu updateFilters() setelah jeda mengetik --}}
+                    <input type="text" x-model.debounce.300ms="searchQuery" @change="updateFilters()"
+                        placeholder="Search products..."
                         class="pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg outline-none focus:border-[#B1252E] focus:shadow-lg transition-all duration-300 w-full sm:w-60 text-sm text-gray-700 focus:scale-105" />
                 </div>
             </div>
@@ -302,8 +368,8 @@
                     :class="`stagger-${(index % 15) + 1}`" x-intersect="$el.style.opacity = '1'">
                     {{-- Category Badge (Top Right) with Pop Animation --}}
                     <span :class="product.kategori === 'alat' 
-                                ? 'bg-blue-100 text-blue-700' 
-                                : 'bg-green-100 text-green-700'"
+                                 ? 'bg-blue-100 text-blue-700' 
+                                 : 'bg-green-100 text-green-700'"
                         class="absolute top-4 right-4 inline-block px-3 py-1 rounded-full text-xs font-semibold badge-pop transform transition-all duration-300 group-hover:scale-110"
                         x-text="product.kategori === 'alat' ? 'Alat' : product.kategori === 'reagen' ? 'Reagen' : 'Produk'"></span>
 
@@ -343,6 +409,7 @@
         {{-- Pagination with Animations --}}
         <div x-show="totalPages > 1 && !isLoading" class="flex justify-center items-center gap-2 mt-16 animate-fade-in">
             {{-- Previous Button --}}
+            {{-- PENTING: Panggil fungsi changePage yang sudah diperbaiki --}}
             <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1"
                 class="btn-ripple w-11 h-11 flex items-center justify-center border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 hover:border-[#B1252E] hover:text-[#B1252E] transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-gray-300 disabled:hover:text-gray-600 hover:scale-110 active:scale-95">
                 <svg class="w-4 h-4 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg"
@@ -354,15 +421,17 @@
 
             {{-- Page Numbers --}}
             <template x-for="page in totalPages" :key="page">
+                {{-- PENTING: Panggil fungsi changePage yang sudah diperbaiki --}}
                 <button @click="changePage(page)"
                     :class="page === currentPage 
-                                ? 'bg-[#B1252E] text-white border-[#B1252E] scale-110' 
-                                : 'border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-[#B1252E] hover:text-[#B1252E]'"
+                             ? 'bg-[#B1252E] text-white border-[#B1252E] scale-110' 
+                             : 'border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-[#B1252E] hover:text-[#B1252E]'"
                     class="btn-ripple w-11 h-11 flex items-center justify-center border rounded-lg font-medium transition-all duration-300 hover:scale-110 active:scale-95"
                     x-text="page"></button>
             </template>
 
             {{-- Next Button --}}
+            {{-- PENTING: Panggil fungsi changePage yang sudah diperbaiki --}}
             <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages"
                 class="btn-ripple w-11 h-11 flex items-center justify-center border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 hover:border-[#B1252E] hover:text-[#B1252E] transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-gray-300 disabled:hover:text-gray-600 hover:scale-110 active:scale-95">
                 <svg class="w-4 h-4 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg"
@@ -375,7 +444,7 @@
 
     </main>
 
-    {{-- Footer --}}
+    {{-- Footer (Assuming you have this component) --}}
     <x-footer />
 
     <script>
@@ -388,23 +457,23 @@
                 searchQuery: initialSearch || '',
                 filterCategory: initialCategory || 'semua',
 
-                currentPage: 1,
+                currentPage: parseInt(new URLSearchParams(window.location.search).get('page')) || 1, // Ambil page dari URL saat init
                 itemsPerPage: 15,
                 isLoading: false,
 
                 init() {
                     this.isLoading = true;
-                    this.currentPage = 1;
+                    this.currentPage = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
 
                     // 🛑 TANGANI TOMBOL BACK/FORWARD BROWSER (POPSTATE)
                     window.onpopstate = (event) => {
                         this.isLoading = true;
 
                         const params = new URLSearchParams(window.location.search);
-                        // Ambil kategori dan search dari URL
+                        // Ambil kategori, search, dan page dari URL
                         this.filterCategory = params.get('kategori') ?? 'semua';
                         this.searchQuery = params.get('search') ?? '';
-                        this.currentPage = 1;
+                        this.currentPage = parseInt(params.get('page')) || 1;
 
                         setTimeout(() => {
                             this.isLoading = false;
@@ -423,25 +492,29 @@
                     // 1. Filter berdasarkan Kategori
                     if (this.filterCategory !== 'semua') {
                         filtered = filtered.filter(product => {
-                            // Kategori di JSON sudah dijamin lowercase, bandingkan langsung.
                             return product.kategori === this.filterCategory;
                         });
                     }
 
                     // 2. Filter berdasarkan Search Query (Case-Insensitive)
                     if (this.searchQuery) {
-                        // 💡 PENTING: Ubah query pengguna ke lowercase
                         const query = this.searchQuery.toLowerCase();
 
                         filtered = filtered.filter(product =>
-                            // Bandingkan semua field target dalam lowercase
                             product.name.toLowerCase().includes(query) ||
                             product.brand.toLowerCase().includes(query) ||
                             (product.description && product.description.toLowerCase().includes(query))
                         );
                     }
 
-                    // Ini adalah array produk yang sudah difilter (tidak dipaginasi)
+                    // Pastikan halaman tidak melebihi batas setelah filtering
+                    const maxPage = Math.ceil(filtered.length / this.itemsPerPage);
+                    if (this.currentPage > maxPage && maxPage > 0) {
+                        this.currentPage = 1;
+                    } else if (filtered.length === 0) {
+                        this.currentPage = 1;
+                    }
+
                     return filtered;
                 },
 
@@ -466,34 +539,81 @@
                     return this.filteredProducts.slice(start, end);
                 },
 
-                goToPage(page) {
-                    if (page >= 1 && page <= this.totalPages) {
-                        this.currentPage = page;
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                /**
+                 * 🚀 FUNGSI PERBAIKAN: Mengubah halaman saat ini
+                 * @param {number} pageNumber - Nomor halaman yang dituju
+                 */
+                changePage(pageNumber) {
+                    if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+                        this.isLoading = true; // Tampilkan loading
+
+                        // Scroll ke atas halaman utama (di bawah navbar)
+                        const mainContent = document.querySelector('main');
+                        if (mainContent) {
+                            // Target scroll: awal konten utama, dikurangi sedikit margin
+                            window.scrollTo({
+                                top: mainContent.offsetTop - 100,
+                                behavior: 'smooth'
+                            });
+                        } else {
+                            window.scrollTo({
+                                top: 0,
+                                behavior: 'smooth'
+                            });
+                        }
+
+                        // Tunggu animasi scroll dan filter selesai
+                        setTimeout(() => {
+                            this.currentPage = pageNumber;
+                            this.updateUrlHistory(pageNumber); // Update URL dengan nomor halaman baru
+                            this.isLoading = false; // Sembunyikan loading
+                        }, 300); // Penundaan 300ms untuk scroll dan animasi
                     }
                 },
 
                 // Logika Update URL/History saat filter/search berubah
                 updateFilters() {
+                    // Set halaman ke 1 setiap kali filter atau search berubah
                     this.currentPage = 1;
 
-                    // Update URL Parameter
+                    // Update URL History
+                    this.updateUrlHistory(this.currentPage);
+                },
+
+                /**
+                 * 💾 Memperbarui URL di browser dengan parameter yang relevan.
+                 * @param {number} page - Nomor halaman saat ini.
+                 */
+                updateUrlHistory(page) {
                     const url = new URL(window.location);
 
+                    // Kategori
                     if (this.filterCategory !== 'semua') {
                         url.searchParams.set('kategori', this.filterCategory);
                     } else {
                         url.searchParams.delete('kategori');
                     }
 
+                    // Pencarian
                     if (this.searchQuery.length > 0) {
                         url.searchParams.set('search', this.searchQuery);
                     } else {
                         url.searchParams.delete('search');
                     }
 
+                    // Paginasi
+                    if (page > 1) {
+                        url.searchParams.set('page', page);
+                    } else {
+                        url.searchParams.delete('page');
+                    }
+
                     // Tambahkan atau ganti histori (tanpa me-reload halaman)
-                    window.history.pushState({ category: this.filterCategory, search: this.searchQuery }, '', url.toString());
+                    window.history.pushState({
+                        category: this.filterCategory,
+                        search: this.searchQuery,
+                        page: page
+                    }, '', url.toString());
                 }
             }
         }

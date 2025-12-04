@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo2.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo2.png') }}">
+    
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/welcome.css', 'resources/css/custom-utilities.css'])
     <title>{{ $produk->nama_produk }} - PT Medlab Nusantara</title>
 
     {{-- Tailwind CSS CDN --}}
@@ -55,14 +60,14 @@
     @endphp
 
     {{-- Navbar --}}
-    <x-public-navbar active="" />
+    @include('components.public-navbar')
 
     {{-- Main Content --}}
     <main class="w-full pt-32 pb-20 px-6 lg:px-12 xl:px-20">
         <div class="max-w-[1800px] mx-auto">
             
             {{-- Breadcrumb --}}
-            <nav class="mb-12 animate-fade-in-up">
+            <div class="mb-12 animate-fade-in-up">
                 <ol class="flex items-center gap-2 text-sm text-gray-500">
                     <li><a href="{{ route('welcome') }}" class="hover:text-[#B1252E] transition-colors">HOME</a></li>
                     <li>/</li>
@@ -70,7 +75,7 @@
                     <li>/</li>
                     <li class="text-[#B1252E] font-semibold">{{ strtoupper($produk->nama_produk) }}</li>
                 </ol>
-            </nav>
+            </div>
 
             {{-- Product Detail Container --}}
             <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
