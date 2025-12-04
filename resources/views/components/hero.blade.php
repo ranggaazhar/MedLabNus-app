@@ -35,7 +35,7 @@
             </h1>
             <p>Welcome to our Company Profile Website</p>
             <a href="{{ route('products.public') }}" class="btn-shop">
-                Shop Now
+                Order Now
                 <span class="arrow">&rarr;</span>
             </a>
         </div>

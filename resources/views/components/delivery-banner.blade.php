@@ -9,7 +9,7 @@
         </div>
         <div class="delivery-btn-wrapper reveal delay-200">
             <a href="{{ route('products.public') }}" class="btn-delivery">
-                View more <span class="arrow">&gt;</span>
+                Order Now <span class="arrow">&gt;</span>
             </a>
         </div>
     </div>
