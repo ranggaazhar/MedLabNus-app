@@ -127,12 +127,16 @@
 
                     {{-- Right: Product Info --}}
                     <div class="p-8 lg:p-16 flex flex-col justify-center animate-fade-in-right delay-300">
-                        
+
                         {{-- Company Logo --}}
                         <div class="flex items-center gap-3 mb-8">
-                            <div class="w-12 h-12 bg-gradient-to-br from-[#B1252E] to-[#8f1d24] rounded-xl flex items-center justify-center shadow-lg">
-                                <span class="text-white font-bold text-xl">M</span>
-                            </div>
+                            @if(file_exists(public_path('images/logo2.png')))
+                                <img src="{{ asset('images/logo2.png') }}" alt="PT Medlab Nusantara Logo" class="h-12 w-auto">
+                            @else
+                                <div class="w-12 h-12 bg-gradient-to-br from-[#B1252E] to-[#8f1d24] rounded-xl flex items-center justify-center shadow-lg">
+                                    <span class="text-white font-bold text-xl">M</span>
+                                </div>
+                            @endif
                             <span class="font-bold text-lg text-gray-800">PT Medlab Nusantara</span>
                         </div>
 
@@ -210,7 +214,7 @@
                                     <line x1="3" y1="6" x2="21" y2="6"></line>
                                     <path d="M16 10a4 4 0 0 1-8 0"></path>
                                 </svg>
-                                Pemesanan
+                                Penawaran
                                 <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                     <polyline points="12 5 19 12 12 19"></polyline>
