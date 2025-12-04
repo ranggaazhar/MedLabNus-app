@@ -349,62 +349,63 @@
         </div>
 
         {{-- Product Grid - Responsive & Full Width --}}
-        <div x-show="!isLoading"
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8 mb-16 opacity-transition">
-            <template x-if="currentProducts.length === 0">
-                <div class="col-span-full text-center py-20 animate-fade-in">
-                    <svg class="w-20 h-20 mx-auto text-gray-300 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <p class="text-gray-400 text-lg">Tidak ada produk ditemukan.</p>
-                </div>
-            </template>
-
-            <template x-for="(product, index) in currentProducts" :key="product.id">
-                <a :href="`/products/${product.id}`"
-                    class="product-card bg-[#F8F9FA] rounded-2xl p-7 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:bg-white hover:border-2 hover:border-[#B1252E] cursor-pointer group h-full min-h-[220px] border-2 border-transparent flex flex-col relative shine-effect animate-scale-in opacity-0"
-                    :class="`stagger-${(index % 15) + 1}`" x-intersect="$el.style.opacity = '1'">
-                    {{-- Category Badge (Top Right) with Pop Animation --}}
-                    <span :class="product.kategori === 'alat' 
-                                 ? 'bg-blue-100 text-blue-700' 
-                                 : 'bg-green-100 text-green-700'"
-                        class="absolute top-4 right-4 inline-block px-3 py-1 rounded-full text-xs font-semibold badge-pop transform transition-all duration-300 group-hover:scale-110"
-                        x-text="product.kategori === 'alat' ? 'Alat' : product.kategori === 'reagen' ? 'Reagen' : 'Produk'"></span>
-
-                    <div class="flex items-center gap-6 flex-1">
-                        {{-- Product Image with Zoom Effect --}}
-                        <div class="flex-shrink-0 w-24 h-24 product-image-container rounded-lg">
-                            <img :src="product.image" :alt="product.name"
-                                class="product-image w-full h-full object-contain" />
-                        </div>
-
-                        {{-- Product Details --}}
-                        <div class="flex-1 flex flex-col justify-center gap-1.5">
-                            <h3 class="text-[#B1252E] font-bold text-lg tracking-wide uppercase leading-tight transition-all duration-300 group-hover:text-[#8B1820]"
-                                x-text="product.name"></h3>
-
-                            <span
-                                class="text-[#AAAAAA] text-[11px] font-medium tracking-widest uppercase transition-colors duration-300 group-hover:text-gray-600"
-                                x-text="product.brand"></span>
-
-                            <p class="text-gray-600 text-xs leading-relaxed mt-2 line-clamp-3 transition-colors duration-300 group-hover:text-gray-700"
-                                x-text="product.description"></p>
-                        </div>
-                    </div>
-
-                    {{-- Hover Arrow Indicator --}}
-                    <div
-                        class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
-                        <svg class="w-5 h-5 text-[#B1252E]" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </div>
-                </a>
-            </template>
+        <!-- Ubah bagian Product Grid ini -->
+<div x-show="!isLoading"
+    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 opacity-transition">
+    <template x-if="currentProducts.length === 0">
+        <div class="col-span-full text-center py-20 animate-fade-in">
+            <svg class="w-20 h-20 mx-auto text-gray-300 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p class="text-gray-400 text-lg">Tidak ada produk ditemukan.</p>
         </div>
+    </template>
+
+    <template x-for="(product, index) in currentProducts" :key="product.id">
+        <a :href="`/products/${product.id}`"
+            class="product-card bg-[#F8F9FA] rounded-2xl p-7 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:bg-white hover:border-2 hover:border-[#B1252E] cursor-pointer group h-full min-h-[220px] border-2 border-transparent flex flex-col relative shine-effect animate-scale-in opacity-0"
+            :class="`stagger-${(index % 15) + 1}`" x-intersect="$el.style.opacity = '1'">
+            {{-- Category Badge (Top Right) with Pop Animation --}}
+            <span :class="product.kategori === 'alat' 
+                        ? 'bg-blue-100 text-blue-700' 
+                        : 'bg-green-100 text-green-700'"
+                class="absolute top-4 right-4 inline-block px-3 py-1 rounded-full text-xs font-semibold badge-pop transform transition-all duration-300 group-hover:scale-110"
+                x-text="product.kategori === 'alat' ? 'Alat' : product.kategori === 'reagen' ? 'Reagen' : 'Produk'"></span>
+
+            <div class="flex items-center gap-6 flex-1">
+                {{-- Product Image with Zoom Effect --}}
+                <div class="flex-shrink-0 w-24 h-24 product-image-container rounded-lg">
+                    <img :src="product.image" :alt="product.name"
+                        class="product-image w-full h-full object-contain" />
+                </div>
+
+                {{-- Product Details --}}
+                <div class="flex-1 flex flex-col justify-center gap-1.5">
+                    <h3 class="text-[#B1252E] font-bold text-lg tracking-wide uppercase leading-tight transition-all duration-300 group-hover:text-[#8B1820]"
+                        x-text="product.name"></h3>
+
+                    <span
+                        class="text-[#AAAAAA] text-[11px] font-medium tracking-widest uppercase transition-colors duration-300 group-hover:text-gray-600"
+                        x-text="product.brand"></span>
+
+                    <p class="text-gray-600 text-xs leading-relaxed mt-2 line-clamp-3 transition-colors duration-300 group-hover:text-gray-700"
+                        x-text="product.description"></p>
+                </div>
+            </div>
+
+            {{-- Hover Arrow Indicator --}}
+            <div
+                class="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
+                <svg class="w-5 h-5 text-[#B1252E]" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </div>
+        </a>
+    </template>
+</div>
 
         {{-- Pagination with Animations --}}
         <div x-show="totalPages > 1 && !isLoading" class="flex justify-center items-center gap-2 mt-16 animate-fade-in">
