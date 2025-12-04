@@ -134,7 +134,6 @@
                 </div>
             </div>
 
-            <hr>
 
             {{-- REAGEN Feature --}}
             <div class="grid lg:grid-cols-5 gap-16 items-center reveal delay-200">
