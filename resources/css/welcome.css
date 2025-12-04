@@ -65,7 +65,6 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 60px;
     position: fixed;
     top: 0;
     left: 0;
@@ -110,27 +109,13 @@ nav ul li a:hover {
 }
 
 /* Tombol Shop */
-.nav-shop-btn {
-    padding: 10px 24px;
-    background: #b41f24;
-    border-radius: 25px;
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: background 0.3s;
-}
-
 .nav-shop-btn:hover {
     background: #90191d;
 }
 
 .icon-shop {
-    width: 18px;
-    height: 18px;
+    width: 16px;                 /* ← Kurangi dari 18px */
+    height: 16px;                /* ← Kurangi dari 18px */
     filter: invert(1) brightness(100);
 }
 

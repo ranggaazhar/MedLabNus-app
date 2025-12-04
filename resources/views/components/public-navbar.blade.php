@@ -48,10 +48,10 @@
             </ul>
 
             {{-- Shop Button --}}
-            <a href="{{ route('products.public') }}" class="hidden md:flex items-center gap-2 px-6 py-2.5 bg-[#B1252E] text-white rounded-full hover:bg-[#8f1d24] transition-colors">
-                <img src="{{ asset('icons/shop.svg') }}" alt="Shop Icon" class="w-4 h-4 brightness-0 invert">
-                Shop
-            </a>
+           <a href="{{ route('products.public') }}" class="hidden md:flex items-center gap-1.5 px-4 py-2 bg-[#B1252E] text-white text-sm rounded-full hover:bg-[#8f1d24] transition-colors">
+    <img src="{{ asset('icons/shop.svg') }}" alt="Shop Icon" class="w-3.5 h-3.5 brightness-0 invert">
+    Shop
+</a>
         </div>
 
         {{-- Mobile Menu --}}
