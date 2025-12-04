@@ -28,12 +28,6 @@
                     <input type="text" name="search" placeholder="Cari pabrikan..." value="{{ request('search') }}"
                         class="w-full border border-gray-200 pl-10 pr-4 py-2.5 rounded-xl bg-white focus:ring-red-500 focus:border-red-500 shadow-sm text-gray-700 placeholder-gray-400 transition duration-150">
                 </div>
-
-                {{-- Placeholder Tombol Filter --}}
-                <button type="button"
-                    class="bg-white border border-gray-300 text-gray-700 font-semibold py-2.5 px-4 rounded-xl shadow-sm transition duration-150 flex items-center gap-2 hover:bg-gray-50 focus:outline-none">
-                    <i class="fas fa-filter"></i> Filter
-                </button>
             </form>
             
             {{-- Tombol Tambah Pabrikan --}}

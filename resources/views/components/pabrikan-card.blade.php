@@ -1,16 +1,12 @@
 @props(['pabrikan'])
 
 {{-- Card container --}}
-{{-- Diperkecil: h-60 -> h-52, p-6 -> p-5 --}}
 <div class="bg-white rounded-2xl shadow-md p-5 flex flex-col justify-between h-52 transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-[1.01] border border-gray-100">
     
-    {{-- Bagian Atas: Logo (Telah Menyatu dengan Nama di dalam Gambar) dan Ikon Panah --}}
-    {{-- Diperkecil: mb-4 -> mb-3 --}}
+    {{-- Bagian Atas: Logo --}}
     <div class="flex items-center justify-between mb-3">
-        {{-- Logo Pabrikan --}}
         <div class="flex items-center space-x-2">
             @if ($pabrikan->logo_pabrikan)
-                {{-- Logo diperbesar sedikit (h-8) agar teks di dalamnya lebih terbaca --}}
                 <img src="{{ asset('storage/' . $pabrikan->logo_pabrikan) }}"
                     alt="{{ $pabrikan->nama_pabrikan }}"
                     class="h-8 w-auto max-h-8 object-contain"> 
@@ -20,55 +16,106 @@
                     <i class="fas fa-industry text-base"></i>
                 </div>
             @endif
-            
-            {{-- Nama Pabrikan Kecil (Sejajar Logo) TELAH DIHAPUS, karena sudah menyatu dengan gambar logo. --}}
         </div>
-        
-        {{-- Ikon Panah Kanan --}}
-        <a href="#" class="text-gray-400 hover:text-red-600 transition-colors">
-            <i class="fas fa-chevron-right text-base font-bold"></i>
-        </a>
     </div>
 
-    {{-- Bagian Tengah: Nama Pabrikan Utama (Text Inputan) --}}
+    {{-- Bagian Tengah: Nama Pabrikan Utama --}}
     <div class="flex-1 -mt-2">
         <h3 class="text-2xl font-bold text-gray-800 leading-tight">
             {{ $pabrikan->nama_pabrikan }}
         </h3>
         
-        {{-- Asal Negara (Tanpa Ikon) --}}
+        {{-- Asal Negara --}}
         <p class="text-base text-gray-500 mt-1">
             {{ $pabrikan->asal_negara }}
         </p>
     </div>
 
-    {{-- Bagian Bawah: Tombol Aksi (Tanpa Shadow) --}}
-    {{-- Diperkecil: mt-4 -> mt-3 --}}
-    <div class="flex justify-start space-x-3 mt-3">
+    {{-- Bagian Bawah: Tombol Aksi --}}
+    <div class="flex justify-between items-center mt-3 w-full">
         
-        {{-- Tombol Edit: navigasi ke halaman edit --}}
+        {{-- Tombol Edit --}}
         <a href="{{ route('pabrikan.edit', $pabrikan) }}" title="Edit Data Pabrikan"
             class="bg-gray-800 text-white hover:bg-gray-900 
                    font-medium py-2 px-5 rounded-lg 
                    transition duration-300 ease-in-out flex items-center space-x-2 
                    focus:outline-none focus:ring-2 focus:ring-gray-300 transform hover:scale-[1.03]">
-            <i class="fas fa-pencil-alt text-xs"></i>
+            
+            <img src="{{ asset('icons/edit.svg') }}" 
+                 alt="Edit Icon" 
+                 class="w-5 h-5 brightness-0 invert">
+            
             <span class="text-sm">Edit</span>
         </a>
 
-        {{-- Tombol Hapus (Tanpa Shadow) --}}
-        <form action="{{ route('pabrikan.destroy', $pabrikan) }}" method="POST"
-            onsubmit="return confirm('Yakin ingin menghapus pabrikan {{ $pabrikan->nama_pabrikan }}? Tindakan ini tidak dapat dibatalkan.');">
+        {{-- Tombol Hapus (UPDATED FOR SWEETALERT) --}}
+        <form action="{{ route('pabrikan.destroy', $pabrikan) }}" method="POST">
             @csrf
             @method('DELETE')
-            <button type="submit" title="Hapus Data Pabrikan"
-                class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-5 rounded-lg 
+            {{-- Perhatikan: type="button" dan penambahan class "btn-delete" --}}
+            <button type="button" title="Hapus Data Pabrikan"
+                class="btn-delete bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-5 rounded-lg 
                        transition duration-300 ease-in-out 
                        flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-red-300 transform hover:scale-[1.03]">
-                {{-- Menggunakan ikon yang lebih kecil (text-xs) --}}
                 <i class="fas fa-trash-alt text-xs"></i>
                 <span class="text-sm">Delete</span>
             </button>
         </form>
     </div>
 </div>
+
+{{-- SWEETALERT LOGIC --}}
+{{-- Menggunakan @once agar script tidak diduplikasi jika component ini di-loop --}}
+@once
+    {{-- Pastikan library SweetAlert2 sudah diload di layout utama (app.blade.php) --}}
+    {{-- Jika belum, uncomment baris di bawah ini: --}}
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Logic Hapus
+            // Event delegation lebih aman, tapi ini sesuai request Anda (querySelectorAll)
+            document.querySelectorAll('.btn-delete').forEach(button => {
+                button.addEventListener('click', function () {
+                    const form = this.closest('form');
+                    Swal.fire({
+                        title: 'Yakin ingin menghapus?',
+                        text: "Data pabrikan tidak dapat dikembalikan setelah dihapus!", // Saya sesuaikan text jadi 'pabrikan'
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+
+            // Logic Alert Success/Error dari Session
+            @if(session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sukses',
+                    text: "{{ session('success') }}",
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            @endif
+
+            @if(session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: "{{ session('error') }}",
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            @endif
+        });
+    </script>
+@endonce
