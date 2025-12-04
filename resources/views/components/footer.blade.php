@@ -21,8 +21,7 @@
                         <h2 class="text-xl font-bold text-white">PT Medlab Nusantara</h2>
                     </div>
                     <p class="text-gray-300 leading-relaxed max-w-md text-sm">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore.
+Mitra tepercaya Anda dalam inovasi diagnostik. Kami menghadirkan produk dan teknologi medis terbaik, memastikan hasil yang presisi dan mendukung kemajuan riset kesehatan di Nusantara
                         <a href="#" class="text-white hover:text-[#B1252E] font-medium ml-1 transition-colors">Learn more</a>
                     </p>
                 </div>
