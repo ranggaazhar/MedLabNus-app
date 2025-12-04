@@ -212,7 +212,6 @@
             let distance = itemIndex - currentActive;
 
             // Normalize distance for circular behavior
-            // This ensures smooth infinite scrolling
             if (distance > totalItems / 2) {
                 distance -= totalItems;
             } else if (distance < -totalItems / 2) {
@@ -224,6 +223,10 @@
 
         function updateCarousel(instant = false) {
             const isMobile = window.innerWidth < 768;
+            
+            // Variabel untuk Mobile (menggunakan VW)
+            const itemWidthVW = 90; // Lebar item di mobile
+            const slideDistanceVW = 100; // Jarak geser antar item (memastikan item penuh terlihat)
 
             carouselItems.forEach((item, index) => {
                 const position = getPositionForIndex(index, activeIndex);
@@ -236,47 +239,36 @@
                 }
 
                 if (isMobile) {
-                    // Mobile: only show active item
-                    if (position === 0) {
-                        item.style.width = '90vw';
-                        item.style.height = '300px';
-                        item.style.opacity = '1';
-                        item.style.transform = 'translateX(0) scale(1)';
-                        item.style.zIndex = '10';
-                        item.style.pointerEvents = 'auto';
-                    } else if (position === 1) {
-                        // Next item - positioned to the right
-                        item.style.width = '90vw';
-                        item.style.height = '300px';
+                    // 📱 LOGIKA MOBILE: Karusel 2D (seperti Feed Instagram/Reel)
+                    
+                    const totalTranslateX = position * slideDistanceVW;
+
+                    item.style.width = itemWidthVW + 'vw';
+                    item.style.height = '300px'; 
+                    item.style.opacity = '1';
+                    
+                    // Transformasi: Geser relatif dari posisi tengah container (-50%, -50%)
+                    // Catatan: Asumsi item-item karusel memiliki CSS awal:
+                    // position: absolute; top: 50%; left: 50%; 
+                    // Jika tidak ada, ini mungkin tidak terpusat.
+                    item.style.transform = `translateX(${totalTranslateX}vw) scale(1) translate(-50%, -50%)`;
+                    item.style.zIndex = position === 0 ? '10' : '5';
+                    item.style.pointerEvents = position === 0 ? 'auto' : 'none';
+                    
+                    // Sembunyikan item yang terlalu jauh
+                    if (Math.abs(position) > 2) {
                         item.style.opacity = '0';
-                        item.style.transform = 'translateX(100%) scale(0.8)';
-                        item.style.zIndex = '0';
-                        item.style.pointerEvents = 'none';
-                    } else if (position === -1) {
-                        // Previous item - positioned to the left
-                        item.style.width = '90vw';
-                        item.style.height = '300px';
-                        item.style.opacity = '0';
-                        item.style.transform = 'translateX(-100%) scale(0.8)';
-                        item.style.zIndex = '0';
-                        item.style.pointerEvents = 'none';
-                    } else {
-                        // Hidden items
-                        item.style.width = '0';
-                        item.style.height = '300px';
-                        item.style.opacity = '0';
-                        item.style.transform = 'scale(0.8)';
-                        item.style.zIndex = '0';
                         item.style.pointerEvents = 'none';
                     }
                 } else {
-                    // Desktop: show active + 2 side items
+                    // 💻 LOGIKA DESKTOP: DIPERTAHANKAN 100% SEPERTI KODE ASLI ANDA
+                    
                     if (position === 0) {
                         // Active item - center
                         item.style.width = '500px';
                         item.style.height = '400px';
                         item.style.opacity = '1';
-                        item.style.transform = 'translateX(0) scale(1)';
+                        item.style.transform = 'translateX(0) scale(1)'; // ASLI
                         item.style.zIndex = '10';
                         item.style.pointerEvents = 'auto';
                     } else if (position === 1) {
@@ -284,7 +276,7 @@
                         item.style.width = '300px';
                         item.style.height = '400px';
                         item.style.opacity = '0.4';
-                        item.style.transform = 'translateX(100px) scale(0.8)';
+                        item.style.transform = 'translateX(100px) scale(0.8)'; // ASLI
                         item.style.zIndex = '5';
                         item.style.pointerEvents = 'auto';
                     } else if (position === -1) {
@@ -292,7 +284,7 @@
                         item.style.width = '300px';
                         item.style.height = '400px';
                         item.style.opacity = '0.4';
-                        item.style.transform = 'translateX(-100px) scale(0.8)';
+                        item.style.transform = 'translateX(-100px) scale(0.8)'; // ASLI
                         item.style.zIndex = '5';
                         item.style.pointerEvents = 'auto';
                     } else if (position === 2) {
@@ -300,7 +292,7 @@
                         item.style.width = '0';
                         item.style.height = '400px';
                         item.style.opacity = '0';
-                        item.style.transform = 'translateX(200px) scale(0.6)';
+                        item.style.transform = 'translateX(200px) scale(0.6)'; // ASLI
                         item.style.zIndex = '0';
                         item.style.pointerEvents = 'none';
                     } else if (position === -2) {
@@ -308,7 +300,7 @@
                         item.style.width = '0';
                         item.style.height = '400px';
                         item.style.opacity = '0';
-                        item.style.transform = 'translateX(-200px) scale(0.6)';
+                        item.style.transform = 'translateX(-200px) scale(0.6)'; // ASLI
                         item.style.zIndex = '0';
                         item.style.pointerEvents = 'none';
                     } else {
@@ -316,7 +308,7 @@
                         item.style.width = '0';
                         item.style.height = '400px';
                         item.style.opacity = '0';
-                        item.style.transform = 'scale(0.6)';
+                        item.style.transform = 'scale(0.6)'; // ASLI
                         item.style.zIndex = '0';
                         item.style.pointerEvents = 'none';
                     }
@@ -329,12 +321,23 @@
             }
 
             // Update dots - 3 dots for 6 images (each dot represents 2 images)
-            const activeDotIndex = Math.floor(activeIndex / 2);
+            // Update dots - 3 dots for 6 images (each dot represents 2 images)
+            const activeDotIndex = Math.floor(activeIndex / 1);
             dots.forEach((dot, index) => {
+                // Warna, Tinggi, Margin, dan Transisi Dasar untuk Semua Dot
+                dot.style.height = '10px';
+                dot.style.transition = 'all 0.3s';
+                dot.style.margin = '0 5px';
+                dot.style.borderRadius = '4px'; // Semua dot berbentuk persegi panjang melengkung
+
                 if (index === activeDotIndex) {
-                    dot.classList.add('active');
+                    // DOT AKTIF: Merah, Paling Panjang
+                    dot.style.width = '80px'; // Lebar lebih panjang
+                    dot.style.backgroundColor = '#B1252E'; // Merah
                 } else {
-                    dot.classList.remove('active');
+                    // DOT TIDAK AKTIF: Abu-abu Gelap, Panjang Standar
+                    dot.style.width = '35px'; // Lebar standar (tetap persegi panjang)
+                    dot.style.backgroundColor = '#888'; // Abu-abu Gelap
                 }
             });
         }
@@ -384,10 +387,12 @@
             });
         });
 
-        // Click on carousel items to make them active
+        // Click on carousel items to make them active (Hanya berlaku di Desktop)
         carouselItems.forEach((item, index) => {
             item.addEventListener('click', () => {
-                if (index !== activeIndex && !isAnimating) {
+                // Hanya aktifkan klik jika bukan di mobile
+                // Logika desktop (window.innerWidth >= 768)
+                if (window.innerWidth >= 768 && index !== activeIndex && !isAnimating) {
                     isAnimating = true;
                     activeIndex = index;
                     updateCarousel();
@@ -440,4 +445,4 @@
             revealObserver.observe(el);
         });
     });
-</script>
+</script>   

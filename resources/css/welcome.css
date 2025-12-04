@@ -114,8 +114,8 @@ nav ul li a:hover {
 }
 
 .icon-shop {
-    width: 16px;                 /* ← Kurangi dari 18px */
-    height: 16px;                /* ← Kurangi dari 18px */
+    width: 16px; /* ← Kurangi dari 18px */
+    height: 16px; /* ← Kurangi dari 18px */
     filter: invert(1) brightness(100);
 }
 
@@ -310,6 +310,9 @@ nav ul li a:hover {
         width: 100% !important;
         height: 242px !important;
         max-width: 100% !important;
+        position: absolute;
+        top: 50%;
+        left: 50%;
     }
 
     .carousel-item img {
