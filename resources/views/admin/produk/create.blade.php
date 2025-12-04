@@ -197,28 +197,32 @@
                 </div>
             </div>
 
-            {{-- KONTEN 3: GAMBAR --}}
+            {{-- KONTEN 3: GAMBAR (UPDATED DRAG & DROP) --}}
             <div id="tab-gambar" class="tab-content hidden">
                 <h2 class="text-xl font-bold text-gray-800 mb-6">Upload Gambar Produk</h2>
                 <div class="">
                     <div class="mb-6">
                         <label for="gambar_utama" class="block text-sm font-semibold text-gray-700 mb-2">Gambar Utama Produk</label>
-                        <div class="w-full border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-red-500 transition-colors">
+                        
+                        {{-- AREA DROP ZONE dengan ID dropZone --}}
+                        <div id="dropZone" class="w-full border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-red-500 hover:bg-gray-50 transition-colors transition-all duration-200 ease-in-out">
                             <input type="file" name="gambar_utama" id="gambar_utama" accept="image/*" class="hidden">
-                            <label for="gambar_utama" class="cursor-pointer">
-                                <div class="flex flex-col items-center">
-                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-300 mb-2"></i>
-                                    <p class="text-sm text-gray-600 mb-1">Drag your file(s) or <span class="text-red-600 font-semibold">browse</span></p>
+                            <label for="gambar_utama" class="cursor-pointer block w-full h-full">
+                                <div class="flex flex-col items-center pointer-events-none">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-300 mb-2 transition-colors" id="uploadIcon"></i>
+                                    <p class="text-sm text-gray-600 mb-1">Drag your file here or <span class="text-red-600 font-semibold">browse</span></p>
                                     <p class="text-xs text-gray-400">Max 10 MB files are allowed</p>
                                 </div>
                             </label>
                         </div>
                         @error('gambar_utama') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
+                    
+                    {{-- PREVIEW IMAGE --}}
                     <div id="imagePreview" class="hidden">
                         <p class="text-sm font-semibold text-gray-700 mb-3">Preview Gambar:</p>
                         <div class="relative inline-block">
-                            <img src="" alt="Preview" class="h-48 w-auto object-cover rounded-lg border-2 border-gray-200 shadow-md">
+                            <img id="previewImg" src="" alt="Preview" class="h-48 w-auto object-cover rounded-lg border-2 border-gray-200 shadow-md">
                             <button type="button" id="removeImageBtn" class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-2 hover:bg-red-700 transition-colors shadow-lg"><i class="fas fa-times"></i></button>
                         </div>
                     </div>
@@ -232,10 +236,9 @@
     @section('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // TAB SWITCHING LOGIC
+            // --- 1. TAB SWITCHING LOGIC ---
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabContents = document.querySelectorAll('.tab-content');
-
             const activeClasses = ['border-red-600', 'text-gray-900', 'font-bold'];
             const inactiveClasses = ['border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'font-medium'];
 
@@ -258,45 +261,119 @@
                 });
             });
 
-            // SPECIFICATION & IMAGE LOGIC
+            // --- 2. SPECIFICATION LOGIC ---
             let specIndex = {{ old('spesifikasi') ? count(old('spesifikasi')) : 0 }};
-            document.getElementById('addSpecBtn').addEventListener('click', function() {
-                const container = document.getElementById('specContainer');
-                const newSpec = `
-                    <div class="spec-item bg-gray-50 rounded-lg border border-gray-200 p-4">
-                        <div class="grid grid-cols-1 gap-4">
-                            <div><label class="block text-sm font-medium text-gray-700 mb-2">Nama Spesifikasi</label><input type="text" name="spesifikasi[${specIndex}][nama_spesifikasi]" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-red-500 focus:ring-red-500"></div>
-                            <div><label class="block text-sm font-medium text-gray-700 mb-2">Nilai Spesifikasi</label><input type="text" name="spesifikasi[${specIndex}][nilai]" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-red-500 focus:ring-red-500"></div>
-                            <div class="flex justify-end"><button type="button" class="removeSpecBtn text-red-600 hover:text-red-800 transition-colors text-sm font-medium flex items-center gap-1"><i class="fas fa-trash"></i> Hapus</button></div>
-                        </div>
-                    </div>`;
-                container.insertAdjacentHTML('beforeend', newSpec);
-                specIndex++;
-            });
+            const addSpecBtn = document.getElementById('addSpecBtn');
+            if(addSpecBtn) {
+                addSpecBtn.addEventListener('click', function() {
+                    const container = document.getElementById('specContainer');
+                    const newSpec = `
+                        <div class="spec-item bg-gray-50 rounded-lg border border-gray-200 p-4">
+                            <div class="grid grid-cols-1 gap-4">
+                                <div><label class="block text-sm font-medium text-gray-700 mb-2">Nama Spesifikasi</label><input type="text" name="spesifikasi[${specIndex}][nama_spesifikasi]" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-red-500 focus:ring-red-500"></div>
+                                <div><label class="block text-sm font-medium text-gray-700 mb-2">Nilai Spesifikasi</label><input type="text" name="spesifikasi[${specIndex}][nilai]" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-red-500 focus:ring-red-500"></div>
+                                <div class="flex justify-end"><button type="button" class="removeSpecBtn text-red-600 hover:text-red-800 transition-colors text-sm font-medium flex items-center gap-1"><i class="fas fa-trash"></i> Hapus</button></div>
+                            </div>
+                        </div>`;
+                    container.insertAdjacentHTML('beforeend', newSpec);
+                    specIndex++;
+                });
+            }
+
             document.addEventListener('click', function(e) {
                 if (e.target.closest('.removeSpecBtn') && confirm('Hapus spesifikasi ini?')) {
                     e.target.closest('.spec-item').remove();
                 }
             });
 
-            // Image Preview
+            // --- 3. IMAGE PREVIEW & DRAG-DROP LOGIC ---
+            const dropZone = document.getElementById('dropZone');
             const fileInput = document.getElementById('gambar_utama');
-            const preview = document.getElementById('imagePreview');
-            const previewImg = preview.querySelector('img');
+            const imagePreview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg'); // Changed from querySelector to ID for safety
             const removeBtn = document.getElementById('removeImageBtn');
+            const uploadIcon = document.getElementById('uploadIcon');
 
+            // Prevent browser default drag behaviors
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            // Highlight drop zone
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dropZone.classList.add('border-red-500', 'bg-red-50');
+                    if(uploadIcon) {
+                        uploadIcon.classList.remove('text-gray-300');
+                        uploadIcon.classList.add('text-red-500');
+                    }
+                }, false);
+            });
+
+            // Unhighlight drop zone
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dropZone.classList.remove('border-red-500', 'bg-red-50');
+                    if(uploadIcon) {
+                        uploadIcon.classList.add('text-gray-300');
+                        uploadIcon.classList.remove('text-red-500');
+                    }
+                }, false);
+            });
+
+            // Handle dropped files
+            dropZone.addEventListener('drop', function(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                if (files.length > 0) {
+                    fileInput.files = files; // Assign dropped files to input
+                    handleFiles(files[0]);
+                }
+            }, false);
+
+            // Handle browse files
             fileInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    if (file.size > 2048000) { alert('Ukuran file maksimal 2MB!'); fileInput.value = ''; return; }
-                    const reader = new FileReader();
-                    reader.onload = function(e) { previewImg.src = e.target.result; preview.classList.remove('hidden'); }
-                    reader.readAsDataURL(file);
+                if (this.files.length > 0) {
+                    handleFiles(this.files[0]);
                 }
             });
-            removeBtn.addEventListener('click', function() { fileInput.value = ''; preview.classList.add('hidden'); previewImg.src = ''; });
 
-            // Form Validation
+            function handleFiles(file) {
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    alert('File harus berupa gambar!');
+                    fileInput.value = '';
+                    return;
+                }
+                // Validate size (Example: 2MB limit -> 2048000 bytes)
+                // Note: user HTML says "10MB", but JS previously said "2MB". 
+                // Let's align with the text displayed: 10MB = 10485760 bytes.
+                if (file.size > 10485760) { 
+                    alert('Ukuran file maksimal 10MB!'); 
+                    fileInput.value = ''; 
+                    return; 
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) { 
+                    previewImg.src = e.target.result; 
+                    imagePreview.classList.remove('hidden'); 
+                }
+                reader.readAsDataURL(file);
+            }
+
+            removeBtn.addEventListener('click', function() { 
+                fileInput.value = ''; 
+                imagePreview.classList.add('hidden'); 
+                previewImg.src = ''; 
+            });
+
+            // --- 4. FORM VALIDATION ---
             document.getElementById('productForm').addEventListener('submit', function(e) {
                 const nama = document.getElementById('nama_produk').value.trim();
                 const pabrikan = document.getElementById('pabrikan_id').value;
