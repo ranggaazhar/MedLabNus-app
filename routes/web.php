@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/produk/export', [ProdukController::class, 'export'])->name('produk.export');
     Route::post('/produk/check-nama', [ProdukController::class, 'checkNamaProduk'])->name('produk.checkNama');
+    Route::post('/pabrikan/check-nama', [PabrikanController::class, 'checkNamaPabrikan'])->name('pabrikan.checkNama');
 
     // ========== PABRIKAN ROUTES ==========
     Route::get('/pabrikan', [PabrikanController::class, 'index'])->name('pabrikan.index');

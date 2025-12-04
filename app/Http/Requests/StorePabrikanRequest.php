@@ -21,11 +21,38 @@ class StorePabrikanRequest extends FormRequest
      */
     public function rules(): array
     {
-        // Pastikan aturan validasi Anda sesuai dengan database baru (tanpa alamat)
+        // Aturan validasi untuk data pabrikan
         return [
-            'nama_pabrikan' => ['required', 'string', 'max:255', 'unique:pabrikans,nama_pabrikan'],
-            'asal_negara' => ['required', 'string', 'max:100'],
-            'logo_pabrikan' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+            'nama_pabrikan' => 'required|string|max:255|unique:pabrikans,nama_pabrikan',
+            'asal_negara' => 'required|string|max:100',
+            // Gunakan format string untuk aturan validasi, seperti di StoreProdukRequest
+            'logo_pabrikan' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            // Pesan kustom untuk nama_pabrikan
+            'nama_pabrikan.required' => 'Nama pabrikan wajib diisi.',
+            'nama_pabrikan.string' => 'Nama pabrikan harus berupa teks.',
+            'nama_pabrikan.max' => 'Nama pabrikan maksimal 255 karakter.',
+            'nama_pabrikan.unique' => 'Nama pabrikan sudah terdaftar, gunakan nama lain.',
+            
+            // Pesan kustom untuk asal_negara
+            'asal_negara.required' => 'Asal negara pabrikan wajib diisi.',
+            'asal_negara.string' => 'Asal negara harus berupa teks.',
+            'asal_negara.max' => 'Asal negara maksimal 100 karakter.',
+
+            // Pesan kustom untuk logo_pabrikan
+            'logo_pabrikan.image' => 'File logo harus berupa gambar.',
+            'logo_pabrikan.mimes' => 'Logo harus berformat: jpeg, png, jpg, gif, atau svg.',
+            'logo_pabrikan.max' => 'Ukuran logo maksimal 2MB.',
         ];
     }
 }
