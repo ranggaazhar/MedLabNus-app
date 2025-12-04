@@ -74,8 +74,8 @@ Mitra tepercaya Anda dalam inovasi diagnostik. Kami menghadirkan produk dan tekn
                         </div>
                         <ul class="space-y-2 text-sm text-gray-300">
                             <li><a href="{{ route('welcome') }}" class="hover:text-[#B1252E] transition-colors">Home</a></li>
-                            <li><a href="#visi-misi" class="hover:text-[#B1252E] transition-colors">Visi & Misi</a></li>
-                            <li><a href="{{ route('products.public') }}" class="hover:text-[#B1252E] transition-colors">Product</a></li>
+                            <li><a href="{{ route('welcome') }}#visi-misi-section" class="hover:text-[#B1252E] transition-colors">Visi & Misi</a></li>
+                            <li><a href="{{ route('welcome') }}#product-section" class="hover:text-[#B1252E] transition-colors">Product</a></li>
                         </ul>
                     </div>
 

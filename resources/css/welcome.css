@@ -65,6 +65,8 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-bottom: 10px;
+    padding-top: 10px;
     position: fixed;
     top: 0;
     left: 0;
