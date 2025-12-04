@@ -32,13 +32,13 @@
                     Edit
                 </p>
                 {{-- Title & Subtitle --}}
-                <h1 class="text-3xl font-extrabold text-gray-800 mt-1">Edit Pabrikan: {{ $pabrikan->nama_pabrikan }}</h1>
+                <h1 class="text-3xl font-extrabold text-gray-800 mt-1">Edit Pabrikan</h1>
                 <p class="text-gray-500">Perbarui informasi dasar Pabrikan dan Logo</p>
             </div>
             
             {{-- Tombol Cancel & Update --}}
             <div class="flex gap-3">
-                <a href="{{ route('pabrikan.show', $pabrikan->pabrikan_id) }}" 
+                <a href="{{ route('pabrikan.index') }}" 
                     class="bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg px-6 py-3 text-base font-medium shadow-sm transition-colors flex items-center gap-2">
                     <i class="fas fa-times"></i> Batal
                 </a>
