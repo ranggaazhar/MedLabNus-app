@@ -91,7 +91,12 @@
         </div>
 
         {{-- Right: Actions --}}
+        
         <div class="flex w-full md:w-auto gap-3 justify-end">
+            <a href="{{ route('produk.export', ['kategori' => request('kategori', 'semua'), 'search' => request('search')]) }}"
+                class="px-4 py-2.5 bg-green-600 text-white rounded-xl text-sm font-medium hover:bg-green-700 shadow-sm flex items-center gap-2 transition-all">
+                <i class="fas fa-file-excel"></i> Export Excel
+            </a>
             <a href="{{ route('produk.create') }}"
                 class="px-4 py-2.5 bg-red-700 text-white rounded-xl text-sm font-medium hover:bg-red-800 shadow-sm flex items-center gap-2 transition-all">
                 <i class="fas fa-plus"></i> Add Product

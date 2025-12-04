@@ -10,9 +10,20 @@ use App\Http\Requests\UpdateProdukRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Exports\ProdukExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProdukController extends Controller
 {
+    public function export(Request $request)
+{
+    $kategori = $request->query('kategori', 'semua');
+    $search = $request->query('search');
+    
+    $filename = 'produk_' . ($kategori !== 'semua' ? $kategori . '_' : '') . date('YmdHis') . '.xlsx';
+    
+    return Excel::download(new ProdukExport($kategori, $search), $filename);
+}
 
 
     public function create()
