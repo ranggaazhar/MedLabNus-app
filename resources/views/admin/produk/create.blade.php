@@ -86,50 +86,49 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {{-- Nama Product --}}
                     {{-- Nama Product - Ganti seluruh div ini --}}
-<div>
-    <label for="nama_produk" class="block text-sm font-semibold text-gray-700 mb-2">
-        Nama Product <span class="text-red-500">*</span>
-    </label>
-    <div class="relative">
-        <input type="text" name="nama_produk" id="nama_produk" 
-            placeholder="Contoh: Chemistry Analyzer" 
-            value="{{ old('nama_produk') }}" required
-            class="w-full border border-gray-300 rounded-lg px-4 py-2.5 pr-10 focus:border-red-500 focus:ring-red-500 transition duration-150 shadow-sm">
-        
-        {{-- Loading Spinner --}}
-        <div id="checkingSpinner" class="hidden absolute right-3 top-3">
-            <svg class="animate-spin h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-        </div>
-        
-        {{-- Success Icon --}}
-        <div id="successIcon" class="hidden absolute right-3 top-3">
-            <svg class="h-5 w-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-            </svg>
-        </div>
-        
-        {{-- Error Icon --}}
-        <div id="errorIcon" class="hidden absolute right-3 top-3">
-            <svg class="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-        </div>
-    </div>
-    
-    {{-- Error Message --}}
-    <p id="namaProdukError" class="hidden text-red-500 text-xs mt-1 items-center gap-1">
-        <i class="fas fa-exclamation-circle"></i>
-        <span>Nama produk sudah terdaftar, gunakan nama lain.</span>
-    </p>
-    
-    @error('nama_produk') 
-        <p class="text-red-500 text-xs mt-1">{{ $message }}</p> 
-    @enderror
-</div>
-
+                <div>
+                    <label for="nama_produk" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Nama Product <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <input type="text" name="nama_produk" id="nama_produk" 
+                            placeholder="Contoh: Chemistry Analyzer" 
+                            value="{{ old('nama_produk') }}" required
+                            class="w-full border border-gray-300 rounded-lg px-4 py-2.5 pr-10 focus:border-red-500 focus:ring-red-500 transition duration-150 shadow-sm">
+                        
+                        {{-- Loading Spinner --}}
+                        <div id="checkingSpinner" class="hidden absolute right-3 top-3">
+                            <svg class="animate-spin h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+                        
+                        {{-- Success Icon --}}
+                        <div id="successIcon" class="hidden absolute right-3 top-3">
+                            <svg class="h-5 w-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        
+                        {{-- Error Icon --}}
+                        <div id="errorIcon" class="hidden absolute right-3 top-3">
+                            <svg class="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    {{-- Error Message --}}
+                    <p id="namaProdukError" class="hidden text-red-500 text-xs mt-1 items-center gap-1">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>Nama produk sudah terdaftar, gunakan nama lain.</span>
+                    </p>
+                    
+                    @error('nama_produk') 
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p> 
+                    @enderror
+                </div>
                     {{-- Pabrikan (Dropdown) --}}
                     <div class="relative" 
                         x-data="{ selectedId: '{{ old('pabrikan_id') }}', selectedName: '{{ old('pabrikan_id') ? $pabrikans->firstWhere('pabrikan_id', old('pabrikan_id'))->nama_pabrikan : 'Pilih Pabrikan' }}' }">
@@ -270,6 +269,68 @@
     @section('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // AJAX Check Nama Produk - Tambahkan sebelum penutup script
+let checkTimeout;
+const namaProdukInput = document.getElementById('nama_produk');
+const checkingSpinner = document.getElementById('checkingSpinner');
+const successIcon = document.getElementById('successIcon');
+const errorIcon = document.getElementById('errorIcon');
+const errorMessage = document.getElementById('namaProdukError');
+const submitButton = document.querySelector('button[type="submit"]');
+
+namaProdukInput.addEventListener('input', function() {
+        const nama = this.value.trim();
+        
+        // Reset icons
+        checkingSpinner.classList.add('hidden');
+        successIcon.classList.add('hidden');
+        errorIcon.classList.add('hidden');
+        errorMessage.classList.add('hidden');
+        namaProdukInput.classList.remove('border-red-500', 'border-green-500');
+        
+        // Clear previous timeout
+        clearTimeout(checkTimeout);
+        
+        if (nama.length < 3) return;
+        
+        // Show loading
+        checkingSpinner.classList.remove('hidden');
+        
+        // Debounce check
+        checkTimeout = setTimeout(() => {
+            fetch('{{ route("produk.checkNama") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ nama_produk: nama })
+            })
+            .then(response => response.json())
+            .then(data => {
+                checkingSpinner.classList.add('hidden');
+                
+                if (data.exists) {
+                    // Nama sudah ada
+                    errorIcon.classList.remove('hidden');
+                    errorMessage.classList.remove('hidden');
+                    namaProdukInput.classList.add('border-red-500');
+                    submitButton.disabled = true;
+                    submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+                } else {
+                    // Nama tersedia
+                    successIcon.classList.remove('hidden');
+                    namaProdukInput.classList.add('border-green-500');
+                    submitButton.disabled = false;
+                    submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                checkingSpinner.classList.add('hidden');
+            });
+        }, 500); // Wait 500ms after user stops typing
+    });
             // --- 1. TAB SWITCHING LOGIC ---
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabContents = document.querySelectorAll('.tab-content');
