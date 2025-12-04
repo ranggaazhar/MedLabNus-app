@@ -15,6 +15,22 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ProdukController extends Controller
 {
+    public function checkNamaProduk(Request $request)
+{
+    $nama = $request->input('nama_produk');
+    $produkId = $request->input('produk_id'); // untuk update
+
+    $query = Produk::where('nama_produk', $nama);
+    
+    // Jika update, exclude produk yang sedang diedit
+    if ($produkId) {
+        $query->where('produk_id', '!=', $produkId);
+    }
+    
+    $exists = $query->exists();
+    
+    return response()->json(['exists' => $exists]);
+}
     public function export(Request $request)
 {
     $kategori = $request->query('kategori', 'semua');

@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/welcome.css', 'resources/css/custom-utilities.css'])
     <title>Products - PT Medlab Nusantara</title>
 
     {{-- Tailwind CSS CDN --}}
@@ -196,7 +198,7 @@
     )" x-cloak>
 
     {{-- Navbar --}}
-    <x-public-navbar active="" />
+    < @include('components.public-navbar')
 
     {{-- Main Content - Full Width --}}
     <main class="w-full px-6 lg:px-12 pt-32 pb-16">

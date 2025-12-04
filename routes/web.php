@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/produk/export', [ProdukController::class, 'export'])->name('produk.export');
+    Route::post('/produk/check-nama', [ProdukController::class, 'checkNamaProduk'])->name('produk.checkNama');
 
     // ========== PABRIKAN ROUTES ==========
     Route::get('/pabrikan', [PabrikanController::class, 'index'])->name('pabrikan.index');
