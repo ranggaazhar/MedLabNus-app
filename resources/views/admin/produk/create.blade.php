@@ -47,22 +47,22 @@
        {{-- SECTION 2: TAB NAVIGATION --}}
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 px-6 mb-6">
             
-            {{-- PERUBAHAN: Gunakan Grid 3 Kolom agar Spesifikasi PAS di Tengah --}}
+            {{-- Gunakan Grid 3 Kolom agar Spesifikasi PAS di Tengah --}}
             <nav class="-mb-px grid grid-cols-3 w-full" aria-label="Tabs">
                 
-                {{-- Tab 1: Info Dasar (Rata Kiri / justify-self-start) --}}
+                {{-- Tab 1: Info Dasar --}}
                 <button type="button" data-tab="info-dasar" 
                     class="tab-btn justify-self-start py-4 px-2 border-b-2 font-bold text-sm transition-colors duration-200 border-red-600 text-gray-900">
                     INFO DASAR
                 </button>
 
-                {{-- Tab 2: Spesifikasi (Rata Tengah / justify-self-center) --}}
+                {{-- Tab 2: Spesifikasi --}}
                 <button type="button" data-tab="spesifikasi" 
                     class="tab-btn justify-self-center py-4 px-2 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors duration-200">
                     SPESIFIKASI
                 </button>
 
-                {{-- Tab 3: Gambar (Rata Kanan / justify-self-end) --}}
+                {{-- Tab 3: Gambar --}}
                 <button type="button" data-tab="gambar" 
                     class="tab-btn justify-self-end py-4 px-2 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors duration-200">
                     GAMBAR
@@ -85,50 +85,50 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {{-- Nama Product --}}
-                    {{-- Nama Product - Ganti seluruh div ini --}}
-                <div>
-                    <label for="nama_produk" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Nama Product <span class="text-red-500">*</span>
-                    </label>
-                    <div class="relative">
-                        <input type="text" name="nama_produk" id="nama_produk" 
-                            placeholder="Contoh: Chemistry Analyzer" 
-                            value="{{ old('nama_produk') }}" required
-                            class="w-full border border-gray-300 rounded-lg px-4 py-2.5 pr-10 focus:border-red-500 focus:ring-red-500 transition duration-150 shadow-sm">
-                        
-                        {{-- Loading Spinner --}}
-                        <div id="checkingSpinner" class="hidden absolute right-3 top-3">
-                            <svg class="animate-spin h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
+                    <div>
+                        <label for="nama_produk" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Nama Product <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input type="text" name="nama_produk" id="nama_produk" 
+                                placeholder="Contoh: Chemistry Analyzer" 
+                                value="{{ old('nama_produk') }}" required
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 pr-10 focus:border-red-500 focus:ring-red-500 transition duration-150 shadow-sm">
+                            
+                            {{-- Loading Spinner --}}
+                            <div id="checkingSpinner" class="hidden absolute right-3 top-3">
+                                <svg class="animate-spin h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            </div>
+                            
+                            {{-- Success Icon --}}
+                            <div id="successIcon" class="hidden absolute right-3 top-3">
+                                <svg class="h-5 w-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            
+                            {{-- Error Icon --}}
+                            <div id="errorIcon" class="hidden absolute right-3 top-3">
+                                <svg class="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </div>
                         </div>
                         
-                        {{-- Success Icon --}}
-                        <div id="successIcon" class="hidden absolute right-3 top-3">
-                            <svg class="h-5 w-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </div>
+                        {{-- Error Message --}}
+                        <p id="namaProdukError" class="hidden text-red-500 text-xs mt-1 items-center gap-1">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>Nama produk sudah terdaftar, gunakan nama lain.</span>
+                        </p>
                         
-                        {{-- Error Icon --}}
-                        <div id="errorIcon" class="hidden absolute right-3 top-3">
-                            <svg class="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </div>
+                        @error('nama_produk') 
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p> 
+                        @enderror
                     </div>
-                    
-                    {{-- Error Message --}}
-                    <p id="namaProdukError" class="hidden text-red-500 text-xs mt-1 items-center gap-1">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <span>Nama produk sudah terdaftar, gunakan nama lain.</span>
-                    </p>
-                    
-                    @error('nama_produk') 
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p> 
-                    @enderror
-                </div>
+
                     {{-- Pabrikan (Dropdown) --}}
                     <div class="relative" 
                         x-data="{ selectedId: '{{ old('pabrikan_id') }}', selectedName: '{{ old('pabrikan_id') ? $pabrikans->firstWhere('pabrikan_id', old('pabrikan_id'))->nama_pabrikan : 'Pilih Pabrikan' }}' }">
@@ -237,7 +237,7 @@
                     <div class="mb-6">
                         <label for="gambar_utama" class="block text-sm font-semibold text-gray-700 mb-2">Gambar Utama Produk</label>
                         
-                        {{-- AREA DROP ZONE dengan ID dropZone --}}
+                        {{-- AREA DROP ZONE --}}
                         <div id="dropZone" class="w-full border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-red-500 hover:bg-gray-50 transition-colors transition-all duration-200 ease-in-out">
                             <input type="file" name="gambar_utama" id="gambar_utama" accept="image/*" class="hidden">
                             <label for="gambar_utama" class="cursor-pointer block w-full h-full">
@@ -267,70 +267,77 @@
     </form>
 
     @section('scripts')
+    {{-- 1. LOAD SWEETALERT LIBRARY --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // AJAX Check Nama Produk - Tambahkan sebelum penutup script
-let checkTimeout;
-const namaProdukInput = document.getElementById('nama_produk');
-const checkingSpinner = document.getElementById('checkingSpinner');
-const successIcon = document.getElementById('successIcon');
-const errorIcon = document.getElementById('errorIcon');
-const errorMessage = document.getElementById('namaProdukError');
-const submitButton = document.querySelector('button[type="submit"]');
+            
+            // --- 0. AJAX CHECK NAMA PRODUK ---
+            let checkTimeout;
+            const namaProdukInput = document.getElementById('nama_produk');
+            const checkingSpinner = document.getElementById('checkingSpinner');
+            const successIcon = document.getElementById('successIcon');
+            const errorIcon = document.getElementById('errorIcon');
+            const errorMessage = document.getElementById('namaProdukError');
+            const submitButton = document.querySelector('button[type="submit"]');
 
-namaProdukInput.addEventListener('input', function() {
-        const nama = this.value.trim();
-        
-        // Reset icons
-        checkingSpinner.classList.add('hidden');
-        successIcon.classList.add('hidden');
-        errorIcon.classList.add('hidden');
-        errorMessage.classList.add('hidden');
-        namaProdukInput.classList.remove('border-red-500', 'border-green-500');
-        
-        // Clear previous timeout
-        clearTimeout(checkTimeout);
-        
-        if (nama.length < 3) return;
-        
-        // Show loading
-        checkingSpinner.classList.remove('hidden');
-        
-        // Debounce check
-        checkTimeout = setTimeout(() => {
-            fetch('{{ route("produk.checkNama") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ nama_produk: nama })
-            })
-            .then(response => response.json())
-            .then(data => {
-                checkingSpinner.classList.add('hidden');
-                
-                if (data.exists) {
-                    // Nama sudah ada
-                    errorIcon.classList.remove('hidden');
-                    errorMessage.classList.remove('hidden');
-                    namaProdukInput.classList.add('border-red-500');
-                    submitButton.disabled = true;
-                    submitButton.classList.add('opacity-50', 'cursor-not-allowed');
-                } else {
-                    // Nama tersedia
-                    successIcon.classList.remove('hidden');
-                    namaProdukInput.classList.add('border-green-500');
-                    submitButton.disabled = false;
-                    submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                checkingSpinner.classList.add('hidden');
-            });
-        }, 500); // Wait 500ms after user stops typing
-    });
+            if(namaProdukInput) {
+                namaProdukInput.addEventListener('input', function() {
+                    const nama = this.value.trim();
+                    
+                    // Reset icons
+                    checkingSpinner.classList.add('hidden');
+                    successIcon.classList.add('hidden');
+                    errorIcon.classList.add('hidden');
+                    errorMessage.classList.add('hidden');
+                    namaProdukInput.classList.remove('border-red-500', 'border-green-500');
+                    
+                    // Clear previous timeout
+                    clearTimeout(checkTimeout);
+                    
+                    if (nama.length < 3) return;
+                    
+                    // Show loading
+                    checkingSpinner.classList.remove('hidden');
+                    
+                    // Debounce check
+                    checkTimeout = setTimeout(() => {
+                        fetch('{{ route("produk.checkNama") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({ nama_produk: nama })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            checkingSpinner.classList.add('hidden');
+                            
+                            if (data.exists) {
+                                // Nama sudah ada
+                                errorIcon.classList.remove('hidden');
+                                errorMessage.classList.remove('hidden');
+                                namaProdukInput.classList.add('border-red-500');
+                                submitButton.disabled = true;
+                                submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+                            } else {
+                                // Nama tersedia
+                                successIcon.classList.remove('hidden');
+                                namaProdukInput.classList.add('border-green-500');
+                                submitButton.disabled = false;
+                                submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            checkingSpinner.classList.add('hidden');
+                        });
+                    }, 500); // Wait 500ms after user stops typing
+                });
+            }
+
             // --- 1. TAB SWITCHING LOGIC ---
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabContents = document.querySelectorAll('.tab-content');
@@ -375,98 +382,144 @@ namaProdukInput.addEventListener('input', function() {
                 });
             }
 
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.removeSpecBtn') && confirm('Hapus spesifikasi ini?')) {
-                    e.target.closest('.spec-item').remove();
-                }
-            });
-
+            // --- REVISI: HAPUS SPESIFIKASI DENGAN SWEETALERT ---
+           document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.removeSpecBtn');
+    
+    if (btn) {
+        e.preventDefault();
+        
+        Swal.fire({
+            title: 'Hapus Spesifikasi?',
+            text: "Item spesifikasi ini akan dihapus dari daftar.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#b91c1c', 
+            cancelButtonColor: '#6b7280', 
+            confirmButtonText: ' Ya, Hapus',
+            cancelButtonText: 'Batal',
+            reverseButtons: true, 
+            focusCancel: true,
+            customClass: {
+                popup: 'rounded-xl',
+                confirmButton: 'px-4 py-2 rounded-lg text-sm font-medium',
+                cancelButton: 'px-4 py-2 rounded-lg text-sm font-medium'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Efek fade out sebelum dihapus
+                const item = btn.closest('.spec-item');
+                item.style.transition = 'all 0.3s ease';
+                item.style.opacity = '0';
+                item.style.transform = 'scale(0.95)';
+                
+                setTimeout(() => {
+                    item.remove(); // Hapus elemen fisik setelah fade out
+                    
+                    // Notifikasi Sukses TANPA TIMER
+                    Swal.fire({
+                        title: 'Sukses',
+                        text: 'Spesifikasi berhasil dihapus',
+                        icon: 'success',
+                        showConfirmButton: false, // Hilangkan tombol OK
+                        timer: 1000, // <--- MODIFIKASI: Ditetapkan 1 detik
+                        customClass: {
+                            popup: 'rounded-xl', 
+                            title: 'text-xl font-bold text-gray-700', 
+                            htmlContainer: 'text-gray-500'
+                        }
+                    });
+                }, 300); // Tunggu animasi selesai
+            }
+        });
+    }
+});
             // --- 3. IMAGE PREVIEW & DRAG-DROP LOGIC ---
             const dropZone = document.getElementById('dropZone');
             const fileInput = document.getElementById('gambar_utama');
             const imagePreview = document.getElementById('imagePreview');
-            const previewImg = document.getElementById('previewImg'); // Changed from querySelector to ID for safety
+            const previewImg = document.getElementById('previewImg');
             const removeBtn = document.getElementById('removeImageBtn');
             const uploadIcon = document.getElementById('uploadIcon');
 
-            // Prevent browser default drag behaviors
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                dropZone.addEventListener(eventName, preventDefaults, false);
-            });
+            if(dropZone && fileInput) {
+                // Prevent browser default drag behaviors
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    dropZone.addEventListener(eventName, preventDefaults, false);
+                });
 
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
+                function preventDefaults(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
 
-            // Highlight drop zone
-            ['dragenter', 'dragover'].forEach(eventName => {
-                dropZone.addEventListener(eventName, () => {
-                    dropZone.classList.add('border-red-500', 'bg-red-50');
-                    if(uploadIcon) {
-                        uploadIcon.classList.remove('text-gray-300');
-                        uploadIcon.classList.add('text-red-500');
+                // Highlight drop zone
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    dropZone.addEventListener(eventName, () => {
+                        dropZone.classList.add('border-red-500', 'bg-red-50');
+                        if(uploadIcon) {
+                            uploadIcon.classList.remove('text-gray-300');
+                            uploadIcon.classList.add('text-red-500');
+                        }
+                    }, false);
+                });
+
+                // Unhighlight drop zone
+                ['dragleave', 'drop'].forEach(eventName => {
+                    dropZone.addEventListener(eventName, () => {
+                        dropZone.classList.remove('border-red-500', 'bg-red-50');
+                        if(uploadIcon) {
+                            uploadIcon.classList.add('text-gray-300');
+                            uploadIcon.classList.remove('text-red-500');
+                        }
+                    }, false);
+                });
+
+                // Handle dropped files
+                dropZone.addEventListener('drop', function(e) {
+                    const dt = e.dataTransfer;
+                    const files = dt.files;
+                    if (files.length > 0) {
+                        fileInput.files = files; // Assign dropped files to input
+                        handleFiles(files[0]);
                     }
                 }, false);
-            });
 
-            // Unhighlight drop zone
-            ['dragleave', 'drop'].forEach(eventName => {
-                dropZone.addEventListener(eventName, () => {
-                    dropZone.classList.remove('border-red-500', 'bg-red-50');
-                    if(uploadIcon) {
-                        uploadIcon.classList.add('text-gray-300');
-                        uploadIcon.classList.remove('text-red-500');
+                // Handle browse files
+                fileInput.addEventListener('change', function(e) {
+                    if (this.files.length > 0) {
+                        handleFiles(this.files[0]);
                     }
-                }, false);
-            });
+                });
 
-            // Handle dropped files
-            dropZone.addEventListener('drop', function(e) {
-                const dt = e.dataTransfer;
-                const files = dt.files;
-                if (files.length > 0) {
-                    fileInput.files = files; // Assign dropped files to input
-                    handleFiles(files[0]);
-                }
-            }, false);
+                function handleFiles(file) {
+                    // Validate file type
+                    if (!file.type.startsWith('image/')) {
+                        alert('File harus berupa gambar!');
+                        fileInput.value = '';
+                        return;
+                    }
+                    // Validate size (10MB)
+                    if (file.size > 10485760) { 
+                        alert('Ukuran file maksimal 10MB!'); 
+                        fileInput.value = ''; 
+                        return; 
+                    }
 
-            // Handle browse files
-            fileInput.addEventListener('change', function(e) {
-                if (this.files.length > 0) {
-                    handleFiles(this.files[0]);
+                    const reader = new FileReader();
+                    reader.onload = function(e) { 
+                        previewImg.src = e.target.result; 
+                        imagePreview.classList.remove('hidden'); 
+                    }
+                    reader.readAsDataURL(file);
                 }
-            });
 
-            function handleFiles(file) {
-                // Validate file type
-                if (!file.type.startsWith('image/')) {
-                    alert('File harus berupa gambar!');
-                    fileInput.value = '';
-                    return;
-                }
-                // Validate size (Example: 2MB limit -> 2048000 bytes)
-                // Note: user HTML says "10MB", but JS previously said "2MB". 
-                // Let's align with the text displayed: 10MB = 10485760 bytes.
-                if (file.size > 10485760) { 
-                    alert('Ukuran file maksimal 10MB!'); 
+                removeBtn.addEventListener('click', function() { 
                     fileInput.value = ''; 
-                    return; 
-                }
-
-                const reader = new FileReader();
-                reader.onload = function(e) { 
-                    previewImg.src = e.target.result; 
-                    imagePreview.classList.remove('hidden'); 
-                }
-                reader.readAsDataURL(file);
+                    imagePreview.classList.add('hidden'); 
+                    previewImg.src = ''; 
+                });
             }
-
-            removeBtn.addEventListener('click', function() { 
-                fileInput.value = ''; 
-                imagePreview.classList.add('hidden'); 
-                previewImg.src = ''; 
-            });
 
             // --- 4. FORM VALIDATION ---
             document.getElementById('productForm').addEventListener('submit', function(e) {

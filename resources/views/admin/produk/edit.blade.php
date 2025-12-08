@@ -2,7 +2,7 @@
 
 @section('title', 'Edit Product')
 
-{{-- 1. COPY STYLES DARI CREATE AGAR LAYOUT STABIL --}}
+{{-- 1. STYLES UTAMA --}}
 @section('styles')
 <style>
     /* Memaksa scrollbar selalu ada secara sistem agar layout stabil */
@@ -11,6 +11,9 @@
     html::-webkit-scrollbar { display: none; }
     /* Sembunyikan di Firefox/IE/Edge */
     html { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    /* Animasi halus untuk drag & drop */
+    #dropZone { transition: all 0.2s ease-in-out; }
 </style>
 @endsection
 
@@ -52,7 +55,7 @@
             </div>
         @endif
 
-        {{-- 2. TAB NAVIGATION (DESIGN DISAMAKAN DENGAN CREATE) --}}
+        {{-- 2. TAB NAVIGATION --}}
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 px-6 mb-6">
             <nav class="-mb-px grid grid-cols-3 w-full" aria-label="Tabs">
                 
@@ -76,7 +79,7 @@
             </nav>
         </div>
 
-        {{-- 3. CONTENT WRAPPER (SATU CONTAINER BESAR UNTUK SEMUA TAB) --}}
+        {{-- 3. CONTENT WRAPPER --}}
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
 
             {{-- TAB CONTENT 1: INFO DASAR --}}
@@ -85,50 +88,49 @@
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {{-- Nama Product --}}
-                    {{-- Nama Product - Ganti seluruh div ini --}}
-            <div>
-                <label for="nama_produk" class="block text-sm font-semibold text-gray-700 mb-2">
-                    Nama Product <span class="text-red-500">*</span>
-                </label>
-                <div class="relative">
-                    <input type="text" name="nama_produk" id="nama_produk" 
-                        placeholder="Contoh: Chemistry Analyzer" 
-                        value="{{ old('nama_produk') }}" required
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2.5 pr-10 focus:border-red-500 focus:ring-red-500 transition duration-150 shadow-sm">
-                    
-                    {{-- Loading Spinner --}}
-                    <div id="checkingSpinner" class="hidden absolute right-3 top-3">
-                        <svg class="animate-spin h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
+                    <div>
+                        <label for="nama_produk" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Nama Product <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input type="text" name="nama_produk" id="nama_produk" 
+                                placeholder="Contoh: Chemistry Analyzer" 
+                                value="{{ old('nama_produk', $produk->nama_produk) }}" required
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2.5 pr-10 focus:border-red-500 focus:ring-red-500 transition duration-150 shadow-sm">
+                            
+                            {{-- Loading Spinner --}}
+                            <div id="checkingSpinner" class="hidden absolute right-3 top-3">
+                                <svg class="animate-spin h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            </div>
+                            
+                            {{-- Success Icon --}}
+                            <div id="successIcon" class="hidden absolute right-3 top-3">
+                                <svg class="h-5 w-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            
+                            {{-- Error Icon --}}
+                            <div id="errorIcon" class="hidden absolute right-3 top-3">
+                                <svg class="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        {{-- Error Message --}}
+                        <p id="namaProdukError" class="hidden text-red-500 text-xs mt-1 flex items-center gap-1">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>Nama produk sudah terdaftar, gunakan nama lain.</span>
+                        </p>
+                        
+                        @error('nama_produk') 
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p> 
+                        @enderror
                     </div>
-                    
-                    {{-- Success Icon --}}
-                    <div id="successIcon" class="hidden absolute right-3 top-3">
-                        <svg class="h-5 w-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                    </div>
-                    
-                    {{-- Error Icon --}}
-                    <div id="errorIcon" class="hidden absolute right-3 top-3">
-                        <svg class="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </div>
-                </div>
-                
-                {{-- Error Message --}}
-                <p id="namaProdukError" class="hidden text-red-500 text-xs mt-1 flex items-center gap-1">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <span>Nama produk sudah terdaftar, gunakan nama lain.</span>
-                </p>
-                
-                @error('nama_produk') 
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p> 
-                @enderror
-            </div>
 
                     {{-- Merk (Pabrikan) --}}
                     <div>
@@ -221,11 +223,11 @@
                 </div>
             </div>
 
-            {{-- TAB CONTENT 3: GAMBAR --}}
+            {{-- TAB CONTENT 3: GAMBAR (DRAG & DROP VERSION) --}}
             <div id="tab-gambar" class="tab-content hidden">
                 <h2 class="text-xl font-bold text-gray-800 mb-6">Upload Gambar Produk</h2>
                 
-                <div class=""> {{-- Container disamakan create --}}
+                <div>
                     {{-- Current Image --}}
                     @if($produk->gambar_utama)
                         <div class="mb-6">
@@ -239,20 +241,26 @@
                         </div>
                     @endif
 
-                    {{-- Upload New Image --}}
+                    {{-- Upload New Image (DRAG & DROP AREA) --}}
                     <div class="mb-6">
                         <label for="gambar_utama" class="block text-sm font-semibold text-gray-700 mb-2">
                             {{ $produk->gambar_utama ? 'Ganti Gambar Produk' : 'Gambar Utama Produk' }}
                         </label>
-                        <div class="w-full border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-red-500 transition-colors">
-                            <input type="file" name="gambar_utama" id="gambar_utama" accept="image/*" class="hidden">
-                            <label for="gambar_utama" class="cursor-pointer">
-                                <div class="flex flex-col items-center">
-                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-300 mb-2"></i>
-                                    <p class="text-sm text-gray-600 mb-1">Drag your file(s) or <span class="text-red-600 font-semibold">browse</span></p>
-                                    <p class="text-xs text-gray-400">Max 10 MB files are allowed</p>
-                                </div>
-                            </label>
+                        
+                        {{-- Area Drop Zone --}}
+                        <div id="dropZone" class="w-full border-2 border-dashed border-gray-300 rounded-lg p-8 text-center transition-all duration-200 ease-in-out bg-white hover:bg-gray-50 cursor-pointer relative">
+                            
+                            {{-- Input File Asli (Hidden tapi menutupi seluruh area) --}}
+                            <input type="file" name="gambar_utama" id="gambar_utama" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                            
+                            {{-- Visual Content --}}
+                            <div class="flex flex-col items-center pointer-events-none">
+                                <i id="uploadIcon" class="fas fa-cloud-upload-alt text-4xl text-gray-300 mb-2 transition-colors"></i>
+                                <p class="text-sm text-gray-600 mb-1">
+                                    <span class="font-semibold text-red-600">Click to upload</span> or drag and drop
+                                </p>
+                                <p class="text-xs text-gray-400">Max 10 MB files are allowed</p>
+                            </div>
                         </div>
                         @error('gambar_utama') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
@@ -262,10 +270,11 @@
                         <p class="text-sm font-semibold text-gray-700 mb-3">Preview Gambar Baru:</p>
                         <div class="relative inline-block">
                             <img src="" alt="Preview" class="h-48 w-auto object-cover rounded-lg border-2 border-gray-200 shadow-md">
-                            <button type="button" id="removeImageBtn" class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-2 hover:bg-red-700 transition-colors shadow-lg">
+                            <button type="button" id="removeImageBtn" class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-2 hover:bg-red-700 transition-colors shadow-lg z-20">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
+                        <p id="fileName" class="text-xs text-gray-500 mt-2 font-medium"></p>
                     </div>
                 </div>
             </div>
@@ -277,72 +286,72 @@
     @section('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // AJAX Check Nama Produk (UPDATE) - Tambahkan sebelum penutup script
-        let checkTimeout;
-        const namaProdukInput = document.getElementById('nama_produk');
-        const checkingSpinner = document.getElementById('checkingSpinner');
-        const successIcon = document.getElementById('successIcon');
-        const errorIcon = document.getElementById('errorIcon');
-        const errorMessage = document.getElementById('namaProdukError');
-        const submitButton = document.querySelector('button[type="submit"]');
-        const currentProdukId = {{ $produk->produk_id }}; // ID produk yang sedang diedit
+            
+            // --- 1. AJAX Check Nama Produk (UPDATE) ---
+            let checkTimeout;
+            const namaProdukInput = document.getElementById('nama_produk');
+            const checkingSpinner = document.getElementById('checkingSpinner');
+            const successIcon = document.getElementById('successIcon');
+            const errorIcon = document.getElementById('errorIcon');
+            const errorMessage = document.getElementById('namaProdukError');
+            const submitButton = document.querySelector('button[type="submit"]');
+            const currentProdukId = {{ $produk->produk_id }}; 
 
-        namaProdukInput.addEventListener('input', function() {
-        const nama = this.value.trim();
-        
-        // Reset icons
-        checkingSpinner.classList.add('hidden');
-        successIcon.classList.add('hidden');
-        errorIcon.classList.add('hidden');
-        errorMessage.classList.add('hidden');
-        namaProdukInput.classList.remove('border-red-500', 'border-green-500');
-        
-        clearTimeout(checkTimeout);
-        
-        if (nama.length < 3) return;
-        
-        checkingSpinner.classList.remove('hidden');
-        
-        checkTimeout = setTimeout(() => {
-            fetch('{{ route("produk.checkNama") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ 
-                    nama_produk: nama,
-                    produk_id: currentProdukId // Kirim ID untuk exclude dari check
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                checkingSpinner.classList.add('hidden');
+            namaProdukInput.addEventListener('input', function() {
+                const nama = this.value.trim();
                 
-                if (data.exists) {
-                    errorIcon.classList.remove('hidden');
-                    errorMessage.classList.remove('hidden');
-                    namaProdukInput.classList.add('border-red-500');
-                    submitButton.disabled = true;
-                    submitButton.classList.add('opacity-50', 'cursor-not-allowed');
-                } else {
-                    successIcon.classList.remove('hidden');
-                    namaProdukInput.classList.add('border-green-500');
-                    submitButton.disabled = false;
-                    submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+                // Reset icons
                 checkingSpinner.classList.add('hidden');
+                successIcon.classList.add('hidden');
+                errorIcon.classList.add('hidden');
+                errorMessage.classList.add('hidden');
+                namaProdukInput.classList.remove('border-red-500', 'border-green-500');
+                
+                clearTimeout(checkTimeout);
+                
+                if (nama.length < 3) return;
+                
+                checkingSpinner.classList.remove('hidden');
+                
+                checkTimeout = setTimeout(() => {
+                    fetch('{{ route("produk.checkNama") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ 
+                            nama_produk: nama,
+                            produk_id: currentProdukId 
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        checkingSpinner.classList.add('hidden');
+                        
+                        if (data.exists) {
+                            errorIcon.classList.remove('hidden');
+                            errorMessage.classList.remove('hidden');
+                            namaProdukInput.classList.add('border-red-500');
+                            submitButton.disabled = true;
+                            submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+                        } else {
+                            successIcon.classList.remove('hidden');
+                            namaProdukInput.classList.add('border-green-500');
+                            submitButton.disabled = false;
+                            submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        checkingSpinner.classList.add('hidden');
+                    });
+                }, 500);
             });
-        }, 500);
-    });
-            // TAB SWITCHING LOGIC (DISAMAKAN DENGAN CREATE)
+
+            // --- 2. TAB SWITCHING LOGIC ---
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabContents = document.querySelectorAll('.tab-content');
-
-            // Class active & inactive persis create
             const activeClasses = ['border-red-600', 'text-gray-900', 'font-bold'];
             const inactiveClasses = ['border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'font-medium'];
 
@@ -368,7 +377,7 @@
                 });
             });
 
-            // SPECIFICATION & IMAGE LOGIC
+            // --- 3. SPECIFICATION REPEATER LOGIC ---
             let specIndex = {{ $produk->spesifikasis->count() }};
 
             document.getElementById('addSpecBtn').addEventListener('click', function() {
@@ -399,29 +408,98 @@
                 }
             });
 
-            // Image Preview Logic
+            // --- 4. DRAG AND DROP & IMAGE PREVIEW LOGIC ---
+            const dropZone = document.getElementById('dropZone');
             const fileInput = document.getElementById('gambar_utama');
             const preview = document.getElementById('imagePreview');
             const previewImg = preview.querySelector('img');
             const removeBtn = document.getElementById('removeImageBtn');
+            const uploadIcon = document.getElementById('uploadIcon');
+            const fileNameDisplay = document.getElementById('fileName');
 
-            fileInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
+            // Fungsi untuk menampilkan preview
+            function showPreview(file) {
                 if (file) {
-                    if (file.size > 2048000) { alert('Ukuran file maksimal 2MB!'); fileInput.value = ''; return; }
+                    if (file.size > 10 * 1024 * 1024) { 
+                        alert('Ukuran file maksimal 10MB!'); 
+                        resetImage();
+                        return; 
+                    }
+                    
                     const reader = new FileReader();
-                    reader.onload = function(e) { previewImg.src = e.target.result; preview.classList.remove('hidden'); }
+                    reader.onload = function(e) { 
+                        previewImg.src = e.target.result; 
+                        preview.classList.remove('hidden');
+                        fileNameDisplay.textContent = file.name; 
+                    }
                     reader.readAsDataURL(file);
                 }
-            });
+            }
 
-            removeBtn.addEventListener('click', function() {
+            // Fungsi Reset Gambar
+            function resetImage() {
                 fileInput.value = '';
                 preview.classList.add('hidden');
                 previewImg.src = '';
+                fileNameDisplay.textContent = '';
+            }
+
+            // Event Listener untuk Input File Biasa
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                showPreview(file);
             });
 
-            // Form Validation on Submit
+            // Drag & Drop Events
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            // Highlight Effect
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight(e) {
+                dropZone.classList.add('border-red-500', 'bg-red-50');
+                dropZone.classList.remove('border-gray-300', 'bg-white');
+                uploadIcon.classList.add('text-red-500');
+                uploadIcon.classList.remove('text-gray-300');
+            }
+
+            function unhighlight(e) {
+                dropZone.classList.remove('border-red-500', 'bg-red-50');
+                dropZone.classList.add('border-gray-300', 'bg-white');
+                uploadIcon.classList.remove('text-red-500');
+                uploadIcon.classList.add('text-gray-300');
+            }
+
+            // Handle Drop
+            dropZone.addEventListener('drop', handleDrop, false);
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+
+                if (files.length > 0) {
+                    fileInput.files = files; // Assign files ke input
+                    showPreview(files[0]);
+                }
+            }
+
+            // Remove Button
+            removeBtn.addEventListener('click', resetImage);
+
+            // --- 5. FORM SUBMIT VALIDATION ---
             document.getElementById('productForm').addEventListener('submit', function(e) {
                 const nama = document.getElementById('nama_produk').value.trim();
                 const pabrikan = document.getElementById('pabrikan_id').value;
@@ -430,7 +508,6 @@
                 if (!nama || !pabrikan || !kategori) {
                     e.preventDefault();
                     alert('Mohon lengkapi field yang wajib diisi (Nama Product, Merk, dan Kategori)');
-                    // Trigger klik ke tab info dasar jika ada yang kosong
                     document.querySelector('[data-tab="info-dasar"]').click();
                 }
             });

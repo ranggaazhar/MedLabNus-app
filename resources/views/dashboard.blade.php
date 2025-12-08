@@ -6,7 +6,6 @@
 
 {{-- STAT CARDS SECTION --}}
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-    {{-- (Bagian Stat Cards tetap sama, tidak saya ubah) --}}
     {{-- Card 1: Product --}}
     <div class="relative">
         <div class="absolute inset-0 bg-red-700 rounded-2xl"></div>
@@ -50,7 +49,7 @@
     </div>
 </div>
 
-    {{-- TOOLBAR SECTION --}}
+ {{-- TOOLBAR SECTION --}}
     <div class="bg-white rounded-2xl p-4 mb-6 shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
         {{-- Left: Search & Filter --}}
         <div class="flex w-full md:w-auto gap-3">
@@ -101,182 +100,237 @@
         </div>
     </div>
 
-    {{-- TABLE SECTION --}}
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <table class="w-full text-left border-collapse table">
-           <thead>
-                <tr class="border-b border-gray-100 bg-white">
-                    <th class="py-4 px-6 text-xs font-bold text-gray-400 uppercase tracking-wider">Product</th>
-                    <th class="py-4 px-6 text-xs font-bold text-gray-400 uppercase tracking-wider">Kategori</th>
-                    <th class="py-4 px-6 text-xs font-bold text-gray-400 uppercase tracking-wider">Pabrikan</th>
-                    <th class="py-4 px-6 text-xs font-bold text-gray-400 uppercase tracking-wider">Tanggal</th>
-                    <th class="py-4 px-6 text-xs font-bold text-gray-400 uppercase tracking-wider text-left">
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-50">
-                @forelse ($produkTerbaru as $item)
-                    <tr class="hover:bg-gray-50 transition-colors">
+{{-- TABLE SECTION --}}
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <table class="w-full text-left border-collapse table">
+        <thead>
+            <tr class="border-b border-gray-100 bg-white">
+                <th class="py-4 px-6 text-xs font-bold text-gray-400 uppercase tracking-wider">Product</th>
+                <th class="py-4 px-6 text-xs font-bold text-gray-400 uppercase tracking-wider">Kategori</th>
+                <th class="py-4 px-6 text-xs font-bold text-gray-400 uppercase tracking-wider">Pabrikan</th>
+                <th class="py-4 px-6 text-xs font-bold text-gray-400 uppercase tracking-wider">Tanggal</th>
+                <th class="py-4 px-6 text-xs font-bold text-gray-400 uppercase tracking-wider text-left">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-50">
+            @forelse ($produkTerbaru as $item)
+                <tr class="hover:bg-gray-50 transition-colors">
 
-                        {{-- Product --}}
-                        <td class="py-4 px-6">
-                            <div class="flex items-center gap-4">
-                                @if($item->gambar_utama)
-                                    <img src="{{ asset('storage/' . $item->gambar_utama) }}" alt="{{ $item->nama_produk }}"
-                                        class="w-10 h-10 rounded-full object-cover border-2 border-red-200">
-                                @else
-                                    <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center border border-red-200">
-                                        <div class="w-5 h-5 bg-red-500 rounded-full"></div>
-                                    </div>
-                                @endif
-                                <div>
-                                    <p class="font-bold text-gray-800 text-sm">{{ $item->nama_produk }}</p>
-                                    <p class="text-xs text-gray-500">{{ Str::limit($item->deskripsi_singkat, 30) }}</p>
+                    {{-- Product --}}
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-4">
+                            @if($item->gambar_utama)
+                                <img src="{{ asset('storage/' . $item->gambar_utama) }}" alt="{{ $item->nama_produk }}"
+                                    class="w-10 h-10 rounded-full object-cover border-2 border-red-200">
+                            @else
+                                <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center border border-red-200">
+                                    <div class="w-5 h-5 bg-red-500 rounded-full"></div>
                                 </div>
+                            @endif
+                            <div>
+                                <p class="font-bold text-gray-800 text-sm">{{ $item->nama_produk }}</p>
+                                <p class="text-xs text-gray-500">{{ Str::limit($item->deskripsi_singkat, 30) }}</p>
                             </div>
-                        </td>
+                        </div>
+                    </td>
 
-                        {{-- Kategori --}}
-                       <td class="py-4 px-6 text-black" data-label="Kategori">
-                            {{ ucfirst($item->kategori) }}
-                        </td>
+                    {{-- Kategori --}}
+                   <td class="py-4 px-6 text-black" data-label="Kategori">
+                        {{ ucfirst($item->kategori) }}
+                    </td>
 
-                        {{-- Merk / Pabrikan --}}
-                        {{-- PERUBAHAN DI SINI --}}
-                        <td class="py-4 px-6" data-label="Pabrikan">
-                            <div class="flex flex-col">
-                                {{-- Nama Pabrikan --}}
-                                <span class="text-sm font-bold text-gray-700">
-                                    {{ $item->pabrikan->nama_pabrikan ?? '-' }}
-                                </span>
-                                {{-- Negara (Asumsi nama kolom di db adalah 'negara') --}}
-                                <span class="text-xs text-gray-500 mt-0.5">
-                                    {{ $item->pabrikan->asal_negara ?? '-' }}
-                                </span>
+                    {{-- Merk / Pabrikan --}}
+                    <td class="py-4 px-6" data-label="Pabrikan">
+                        <div class="flex flex-col">
+                            {{-- Nama Pabrikan --}}
+                            <span class="text-sm font-bold text-gray-700">
+                                {{ $item->pabrikan->nama_pabrikan ?? '-' }}
+                            </span>
+                            {{-- Negara (Asumsi nama kolom di db adalah 'negara') --}}
+                            <span class="text-xs text-gray-500 mt-0.5">
+                                {{ $item->pabrikan->asal_negara ?? '-' }}
+                            </span>
+                        </div>
+                    </td>
+
+                    {{-- Tanggal --}}
+                    <td class="py-4 px-6 text-sm text-gray-600" data-label="Tanggal">
+                        {{ $item->created_at->format('d M Y') }}
+                    </td>
+
+                    {{-- Actions (Kolom 5) --}}
+                    <td class="py-4 px-6" data-label="Action">
+                        <div class="flex items-center justify-between w-full">
+
+                            {{-- GRUP KIRI: Edit & Delete --}}
+                            <div class="flex items-center gap-4">
+
+                                {{-- Edit Button (SVG Image) --}}
+                                <a href="{{ route('produk.edit', $item->produk_id) }}"
+                                   class="group transition transform hover:scale-110" title="Edit">
+                                    {{-- Pastikan nama file sesuai, misal: edit.svg --}}
+                                    <img src="{{ asset('icons/edit.svg') }}" 
+                                        alt="Edit" 
+                                        class="w-5 h-5">
+                                </a>
+
+                                {{-- Delete Button (SVG Image) --}}
+                                <form action="{{ route('produk.destroy', $item->produk_id) }}" method="POST"
+                                        class="inline delete-form">
+                                    @csrf @method('DELETE')
+                                    {{-- Perhatikan class text-red-500 dan hover:text-red-700 di button ini --}}
+                                    <button type="button" class="text-red-500 hover:text-red-700 transition btn-delete transform hover:scale-110 flex items-center"
+                                            title="Hapus">
+                                        
+                                        {{-- Kode SVG Trash/Sampah ditaruh langsung di sini --}}
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                        </svg>
+
+                                    </button>
+                                </form>
                             </div>
-                        </td>
 
-                        {{-- Tanggal --}}
-                        <td class="py-4 px-6 text-sm text-gray-600" data-label="Tanggal">
-                            {{ $item->created_at->format('d M Y') }}
-                        </td>
+                            {{-- GRUP KANAN: Detail Arrow --}}
+                            <a href="{{ route('produk.show', $item->produk_id) }}"
+                               class="text-gray-900 hover:text-gray-600 transition transform hover:scale-110 ml-4" title="Detail">
+                                <i class="fas fa-chevron-right text-lg font-bold"></i>
+                            </a>
 
-                      {{-- Actions (Kolom 5) --}}
-<td class="py-4 px-6" data-label="Action">
-    <div class="flex items-center justify-between w-full">
+                        </div>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5" class="py-12 text-center">
+                        <div class="flex flex-col items-center gap-3">
+                            <i class="fas fa-box-open text-5xl text-gray-300"></i>
+                            <p class="text-gray-500 font-medium">Belum ada produk</p>
+                            <a href="{{ route('produk.create') }}"
+                                class="text-red-700 hover:text-red-800 font-semibold text-sm">
+                                + Tambah Produk Pertama
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
 
-        {{-- GRUP KIRI: Edit & Delete --}}
-        <div class="flex items-center gap-4">
+{{-- ---------------------------------------------------------------- --}}
+@if($produkTerbaru->hasPages())
+    {{-- Kontainer Paginasi di luar Card. Hanya menggunakan margin-top dan padding. --}}
+    <div class="flex flex-col md:flex-row justify-between items-center mt-6 py-3 px-1">
+        
+        {{-- 1. Show Result Info (Menggunakan text-gray-500 untuk kesan transparan/halus) --}}
+        <div class="text-gray-500 text-sm font-medium py-2 order-2 md:order-1">
+            @if($produkTerbaru->total() > 0)
+                <span class="text-sm tracking-wide">
+                    Showing 
+                    <span class="font-bold text-gray-700">{{ $produkTerbaru->firstItem() }}</span>
+                    -
+                    <span class="font-bold text-gray-700">{{ $produkTerbaru->lastItem() }}</span> 
+                    of 
+                    <span class="font-bold text-gray-700">{{ $produkTerbaru->total() }}</span> 
+                    result{{ $produkTerbaru->total() !== 1 ? 's' : '' }}
+                </span>
+            @else
+                <span class="text-sm tracking-wide text-gray-400">0 results found</span>
+            @endif
+        </div>
 
-            {{-- Edit Button (SVG Image) --}}
-            <a href="{{ route('produk.edit', $item->produk_id) }}"
-               class="group transition transform hover:scale-110" title="Edit">
-                {{-- Pastikan nama file sesuai, misal: edit.svg --}}
-                <img src="{{ asset('icons/edit.svg') }}" 
-                     alt="Edit" 
-                     class="w-5 h-5">
+        {{-- 2. Tombol Paginasi (Tetap dengan desain kotak bulat) --}}
+        <div class="flex items-center gap-2 order-1 md:order-2 mb-4 md:mb-0">
+
+            {{-- Previous Button --}}
+            <a href="{{ $produkTerbaru->previousPageUrl() }}" 
+               @class([
+                   'w-10 h-10 flex items-center justify-center border rounded-lg text-gray-600 transition-all duration-300 hover:scale-110 active:scale-95 text-sm',
+                   'border-gray-300 hover:bg-gray-50 hover:border-red-700 hover:text-red-700' => !$produkTerbaru->onFirstPage(),
+                   'opacity-30 cursor-not-allowed' => $produkTerbaru->onFirstPage(),
+               ])
+               title="Previous"
+               >
+                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
             </a>
 
-            {{-- Delete Button (SVG Image) --}}
-            <form action="{{ route('produk.destroy', $item->produk_id) }}" method="POST"
-                  class="inline delete-form">
-                @csrf @method('DELETE')
-                {{-- Perhatikan class text-red-500 dan hover:text-red-700 di button ini --}}
-                <button type="button" class="text-red-500 hover:text-red-700 transition btn-delete transform hover:scale-110 flex items-center"
-                        title="Hapus">
-                    
-                    {{-- Kode SVG Trash/Sampah ditaruh langsung di sini --}}
-                    {{-- 'stroke="currentColor"' memastikan warna mengikuti text-red-500 dari button --}}
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                    </svg>
+            {{-- Page Numbers --}}
+            @foreach ($produkTerbaru->getUrlRange(1, $produkTerbaru->lastPage()) as $page => $url)
+                <a href="{{ $url }}"
+                   @class([
+                       'w-10 h-10 flex items-center justify-center border rounded-lg font-medium transition-all duration-300 hover:scale-110 active:scale-95 text-sm',
+                       'bg-red-700 text-white border-red-700 scale-110' => $page == $produkTerbaru->currentPage(),
+                       'border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-red-700 hover:text-red-700' => $page != $produkTerbaru->currentPage(),
+                   ])
+                   >{{ $page }}</a>
+            @endforeach
 
-                </button>
-            </form>
+            {{-- Next Button --}}
+            <a href="{{ $produkTerbaru->nextPageUrl() }}" 
+               @class([
+                   'w-10 h-10 flex items-center justify-center border rounded-lg text-gray-600 transition-all duration-300 hover:scale-110 active:scale-95 text-sm',
+                   'border-gray-300 hover:bg-gray-50 hover:border-red-700 hover:text-red-700' => $produkTerbaru->hasMorePages(),
+                   'opacity-30 cursor-not-allowed' => !$produkTerbaru->hasMorePages(),
+               ])
+               title="Next"
+               >
+                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
         </div>
-
-        {{-- GRUP KANAN: Detail Arrow --}}
-        <a href="{{ route('produk.show', $item->produk_id) }}"
-           class="text-gray-900 hover:text-gray-600 transition transform hover:scale-110 ml-4" title="Detail">
-            <i class="fas fa-chevron-right text-lg font-bold"></i>
-        </a>
-
     </div>
-</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="py-12 text-center">
-                            <div class="flex flex-col items-center gap-3">
-                                <i class="fas fa-box-open text-5xl text-gray-300"></i>
-                                <p class="text-gray-500 font-medium">Belum ada produk</p>
-                                <a href="{{ route('produk.create') }}"
-                                    class="text-red-700 hover:text-red-800 font-semibold text-sm">
-                                    + Tambah Produk Pertama
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    {{-- Pagination --}}
-    @if($produkTerbaru->hasPages())
-        <div class="px-6 py-4 border-t border-gray-100 bg-gray-50">
-            {{ $produkTerbaru->links() }}
-        </div>
-    @endif
+@endif
 
 
-    {{-- SWEETALERT LOGIC --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Logic Hapus
-            document.querySelectorAll('.btn-delete').forEach(button => {
-                button.addEventListener('click', function () {
-                    const form = this.closest('form');
-                    Swal.fire({
-                        title: 'Yakin ingin menghapus?',
-                        text: "Data produk tidak dapat dikembalikan setelah dihapus!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#6c757d',
-                        confirmButtonText: 'Ya, hapus!',
-                        cancelButtonText: 'Batal',
-                        reverseButtons: true
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            form.submit();
-                        }
-                    });
+{{-- SWEETALERT LOGIC --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // ... (SweetAlert Logic Anda tetap sama)
+        // Logic Hapus
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function () {
+                const form = this.closest('form');
+                Swal.fire({
+                    title: 'Yakin ingin menghapus?',
+                    text: "Data produk tidak dapat dikembalikan setelah dihapus!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
                 });
             });
-
-            // Logic Alert Success/Error
-            @if(session('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Sukses',
-                    text: "{{ session('success') }}",
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            @endif
-
-            @if(session('error'))
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: "{{ session('error') }}",
-                    timer: 3000,
-                    showConfirmButton: false
-                });
-            @endif
         });
-    </script>
+
+        // Logic Alert Success/Error
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Sukses',
+                text: "{{ session('success') }}",
+                timer: 2000,
+                showConfirmButton: false
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: "{{ session('error') }}",
+                timer: 3000,
+                showConfirmButton: false
+            });
+        @endif
+    });
+</script>
 
 @endsection
