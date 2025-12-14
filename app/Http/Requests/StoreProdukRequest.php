@@ -18,7 +18,10 @@ class StoreProdukRequest extends FormRequest
             'nama_produk' => 'required|string|unique:produks,nama_produk|max:255',
             'deskripsi_singkat' => 'nullable|string',
             'gambar_utama' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'kategori' => 'required|in:reagen,alat',
+            
+            // Perubahan di sini: Menambahkan nilai kategori yang baru
+            'kategori' => 'required|in:reagen,alat,steril,non steril,invitro',
+            
             'pabrikan_id' => 'required|exists:pabrikans,pabrikan_id',
             'spesifikasi' => 'nullable|array',
             'spesifikasi.*.nama_spesifikasi' => 'required_with:spesifikasi|string|max:100',
@@ -34,7 +37,8 @@ class StoreProdukRequest extends FormRequest
             'nama_produk.max' => 'Nama produk maksimal 255 karakter.',
             
             'kategori.required' => 'Kategori produk wajib dipilih.',
-            'kategori.in' => 'Kategori harus berupa Reagen atau Alat.',
+            // Perubahan di sini: Memperbarui pesan error agar lebih sesuai
+            'kategori.in' => 'Kategori yang dipilih tidak valid. Pilihan yang tersedia: Reagen, Alat, Steril, Non Steril, atau Invitro.',
             
             'pabrikan_id.required' => 'Pabrikan wajib dipilih.',
             'pabrikan_id.exists' => 'Pabrikan yang dipilih tidak valid.',

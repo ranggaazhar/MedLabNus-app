@@ -12,16 +12,23 @@ class DashboardController extends Controller
     {
 
         $totalProduk = Produk::count();
+        
+        // --- Perubahan di sini: Menambahkan perhitungan kategori baru ---
         $totalAlat = Produk::where('kategori', 'alat')->count();
         $totalReagen = Produk::where('kategori', 'reagen')->count();
+        $totalSteril = Produk::where('kategori', 'steril')->count();
+        $totalNonSteril = Produk::where('kategori', 'non steril')->count();
+        $totalInvitro = Produk::where('kategori', 'invitro')->count();
+        // ----------------------------------------------------------------
+        
         $query = Produk::with(['pabrikan', 'spesifikasis']);
 
+        // Blok ini menggabungkan dua pengecekan if yang redundant
         if ($request->filled('kategori') && $request->kategori !== 'semua') {
             $query->where('kategori', $request->kategori);
         }
-        if ($request->has('kategori') && $request->kategori != 'semua') {
-            $query->where('kategori', $request->kategori);
-        }
+        
+        // (Saya menghapus blok if yang sama di bawahnya untuk menghindari redundansi)
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -41,6 +48,11 @@ class DashboardController extends Controller
             'totalProduk',
             'totalAlat',
             'totalReagen',
+            // --- Perubahan di sini: Mengirim variabel kategori baru ke view ---
+            'totalSteril',
+            'totalNonSteril',
+            'totalInvitro',
+            // ----------------------------------------------------------------
             'produkTerbaru'
         ));
     }

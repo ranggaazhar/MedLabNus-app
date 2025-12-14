@@ -4,14 +4,16 @@
 
 @section('content')
 
-{{-- STAT CARDS SECTION --}}
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-    {{-- Card 1: Product --}}
+{{-- STAT CARDS SECTION (DISESUAIKAN) --}}
+{{-- Ubah layout grid untuk menampung 6 kartu --}}
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-6 mb-8">
+
+    {{-- Card 1: Total Produk --}}
     <div class="relative">
         <div class="absolute inset-0 bg-red-700 rounded-2xl"></div>
         <div class="relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex justify-between items-center ml-1.5">
             <div>
-                <p class="text-gray-500 text-sm font-medium mb-1">Product</p>
+                <p class="text-gray-500 text-sm font-medium mb-1">Total Produk</p>
                 <h3 class="text-4xl font-bold text-gray-800">{{ $totalProduk }}</h3>
             </div>
             <div class="bg-red-700 w-14 h-14 rounded-xl flex items-center justify-center">
@@ -47,6 +49,58 @@
             </div>
         </div>
     </div>
+    
+    {{-- Card 4: Steril (BARU) --}}
+    <div class="relative">
+        <div class="absolute inset-0 bg-red-700 rounded-2xl"></div>
+        <div class="relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex justify-between items-center ml-1.5">
+            <div>
+                <p class="text-gray-500 text-sm font-medium mb-1">Steril</p>
+                <h3 class="text-4xl font-bold text-gray-800">{{ $totalSteril }}</h3>
+            </div>
+            <div class="bg-red-700 w-14 h-14 rounded-xl flex items-center justify-center">
+                {{-- Anda bisa mengganti ini dengan ikon yang lebih spesifik jika ada --}}
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.01 12.01 0 002.944 12c0 3.078 1.488 5.99 3.944 8.056A11.955 11.955 0 0112 21.056c3.078 0 5.99-1.488 8.056-3.944A12.01 12.01 0 0021.056 12a12.01 12.01 0 00-.438-3.016z" />
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    {{-- Card 5: Non Steril (BARU) --}}
+    <div class="relative">
+        <div class="absolute inset-0 bg-red-700 rounded-2xl"></div>
+        <div class="relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex justify-between items-center ml-1.5">
+            <div>
+                <p class="text-gray-500 text-sm font-medium mb-1">Non Steril</p>
+                <h3 class="text-4xl font-bold text-gray-800">{{ $totalNonSteril }}</h3>
+            </div>
+            <div class="bg-red-700 w-14 h-14 rounded-xl flex items-center justify-center">
+                {{-- Anda bisa mengganti ini dengan ikon yang lebih spesifik jika ada --}}
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    {{-- Card 6: In Vitro (BARU) --}}
+    <div class="relative">
+        <div class="absolute inset-0 bg-red-700 rounded-2xl"></div>
+        <div class="relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex justify-between items-center ml-1.5">
+            <div>
+                <p class="text-gray-500 text-sm font-medium mb-1">In Vitro</p>
+                <h3 class="text-4xl font-bold text-gray-800">{{ $totalInvitro }}</h3>
+            </div>
+            <div class="bg-red-700 w-14 h-14 rounded-xl flex items-center justify-center">
+                {{-- Anda bisa mengganti ini dengan ikon yang lebih spesifik jika ada --}}
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+            </div>
+        </div>
+    </div>
+
 </div>
 
  {{-- TOOLBAR SECTION --}}
@@ -79,6 +133,21 @@
                         <a href="{{ route('dashboard', ['kategori' => 'reagen']) }}"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
                             Reagen
+                        </a>
+                        {{-- Opsi Kategori Baru --}}
+                        <a href="{{ route('dashboard', ['kategori' => 'steril', 'search' => request('search')]) }}"
+                            class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-red-50 hover:text-red-700 {{ request('kategori') == 'steril' ? 'bg-red-50 text-red-700 font-semibold' : '' }}">
+                            Steril
+                        </a>
+
+                        <a href="{{ route('dashboard', ['kategori' => 'non steril', 'search' => request('search')]) }}"
+                            class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-red-50 hover:text-red-700 {{ request('kategori') == 'non steril' ? 'bg-red-50 text-red-700 font-semibold' : '' }}">
+                            Non Steril
+                        </a>
+
+                        <a href="{{ route('dashboard', ['kategori' => 'invitro', 'search' => request('search')]) }}"
+                            class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-red-50 hover:text-red-700 {{ request('kategori') == 'invitro' ? 'bg-red-50 text-red-700 font-semibold' : '' }}">
+                            In Vitro
                         </a>
                     </div>
                 </div>

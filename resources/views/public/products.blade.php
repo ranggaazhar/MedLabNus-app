@@ -316,9 +316,27 @@
                         </button>
                         <button @click="filterCategory = 'reagen'; updateFilters(); open = false"
                             :class="filterCategory === 'reagen' ? 'bg-[#B1252E] text-white' : 'text-gray-700 hover:bg-gray-50'"
-                            class="w-full text-left px-4 py-2.5 text-sm transition-all duration-200 border-t border-gray-200 last:rounded-b-lg hover:pl-5">
+                            class="w-full text-left px-4 py-2.5 text-sm transition-all duration-200 border-t border-gray-200 hover:pl-5">
                             Reagen
                         </button>
+                        
+                        {{-- Opsi Kategori BARU --}}
+                        <button @click="filterCategory = 'steril'; updateFilters(); open = false"
+                            :class="filterCategory === 'steril' ? 'bg-[#B1252E] text-white' : 'text-gray-700 hover:bg-gray-50'"
+                            class="w-full text-left px-4 py-2.5 text-sm transition-all duration-200 border-t border-gray-200 hover:pl-5">
+                            Steril
+                        </button>
+                        <button @click="filterCategory = 'non steril'; updateFilters(); open = false"
+                            :class="filterCategory === 'non steril' ? 'bg-[#B1252E] text-white' : 'text-gray-700 hover:bg-gray-50'"
+                            class="w-full text-left px-4 py-2.5 text-sm transition-all duration-200 border-t border-gray-200 hover:pl-5">
+                            Non Steril
+                        </button>
+                        <button @click="filterCategory = 'invitro'; updateFilters(); open = false"
+                            :class="filterCategory === 'invitro' ? 'bg-[#B1252E] text-white' : 'text-gray-700 hover:bg-gray-50'"
+                            class="w-full text-left px-4 py-2.5 text-sm transition-all duration-200 border-t border-gray-200 last:rounded-b-lg hover:pl-5">
+                            In Vitro
+                        </button>
+                        
                     </div>
                 </div>
 
@@ -349,8 +367,7 @@
         </div>
 
         {{-- Product Grid - Responsive & Full Width --}}
-        <!-- Ubah bagian Product Grid ini -->
-<div x-show="!isLoading"
+        <div x-show="!isLoading"
     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 opacity-transition">
     <template x-if="currentProducts.length === 0">
         <div class="col-span-full text-center py-20 animate-fade-in">
@@ -368,11 +385,32 @@
             class="product-card bg-[#F8F9FA] rounded-2xl p-7 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:bg-white hover:border-2 hover:border-[#B1252E] cursor-pointer group h-full min-h-[220px] border-2 border-transparent flex flex-col relative shine-effect animate-scale-in opacity-0"
             :class="`stagger-${(index % 15) + 1}`" x-intersect="$el.style.opacity = '1'">
             {{-- Category Badge (Top Right) with Pop Animation --}}
-            <span :class="product.kategori === 'alat' 
-                        ? 'bg-blue-100 text-blue-700' 
-                        : 'bg-green-100 text-green-700'"
+            <span :class="
+                product.kategori === 'alat' 
+                    ? 'bg-blue-100 text-blue-700' 
+                    : (product.kategori === 'reagen' 
+                        ? 'bg-green-100 text-green-700' 
+                        : (product.kategori === 'steril' 
+                            ? 'bg-purple-100 text-purple-700' 
+                            : (product.kategori === 'non steril' 
+                                ? 'bg-orange-100 text-orange-700' 
+                                : 'bg-pink-100 text-pink-700' // Default untuk invitro
+                            )
+                        )
+                    )"
                 class="absolute top-4 right-4 inline-block px-3 py-1 rounded-full text-xs font-semibold badge-pop transform transition-all duration-300 group-hover:scale-110"
-                x-text="product.kategori === 'alat' ? 'Alat' : product.kategori === 'reagen' ? 'Reagen' : 'Produk'"></span>
+                x-text="product.kategori === 'alat' 
+                        ? 'Alat' 
+                        : (product.kategori === 'reagen' 
+                            ? 'Reagen' 
+                            : (product.kategori === 'steril'
+                                ? 'Steril'
+                                : (product.kategori === 'non steril'
+                                    ? 'Non Steril'
+                                    : 'In Vitro' // Untuk invitro
+                                )
+                            )
+                        )"></span>
 
             <div class="flex items-center gap-6 flex-1">
                 {{-- Product Image with Zoom Effect --}}

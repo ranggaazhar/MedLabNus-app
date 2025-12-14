@@ -14,7 +14,10 @@ return new class extends Migration
             $table->string('model_produk', 100);
             $table->text('deskripsi_singkat')->nullable();
             $table->string('gambar_utama', 255)->nullable();
-            $table->enum('kategori', ['reagen', 'alat'])->default('reagen');
+            
+            // Kolom kategori yang dimodifikasi
+            $table->enum('kategori', ['reagen', 'alat', 'steril', 'non steril', 'invitro'])->default('reagen');
+            
             $table->foreignId('pabrikan_id')
                   ->constrained('pabrikans', 'pabrikan_id')
                   ->onDelete('cascade');
