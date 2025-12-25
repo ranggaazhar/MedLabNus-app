@@ -6,18 +6,22 @@
 
 {{-- STAT CARDS SECTION (DISESUAIKAN) --}}
 {{-- Ubah layout grid untuk menampung 6 kartu --}}
-<div class="grid grid-cols-2 sm:grid-cols-3 gap-6 mb-8">
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
 
+    {{-- Gunakan pola ini untuk ke-6 Card Anda --}}
+    
     {{-- Card 1: Total Produk --}}
     <div class="relative">
         <div class="absolute inset-0 bg-red-700 rounded-2xl"></div>
-        <div class="relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex justify-between items-center ml-1.5">
-            <div>
-                <p class="text-gray-500 text-sm font-medium mb-1">Total Produk</p>
-                <h3 class="text-4xl font-bold text-gray-800">{{ $totalProduk }}</h3>
+        {{-- Perubahan: flex-col di mobile (items-start), flex-row di desktop (items-center) --}}
+        <div class="relative bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center ml-1.5 h-full">
+            <div class="mb-3 sm:mb-0">
+                <p class="text-gray-500 text-[11px] sm:text-sm font-medium mb-1 uppercase sm:normal-case">Total Produk</p>
+                <h3 class="text-2xl sm:text-4xl font-bold text-gray-800">{{ $totalProduk }}</h3>
             </div>
-            <div class="bg-red-700 w-14 h-14 rounded-xl flex items-center justify-center">
-                <img src="{{ asset('icons/box.svg') }}" alt="Product Icon" class="w-7 h-7 object-contain filter brightness-0 invert">
+            {{-- Perubahan: Ukuran box ikon lebih kecil di mobile --}}
+            <div class="bg-red-700 w-10 h-10 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center self-end sm:self-center">
+                <img src="{{ asset('icons/box.svg') }}" alt="Product Icon" class="w-5 h-5 sm:w-7 sm:h-7 object-contain filter brightness-0 invert">
             </div>
         </div>
     </div>
@@ -25,13 +29,13 @@
     {{-- Card 2: Alat --}}
     <div class="relative">
         <div class="absolute inset-0 bg-red-700 rounded-2xl"></div>
-        <div class="relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex justify-between items-center ml-1.5">
-            <div>
-                <p class="text-gray-500 text-sm font-medium mb-1">Alat</p>
-                <h3 class="text-4xl font-bold text-gray-800">{{ $totalAlat }}</h3>
+        <div class="relative bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center ml-1.5 h-full">
+            <div class="mb-3 sm:mb-0">
+                <p class="text-gray-500 text-[11px] sm:text-sm font-medium mb-1 uppercase sm:normal-case">Alat</p>
+                <h3 class="text-2xl sm:text-4xl font-bold text-gray-800">{{ $totalAlat }}</h3>
             </div>
-            <div class="bg-red-700 w-14 h-14 rounded-xl flex items-center justify-center">
-                <img src="{{ asset('icons/pk.svg') }}" alt="Alat Icon" class="w-7 h-7 object-contain filter brightness-0 invert">
+            <div class="bg-red-700 w-10 h-10 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center self-end sm:self-center">
+                <img src="{{ asset('icons/pk.svg') }}" alt="Alat Icon" class="w-5 h-5 sm:w-7 sm:h-7 object-contain filter brightness-0 invert">
             </div>
         </div>
     </div>
@@ -39,62 +43,59 @@
     {{-- Card 3: Reagen --}}
     <div class="relative">
         <div class="absolute inset-0 bg-red-700 rounded-2xl"></div>
-        <div class="relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex justify-between items-center ml-1.5">
-            <div>
-                <p class="text-gray-500 text-sm font-medium mb-1">Reagen</p>
-                <h3 class="text-4xl font-bold text-gray-800">{{ $totalReagen }}</h3>
+        <div class="relative bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center ml-1.5 h-full">
+            <div class="mb-3 sm:mb-0">
+                <p class="text-gray-500 text-[11px] sm:text-sm font-medium mb-1 uppercase sm:normal-case">Reagen</p>
+                <h3 class="text-2xl sm:text-4xl font-bold text-gray-800">{{ $totalReagen }}</h3>
             </div>
-            <div class="bg-red-700 w-14 h-14 rounded-xl flex items-center justify-center">
-                <img src="{{ asset('icons/lab.svg') }}" alt="Reagen Icon" class="w-7 h-7 object-contain filter brightness-0 invert">
+            <div class="bg-red-700 w-10 h-10 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center self-end sm:self-center">
+                <img src="{{ asset('icons/lab.svg') }}" alt="Reagen Icon" class="w-5 h-5 sm:w-7 sm:h-7 object-contain filter brightness-0 invert">
             </div>
         </div>
     </div>
-    
-    {{-- Card 4: Steril (BARU) --}}
+
+    {{-- Card 4: Steril --}}
     <div class="relative">
         <div class="absolute inset-0 bg-red-700 rounded-2xl"></div>
-        <div class="relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex justify-between items-center ml-1.5">
-            <div>
-                <p class="text-gray-500 text-sm font-medium mb-1">Steril</p>
-                <h3 class="text-4xl font-bold text-gray-800">{{ $totalSteril }}</h3>
+        <div class="relative bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center ml-1.5 h-full">
+            <div class="mb-3 sm:mb-0">
+                <p class="text-gray-500 text-[11px] sm:text-sm font-medium mb-1 uppercase sm:normal-case">Steril</p>
+                <h3 class="text-2xl sm:text-4xl font-bold text-gray-800">{{ $totalSteril }}</h3>
             </div>
-            <div class="bg-red-700 w-14 h-14 rounded-xl flex items-center justify-center">
-                {{-- Anda bisa mengganti ini dengan ikon yang lebih spesifik jika ada --}}
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <div class="bg-red-700 w-10 h-10 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center self-end sm:self-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 sm:w-7 sm:h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.01 12.01 0 002.944 12c0 3.078 1.488 5.99 3.944 8.056A11.955 11.955 0 0112 21.056c3.078 0 5.99-1.488 8.056-3.944A12.01 12.01 0 0021.056 12a12.01 12.01 0 00-.438-3.016z" />
                 </svg>
             </div>
         </div>
     </div>
 
-    {{-- Card 5: Non Steril (BARU) --}}
+    {{-- Card 5: Non Steril --}}
     <div class="relative">
         <div class="absolute inset-0 bg-red-700 rounded-2xl"></div>
-        <div class="relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex justify-between items-center ml-1.5">
-            <div>
-                <p class="text-gray-500 text-sm font-medium mb-1">Non Steril</p>
-                <h3 class="text-4xl font-bold text-gray-800">{{ $totalNonSteril }}</h3>
+        <div class="relative bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center ml-1.5 h-full">
+            <div class="mb-3 sm:mb-0">
+                <p class="text-gray-500 text-[11px] sm:text-sm font-medium mb-1 uppercase sm:normal-case">Non Steril</p>
+                <h3 class="text-2xl sm:text-4xl font-bold text-gray-800">{{ $totalNonSteril }}</h3>
             </div>
-            <div class="bg-red-700 w-14 h-14 rounded-xl flex items-center justify-center">
-                {{-- Anda bisa mengganti ini dengan ikon yang lebih spesifik jika ada --}}
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <div class="bg-red-700 w-10 h-10 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center self-end sm:self-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 sm:w-7 sm:h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </div>
         </div>
     </div>
 
-    {{-- Card 6: In Vitro (BARU) --}}
+    {{-- Card 6: In Vitro --}}
     <div class="relative">
         <div class="absolute inset-0 bg-red-700 rounded-2xl"></div>
-        <div class="relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex justify-between items-center ml-1.5">
-            <div>
-                <p class="text-gray-500 text-sm font-medium mb-1">In Vitro</p>
-                <h3 class="text-4xl font-bold text-gray-800">{{ $totalInvitro }}</h3>
+        <div class="relative bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center ml-1.5 h-full">
+            <div class="mb-3 sm:mb-0">
+                <p class="text-gray-500 text-[11px] sm:text-sm font-medium mb-1 uppercase sm:normal-case">In Vitro</p>
+                <h3 class="text-2xl sm:text-4xl font-bold text-gray-800">{{ $totalInvitro }}</h3>
             </div>
-            <div class="bg-red-700 w-14 h-14 rounded-xl flex items-center justify-center">
-                {{-- Anda bisa mengganti ini dengan ikon yang lebih spesifik jika ada --}}
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <div class="bg-red-700 w-10 h-10 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center self-end sm:self-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 sm:w-7 sm:h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
             </div>
