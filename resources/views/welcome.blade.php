@@ -12,7 +12,6 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <title>PT Medlab Nusantara</title>
 
-
     {{-- Tailwind CSS CDN --}}
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -20,272 +19,172 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
-        [x-cloak] {
-            display: none !important;
-        }
+        [x-cloak] { display: none !important; }
 
         /* Keyframe Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeInRight {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-
-        @keyframes slideDown {
-            from {
-                transform: translateY(-100px);
-            }
-
-            to {
-                transform: translateY(0);
-            }
-        }
-
-        @keyframe drawPath {
-            to {
-                stroke-dashoffset: 0;
-            }
-        }
-
-        .animate-fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
-
-        .animate-fade-in-left {
-            animation: fadeInLeft 0.8s ease-out forwards;
-        }
-
-        .animate-fade-in-right {
-            animation: fadeInRight 0.8s ease-out forwards;
-        }
-
-        .animate-scale-in {
-            animation: scaleIn 0.8s ease-out forwards;
-        }
-
-        .animate-float {
-            animation: float 4s ease-in-out infinite;
-        }
-
-        .animate-slide-down {
-            animation: slideDown 0.6s ease-out forwards;
-        }
-
-        .delay-100 {
-            animation-delay: 0.1s;
-        }
-
-        .delay-200 {
-            animation-delay: 0.2s;
-        }
-
-        .delay-300 {
-            animation-delay: 0.3s;
-        }
-
-        .delay-400 {
-            animation-delay: 0.4s;
-        }
-
-        .delay-500 {
-            animation-delay: 0.5s;
-        }
-
-        .delay-600 {
-            animation-delay: 0.6s;
-        }
+        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+        .animate-scale-in { animation: scaleIn 0.8s ease-out forwards; }
 
         /* Scroll Reveal */
-        .reveal {
-            opacity: 0;
-        }
+        .reveal { opacity: 0; transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; }
 
-        .reveal.active {
-            opacity: 1;
-        }
-
-        /* SVG Path Animation */
-        .animated-svg {
-            stroke-dasharray: 3000;
-            stroke-dashoffset: 3000;
-            animation: drawPath 2s ease-out forwards;
-        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 
-<body class="w-full overflow-x-hidden bg-white" x-data="{ mobileMenuOpen: false, currentSlide: 0, totalSlides: 3 }">
+<body class="w-full overflow-x-hidden bg-white" x-data="{ mobileMenuOpen: false }">
 
-    {{-- Navbar --}}
     @include('components.public-navbar')
-
-    {{-- Hero Section --}}
     @include('components.hero')
-
-    {{-- Profile Section --}}
     @include('components.company-profile')
-
-    {{-- Visi Misi Section --}}
     @include('components.vision-mission')
-
-    {{-- Delivery Section --}}
     @include('components.delivery-banner')
 
-    {{-- 🔥 Section Kategori Cepat (BARU DITAMBAHKAN) 🔥 --}}
-    <section class="py-12 bg-gray-50 reveal">
+    {{-- 🔥 Section Kategori Produk 🔥 --}}
+    <section class="py-20 bg-[#fbfbfb] reveal">
         <div class="container mx-auto px-6 lg:px-12">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-gray-800 mb-2">Kategori Produk</h2>
-                <div class="h-1 w-20 bg-[#B1252E] mx-auto rounded-full"></div>
+            
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Kategori Produk</h2>
+                <div class="mt-6 h-1 w-20 bg-[#B1252E] mx-auto rounded-full"></div>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                <a href="/products?kategori=alat" class="group bg-white p-6 rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 flex flex-col items-center justify-center gap-4">
-                    <div class="w-14 h-14 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 group-hover:bg-[#B1252E] group-hover:text-white transition-colors duration-300">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                    </div>
-                    <span class="font-semibold text-gray-700 group-hover:text-[#B1252E] transition-colors">Alat</span>
-                </a>
+            <div class="flex overflow-x-auto pb-8 gap-5 hide-scrollbar snap-x md:grid md:grid-cols-5 md:gap-8 md:overflow-visible">
+                
+                @php
+                    $categories = [
+                        [
+                            'name' => 'Alat', 
+                            'slug' => 'alat',
+                            'color' => 'blue', 
+                            // Analyzer (Representasi BA400/A15)
+                            'icon' => '<rect x="3" y="4" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7 8h4M7 12h2M15 8h2v6h-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M3 14h18" stroke="currentColor" stroke-width="1.8"/>'
+                        ],
+                        [
+                            'name' => 'Reagen', 
+                            'slug' => 'reagen',
+                            'color' => 'green', 
+                            // Reagent Bottle with Drop
+                            'icon' => '<path d="M9 3h6v3a4 4 0 0 1-4 4 4 4 0 0 1-4-4V3z" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="7" y="10" width="10" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 14v2M12 14c-.5 0-1 .5-1 1s.5 1 1 1" stroke="currentColor" stroke-width="1.2"/>'
+                        ],
+                        [
+                            'name' => 'Steril', 
+                            'slug' => 'steril',
+                            'color' => 'purple', 
+                            // Syringe & Scalpel Combined
+                            'icon' => '<path d="m18 2 2 2-11 11-4-1 1-4Z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13 7l2 2M2 22l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="19" cy="5" r="1" fill="currentColor"/>'
+                        ],
+                        [
+                            'name' => 'Non Steril', 
+                            'slug' => 'non-steril',
+                            'color' => 'orange', 
+                            // Digital Scale (Timbangan)
+                            'icon' => '<rect x="3" y="14" width="18" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M6 14V7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'
+                        ],
+                        [
+                            'name' => 'In Vitro', 
+                            'slug' => 'invitro',
+                            'color' => 'pink', 
+                            // Original Test Tube
+                            'icon' => '<path d="M9 3h6M10 3v13a3 3 0 0 0 6 0V3M10 8h6M10 12h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'
+                        ],
+                    ];
+                @endphp
 
-                <a href="/products?kategori=reagen" class="group bg-white p-6 rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 flex flex-col items-center justify-center gap-4">
-                    <div class="w-14 h-14 bg-green-50 rounded-full flex items-center justify-center text-green-600 group-hover:bg-[#B1252E] group-hover:text-white transition-colors duration-300">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                @foreach($categories as $cat)
+                <a href="/products?kategori={{ $cat['slug'] }}" 
+                    class="category-card min-w-[150px] snap-center group bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-500 flex flex-col items-center gap-5 md:min-w-0">
+                    
+                    <div class="icon-box w-20 h-20 bg-{{ $cat['color'] }}-50 rounded-2xl flex items-center justify-center text-{{ $cat['color'] }}-600 group-hover:bg-[#B1252E] group-hover:text-white transition-all duration-500">
+                        <svg class="w-10 h-10 transition-colors duration-500 group-hover:text-white" viewBox="0 0 24 24">
+                            {!! $cat['icon'] !!}
+                        </svg>
                     </div>
-                    <span class="font-semibold text-gray-700 group-hover:text-[#B1252E] transition-colors">Reagen</span>
-                </a>
 
-                <a href="/products?kategori=steril" class="group bg-white p-6 rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 flex flex-col items-center justify-center gap-4">
-                    <div class="w-14 h-14 bg-purple-50 rounded-full flex items-center justify-center text-purple-600 group-hover:bg-[#B1252E] group-hover:text-white transition-colors duration-300">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.01 12.01 0 002.944 12c0 3.078 1.488 5.99 3.944 8.056A11.955 11.955 0 0112 21.056c3.078 0 5.99-1.488 8.056-3.944A12.01 12.01 0 0021.056 12a12.01 12.01 0 00-.438-3.016z"></path></svg>
-                    </div>
-                    <span class="font-semibold text-gray-700 group-hover:text-[#B1252E] transition-colors">Steril</span>
+                    <span class="font-semibold text-gray-700 text-lg group-hover:text-[#B1252E] transition-colors duration-300 whitespace-nowrap">
+                        {{ $cat['name'] }}
+                    </span>
                 </a>
-
-                <a href="/products?kategori=non steril" class="group bg-white p-6 rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 flex flex-col items-center justify-center gap-4">
-                    <div class="w-14 h-14 bg-orange-50 rounded-full flex items-center justify-center text-orange-600 group-hover:bg-[#B1252E] group-hover:text-white transition-colors duration-300">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                    </div>
-                    <span class="font-semibold text-gray-700 group-hover:text-[#B1252E] transition-colors">Non Steril</span>
-                </a>
-
-                <a href="/products?kategori=invitro" class="group bg-white p-6 rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 flex flex-col items-center justify-center gap-4">
-                    <div class="w-14 h-14 bg-pink-50 rounded-full flex items-center justify-center text-pink-600 group-hover:bg-[#B1252E] group-hover:text-white transition-colors duration-300">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                    </div>
-                    <span class="font-semibold text-gray-700 group-hover:text-[#B1252E] transition-colors">In Vitro</span>
-                </a>
+                @endforeach
             </div>
         </div>
     </section>
 
-    {{-- Product Section --}}
     @include('components.product-collection')
-
-    {{-- Footer --}}
     @include('components.footer')
 
     <script>
-        // Scroll Reveal Animation
+        // --- LOGIKA CAROUSEL ---
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.querySelector('.carousel-container');
+            const items = document.querySelectorAll('.carousel-item');
+            const dots = document.querySelectorAll('.carousel-dot');
+            if(!container || items.length === 0) return;
+
+            let activeIndex = 0;
+            const total = items.length;
+            let isAnimating = false;
+
+            function getRelativePosition(index, active) {
+                let diff = index - active;
+                if (diff > total / 2) diff -= total;
+                if (diff < -total / 2) diff += total;
+                return diff;
+            }
+
+            function updateCarousel() {
+                const isMobile = window.innerWidth < 768;
+                items.forEach((item, i) => {
+                    const pos = getRelativePosition(i, activeIndex);
+                    if (isMobile) {
+                        item.style.transform = `translateX(${pos * 100}%) scale(${pos === 0 ? 1 : 0.8})`;
+                        item.style.opacity = pos === 0 ? 1 : 0.4;
+                    } else {
+                        item.style.transform = `translateX(${pos * 350}px) scale(${1 - Math.abs(pos) * 0.2})`;
+                        item.style.opacity = 1 - Math.abs(pos) * 0.5;
+                    }
+                    item.style.zIndex = 20 - Math.abs(pos);
+                });
+                dots.forEach((dot, i) => {
+                    dot.style.width = i === activeIndex ? '30px' : '10px';
+                    dot.style.backgroundColor = i === activeIndex ? '#B1252E' : '#D1D5DB';
+                });
+            }
+
+            function moveNext() { 
+                if(isAnimating) return;
+                isAnimating = true;
+                activeIndex = (activeIndex + 1) % total; 
+                updateCarousel(); 
+                setTimeout(() => isAnimating = false, 600);
+            }
+
+            document.getElementById('nextBtn')?.addEventListener('click', moveNext);
+            document.getElementById('prevBtn')?.addEventListener('click', () => {
+                activeIndex = (activeIndex - 1 + total) % total;
+                updateCarousel();
+            });
+
+            window.addEventListener('resize', updateCarousel);
+            updateCarousel();
+            setInterval(moveNext, 5000);
+        });
+
         function reveal() {
             const reveals = document.querySelectorAll('.reveal');
-
             reveals.forEach(element => {
-                const windowHeight = window.innerHeight;
-                const elementTop = element.getBoundingClientRect().top;
-                const elementVisible = 150;
-
-                if (elementTop < windowHeight - elementVisible) {
+                if (element.getBoundingClientRect().top < window.innerHeight - 150) {
                     element.classList.add('active');
                 }
             });
         }
-
         window.addEventListener('scroll', reveal);
-        reveal(); // Initial check
-
-        // Smooth Scroll with Animation
-        document.querySelectorAll('.smooth-scroll').forEach(link => {
-            link.addEventListener('click', function (e) {
-                e.preventDefault();
-
-                const targetId = this.getAttribute('data-scroll-target') || this.getAttribute('href').substring(1);
-                const targetElement = document.getElementById(targetId);
-
-                if (targetElement) {
-                    // Add animation class to target section
-                    targetElement.style.animation = 'none';
-                    setTimeout(() => {
-                        targetElement.style.animation = 'fadeInUp 0.8s ease-out forwards';
-                    }, 10);
-
-                    // Smooth scroll
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-
-                    // Close mobile menu if open
-                    const mobileMenu = document.querySelector('[x-data*="mobileMenuOpen"]');
-                    if (mobileMenu && mobileMenu.__x && mobileMenu.__x.$data) {
-                        mobileMenu.__x.$data.mobileMenuOpen = false;
-                    }
-                }
-            });
-        });
+        reveal();
     </script>
 </body>
-
 </html>
