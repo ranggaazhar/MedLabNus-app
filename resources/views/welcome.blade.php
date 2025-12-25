@@ -10,9 +10,8 @@
     <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo2.png') }}">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @vite(['resources/css/welcome.css', 'resources/css/custom-utilities.css'])
     <title>PT Medlab Nusantara</title>
-    
+
 
     {{-- Tailwind CSS CDN --}}
     <script src="https://cdn.tailwindcss.com"></script>
