@@ -5,9 +5,8 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/css/welcome.css', 
-                'resources/css/footer.css', 
-                // TAMBAHKAN FILE JS ANDA DI SINI
+                'resources/css/app.css', // Cukup satu ini untuk semua CSS
+                'resources/js/app.js',
                 'resources/js/slider.js' 
             ],
             refresh: true,
