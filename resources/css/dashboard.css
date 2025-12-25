@@ -48,4 +48,57 @@
     .table tbody td:nth-child(1)::before {
         content: ''; /* Hapus label untuk kolom Product */
     }
+
+    .grid.grid-cols-2.sm\:grid-cols-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+        padding: 0 5px;
+    }
+
+    /* 2. Mengubah struktur Card Putih dari menyamping (row) menjadi ke bawah (column) */
+    .relative.bg-white.rounded-2xl.p-6 {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important; /* Perbaikan dari items-start */
+        padding: 12px !important; /* Padding lebih ramping */
+        margin-left: 4px !important; /* Menyesuaikan jarak shadow merah */
+        min-height: 125px !important;
+        justify-content: space-between !important;
+    }
+
+    /* 3. Menyesuaikan teks judul (Total Produk, Alat, dll) */
+    .relative.bg-white.rounded-2xl.p-6 p {
+        font-size: 11px !important;
+        font-weight: 600 !important;
+        line-height: 1.2 !important;
+        color: #6b7280 !important; /* text-gray-500 */
+        margin-bottom: 4px !important;
+        text-transform: uppercase;
+    }
+
+    /* 4. Menyesuaikan ukuran angka utama */
+    .relative.bg-white.rounded-2xl.p-6 h3 {
+        font-size: 1.8rem !important; /* Ukuran lebih pas untuk HP */
+        font-weight: 800 !important;
+        color: #1f2937 !important; /* text-gray-800 */
+        margin: 0 !important;
+    }
+
+    /* 5. Mengatur posisi dan ukuran kotak ikon merah */
+    .bg-red-700.w-14.h-14 {
+        width: 36px !important; /* Ukuran kotak ikon diperkecil */
+        height: 36px !important;
+        border-radius: 10px !important;
+        align-self: flex-end !important; /* Ikon berada di pojok kanan bawah */
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* 6. Menyesuaikan ukuran ikon (gambar/svg) di dalam kotak merah */
+    .bg-red-700.w-14.h-14 img, 
+    .bg-red-700.w-14.h-14 svg {
+        width: 18px !important;
+        height: 18px !important;
+    }
 }
