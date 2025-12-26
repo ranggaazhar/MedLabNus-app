@@ -116,25 +116,144 @@
             </div>
         </div>
 
-        {{-- Section Kategori (Contoh ALAT & REAGEN) --}}
+ {{-- FEATURE SECTIONS --}}
         <div class="max-w-[1800px] mx-auto space-y-16">
-            {{-- Alat --}}
+            {{-- 1. ALAT --}}
             <div class="grid lg:grid-cols-5 gap-16 items-center reveal">
-                <div class="space-y-6 lg:col-span-3 lg:text-left text-center">
-                    <div class="flex items-center lg:justify-start justify-center gap-4">
+                <div class="space-y-6 lg:col-span-3">
+                    <div class="flex items-center gap-4">
                         <div class="w-16 h-16 bg-gradient-to-br from-[#B1252E] to-[#8f1d24] rounded-2xl flex items-center justify-center shadow-lg">
                             <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="12" y1="18" x2="12" y2="12" /><line x1="9" y1="15" x2="15" y2="15" />
+                               <rect x="3" y="4" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7 8h4M7 12h2M15 8h2v6h-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M3 14h18" stroke="currentColor" stroke-width="1.8"/>
                             </svg>
                         </div>
                         <h3 class="text-4xl font-semibold text-gray-900">ALAT</h3>
                     </div>
-                    <div class="h-1 w-16 bg-gradient-to-r from-[#B1252E] to-[#8f1d24] rounded-full mx-auto lg:mx-0"></div>
-                    <p class="text-xl text-gray-600">Peralatan medis berkualitas tinggi untuk hasil pemeriksaan yang akurat.</p>
-                    <a href="#" class="inline-flex items-center gap-2 text-[#B1252E] hover:translate-x-2 transition-transform">&gt; View more</a>
+                    <div class="h-1 w-16 bg-gradient-to-r from-[#B1252E] to-[#8f1d24] rounded-full"></div>
+                    <p class="text-xl leading-relaxed text-gray-600">Peralatan medis berkualitas tinggi yang dirancang untuk mendukung proses pemeriksaan agar lebih akurat dan efisien.</p>
+                    <a href="{{ route('products.public', ['kategori' => 'alat']) }}" class="inline-flex items-center gap-2 text-[#B1252E] group hover-lift">
+                        <span>View more</span>
+                        <span class="text-xl transition-transform group-hover:translate-x-2">&gt;</span>
+                    </a>
                 </div>
-                <div class="lg:col-span-2 h-[300px] lg:h-[400px] bg-gray-100 rounded-3xl overflow-hidden shadow-xl">
-                    <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800" class="w-full h-full object-cover" alt="Alat">
+                <div class="relative overflow-hidden rounded-3xl shadow-2xl hover-scale bg-gray-100 p-8 h-[400px] flex items-center justify-center transition-transform duration-300 lg:col-span-2">
+                    @if ($produks->where('kategori', 'alat')->count() > 0)
+                        <img src="{{ asset('storage/' . $produks->where('kategori', 'alat')->first()->gambar_utama) }}" alt="Alat Medis" class="w-full h-full object-contain">
+                    @else
+                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800" alt="Default Alat" class="w-full h-full object-cover">
+                    @endif
+                </div>
+            </div>
+
+            {{-- 2. REAGEN --}}
+            <div class="grid lg:grid-cols-5 gap-16 items-center reveal">
+                <div class="relative overflow-hidden rounded-3xl shadow-2xl hover-scale bg-gray-100 p-8 h-[400px] flex items-center justify-center transition-transform duration-300 order-2 lg:order-1 lg:col-span-2">
+                    @php $reagen_utama = $produks->where('kategori', 'reagen')->first(); @endphp
+                    @if ($reagen_utama)
+                        <img src="{{ asset('storage/' . $reagen_utama->gambar_utama) }}" alt="Reagen Medis" class="w-full h-full object-contain">
+                    @else
+                        <img src="https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=800" alt="Default Reagen" class="w-full h-full object-cover">
+                    @endif
+                </div>
+                <div class="space-y-6 order-1 lg:order-2 lg:col-span-3">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 bg-gradient-to-br from-[#B1252E] to-[#8f1d24] rounded-2xl flex items-center justify-center shadow-lg">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M9 3h6v3a4 4 0 0 1-4 4 4 4 0 0 1-4-4V3z" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="7" y="10" width="10" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 14v2M12 14c-.5 0-1 .5-1 1s.5 1 1 1" stroke="currentColor" stroke-width="1.2"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-4xl font-semibold text-gray-900">REAGEN</h3>
+                    </div>
+                    <div class="h-1 w-16 bg-gradient-to-r from-[#B1252E] to-[#8f1d24] rounded-full"></div>
+                    <p class="text-xl leading-relaxed text-gray-600">Reagen berkualitas tinggi yang memastikan hasil pengujian laboratorium yang akurat, cepat, dan dapat diandalkan.</p>
+                    <a href="{{ route('products.public', ['kategori' => 'reagen']) }}" class="inline-flex items-center gap-2 text-[#B1252E] group hover-lift">
+                        <span>View more</span>
+                        <span class="text-xl transition-transform group-hover:translate-x-2">&gt;</span>
+                    </a>
+                </div>
+            </div>
+
+            {{-- 3. STERIL --}}
+            <div class="grid lg:grid-cols-5 gap-16 items-center reveal">
+                <div class="space-y-6 lg:col-span-3">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 bg-gradient-to-br from-[#B1252E] to-[#8f1d24] rounded-2xl flex items-center justify-center shadow-lg">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.01 12.01 0 002.944 12c0 3.078 1.488 5.99 3.944 8.056A11.955 11.955 0 0112 21.056c3.078 0 5.99-1.488 8.056-3.944A12.01 12.01 0 0021.056 12a12.01 12.01 0 00-.438-3.016z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-4xl font-semibold text-gray-900">STERIL</h3>
+                    </div>
+                    <div class="h-1 w-16 bg-gradient-to-r from-[#B1252E] to-[#8f1d24] rounded-full"></div>
+                    <p class="text-xl leading-relaxed text-gray-600">Produk steril yang terjamin kebersihannya untuk mendukung prosedur medis yang aman dan bebas kontaminasi.</p>
+                    <a href="{{ route('products.public', ['kategori' => 'steril']) }}" class="inline-flex items-center gap-2 text-[#B1252E] group hover-lift">
+                        <span>View more</span>
+                        <span class="text-xl transition-transform group-hover:translate-x-2">&gt;</span>
+                    </a>
+                </div>
+                <div class="relative overflow-hidden rounded-3xl shadow-2xl hover-scale bg-gray-100 p-8 h-[400px] flex items-center justify-center transition-transform duration-300 lg:col-span-2">
+                    @php $steril_utama = $produks->where('kategori', 'steril')->first(); @endphp
+                    @if ($steril_utama)
+                        <img src="{{ asset('storage/' . $steril_utama->gambar_utama) }}" alt="Produk Steril" class="w-full h-full object-contain">
+                    @else
+                        <img src="https://images.unsplash.com/photo-1584036561566-b93a90a63146?q=80&w=800" alt="Default Steril" class="w-full h-full object-cover">
+                    @endif
+                </div>
+            </div>
+
+            {{-- 4. NON STERIL --}}
+            <div class="grid lg:grid-cols-5 gap-16 items-center reveal">
+                <div class="relative overflow-hidden rounded-3xl shadow-2xl hover-scale bg-gray-100 p-8 h-[400px] flex items-center justify-center transition-transform duration-300 order-2 lg:order-1 lg:col-span-2">
+                    @php $non_steril_utama = $produks->where('kategori', 'non steril')->first(); @endphp
+                    @if ($non_steril_utama)
+                        <img src="{{ asset('storage/' . $non_steril_utama->gambar_utama) }}" alt="Produk Non Steril" class="w-full h-full object-contain">
+                    @else
+                        <img src="https://images.unsplash.com/photo-1631549916768-4119b2e5f926?q=80&w=800" alt="Default Non Steril" class="w-full h-full object-cover">
+                    @endif
+                </div>
+                <div class="space-y-6 order-1 lg:order-2 lg:col-span-3">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 bg-gradient-to-br from-[#B1252E] to-[#8f1d24] rounded-2xl flex items-center justify-center shadow-lg">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <rect x="3" y="14" width="18" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M6 14V7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-4xl font-semibold text-gray-900">NON STERIL</h3>
+                    </div>
+                    <div class="h-1 w-16 bg-gradient-to-r from-[#B1252E] to-[#8f1d24] rounded-full"></div>
+                    <p class="text-xl leading-relaxed text-gray-600">Perlengkapan medis umum dan pendukung laboratorium untuk kebutuhan operasional sehari-hari yang esensial.</p>
+                    <a href="{{ route('products.public', ['kategori' => 'non steril']) }}" class="inline-flex items-center gap-2 text-[#B1252E] group hover-lift">
+                        <span>View more</span>
+                        <span class="text-xl transition-transform group-hover:translate-x-2">&gt;</span>
+                    </a>
+                </div>
+            </div>
+
+            {{-- 5. IN VITRO --}}
+            <div class="grid lg:grid-cols-5 gap-16 items-center reveal">
+                <div class="space-y-6 lg:col-span-3">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 bg-gradient-to-br from-[#B1252E] to-[#8f1d24] rounded-2xl flex items-center justify-center shadow-lg">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M9 3h6M10 3v13a3 3 0 0 0 6 0V3M10 8h6M10 12h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-4xl font-semibold text-gray-900">IN VITRO</h3>
+                    </div>
+                    <div class="h-1 w-16 bg-gradient-to-r from-[#B1252E] to-[#8f1d24] rounded-full"></div>
+                    <p class="text-xl leading-relaxed text-gray-600">Solusi diagnostik In Vitro mutakhir untuk analisis laboratorium yang presisi dan mendukung diagnosis klinis.</p>
+                    <a href="{{ route('products.public', ['kategori' => 'invitro']) }}" class="inline-flex items-center gap-2 text-[#B1252E] group hover-lift">
+                        <span>View more</span>
+                        <span class="text-xl transition-transform group-hover:translate-x-2">&gt;</span>
+                    </a>
+                </div>
+                <div class="relative overflow-hidden rounded-3xl shadow-2xl hover-scale bg-gray-100 p-8 h-[400px] flex items-center justify-center transition-transform duration-300 lg:col-span-2">
+                    @php $invitro_utama = $produks->where('kategori', 'invitro')->first(); @endphp
+                    @if ($invitro_utama)
+                        <img src="{{ asset('storage/' . $invitro_utama->gambar_utama) }}" alt="Produk In Vitro" class="w-full h-full object-contain">
+                    @else
+                        <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=800" alt="Default In Vitro" class="w-full h-full object-cover">
+                    @endif
                 </div>
             </div>
         </div>
