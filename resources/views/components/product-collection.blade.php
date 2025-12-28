@@ -138,7 +138,7 @@
                 </div>
                 <div class="relative overflow-hidden rounded-3xl shadow-2xl hover-scale bg-gray-100 p-8 h-[400px] flex items-center justify-center transition-transform duration-300 lg:col-span-2">
                     @if ($produks->where('kategori', 'alat')->count() > 0)
-                        <img src="{{ asset('storage/' . $produks->where('kategori', 'alat')->first()->gambar_utama) }}" alt="Alat Medis" class="w-full h-full object-contain">
+                        <img src="{{ asset($produks->where('kategori', 'alat')->first()->gambar_utama) }}" alt="Alat Medis" class="w-full h-full object-contain">
                     @else
                         <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800" alt="Default Alat" class="w-full h-full object-cover">
                     @endif
@@ -150,7 +150,7 @@
                 <div class="relative overflow-hidden rounded-3xl shadow-2xl hover-scale bg-gray-100 p-8 h-[400px] flex items-center justify-center transition-transform duration-300 order-2 lg:order-1 lg:col-span-2">
                     @php $reagen_utama = $produks->where('kategori', 'reagen')->first(); @endphp
                     @if ($reagen_utama)
-                        <img src="{{ asset('storage/' . $reagen_utama->gambar_utama) }}" alt="Reagen Medis" class="w-full h-full object-contain">
+                        <img src="{{ asset($reagen_utama->gambar_utama) }}" alt="Reagen Medis" class="w-full h-full object-contain">
                     @else
                         <img src="https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=800" alt="Default Reagen" class="w-full h-full object-cover">
                     @endif
@@ -194,7 +194,7 @@
                 <div class="relative overflow-hidden rounded-3xl shadow-2xl hover-scale bg-gray-100 p-8 h-[400px] flex items-center justify-center transition-transform duration-300 lg:col-span-2">
                     @php $steril_utama = $produks->where('kategori', 'steril')->first(); @endphp
                     @if ($steril_utama)
-                        <img src="{{ asset('storage/' . $steril_utama->gambar_utama) }}" alt="Produk Steril" class="w-full h-full object-contain">
+                        <img src="{{ asset($steril_utama->gambar_utama) }}" alt="Produk Steril" class="w-full h-full object-contain">
                     @else
                         <img src="https://images.unsplash.com/photo-1584036561566-b93a90a63146?q=80&w=800" alt="Default Steril" class="w-full h-full object-cover">
                     @endif
@@ -206,7 +206,7 @@
                 <div class="relative overflow-hidden rounded-3xl shadow-2xl hover-scale bg-gray-100 p-8 h-[400px] flex items-center justify-center transition-transform duration-300 order-2 lg:order-1 lg:col-span-2">
                     @php $non_steril_utama = $produks->where('kategori', 'non steril')->first(); @endphp
                     @if ($non_steril_utama)
-                        <img src="{{ asset('storage/' . $non_steril_utama->gambar_utama) }}" alt="Produk Non Steril" class="w-full h-full object-contain">
+                        <img src="{{ asset($non_steril_utama->gambar_utama) }}" alt="Produk Non Steril" class="w-full h-full object-contain">
                     @else
                         <img src="https://images.unsplash.com/photo-1631549916768-4119b2e5f926?q=80&w=800" alt="Default Non Steril" class="w-full h-full object-cover">
                     @endif
@@ -250,7 +250,7 @@
                 <div class="relative overflow-hidden rounded-3xl shadow-2xl hover-scale bg-gray-100 p-8 h-[400px] flex items-center justify-center transition-transform duration-300 lg:col-span-2">
                     @php $invitro_utama = $produks->where('kategori', 'invitro')->first(); @endphp
                     @if ($invitro_utama)
-                        <img src="{{ asset('storage/' . $invitro_utama->gambar_utama) }}" alt="Produk In Vitro" class="w-full h-full object-contain">
+                        <img src="{{ asset($invitro_utama->gambar_utama) }}" alt="Produk In Vitro" class="w-full h-full object-contain">
                     @else
                         <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=800" alt="Default In Vitro" class="w-full h-full object-cover">
                     @endif

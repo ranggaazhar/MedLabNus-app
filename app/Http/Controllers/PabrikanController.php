@@ -7,18 +7,17 @@ use App\Http\Requests\StorePabrikanRequest;
 use App\Http\Requests\UpdatePabrikanRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+// Storage tidak lagi digunakan untuk upload, tapi bisa disimpan untuk referensi atau dihapus
 
 class PabrikanController extends Controller
 {
     public function checkNamaPabrikan(Request $request)
     {
         $nama = $request->input('nama_pabrikan');
-        $pabrikanId = $request->input('pabrikan_id'); // untuk update
+        $pabrikanId = $request->input('pabrikan_id'); 
 
         $query = Pabrikan::where('nama_pabrikan', $nama);
         
-        // Jika update, exclude pabrikan yang sedang diedit
         if ($pabrikanId) {
             $query->where('pabrikan_id', '!=', $pabrikanId);
         }
@@ -49,39 +48,37 @@ class PabrikanController extends Controller
     public function store(StorePabrikanRequest $request)
     {
         try {
-            // Memulai transaksi database
             DB::beginTransaction();
 
             $data = $request->validated();
-            $gambar_utama = null; // Variabel untuk menyimpan path gambar sementara
+            $nama_file_baru = null; 
 
-            // Proses upload logo_pabrikan
             if ($request->hasFile('logo_pabrikan')) {
-                $gambar_utama = $request->file('logo_pabrikan')
-                    ->store('pabrikan_logos', 'public'); // Ganti 'products' dengan 'pabrikan_logos'
-                $data['logo_pabrikan'] = $gambar_utama;
+                $file = $request->file('logo_pabrikan');
+                // Membuat nama file unik
+                $nama_file_baru = time() . '_' . $file->getClientOriginalName();
+                
+                // Pindahkan file ke public/uploads/pabrikan_logos
+                $file->move(public_path('uploads/pabrikan_logos'), $nama_file_baru);
+                
+                // Simpan path relatif ke database agar mudah dipanggil asset()
+                $data['logo_pabrikan'] = 'uploads/pabrikan_logos/' . $nama_file_baru;
             }
 
-            // Membuat record Pabrikan
             $pabrikan = Pabrikan::create($data);
 
-            // Karena Pabrikan tidak memiliki spesifikasi seperti Produk, 
-            // logika spesifikasi dihilangkan.
-
-            // Menyelesaikan transaksi
             DB::commit();
 
             return redirect()
-                ->route('pabrikan.index') // Sesuaikan dengan nama route Anda
+                ->route('pabrikan.index')
                 ->with('success', 'Pabrikan berhasil ditambahkan');
 
         } catch (\Exception $e) {
-            // Membatalkan transaksi jika terjadi error
             DB::rollBack();
 
-            // Hapus file yang sudah terupload jika ada error setelah upload
-            if (isset($gambar_utama)) {
-                Storage::disk('public')->delete($gambar_utama);
+            // Jika error, hapus file yang sudah terlanjur pindah ke folder uploads
+            if ($nama_file_baru && file_exists(public_path('uploads/pabrikan_logos/' . $nama_file_baru))) {
+                unlink(public_path('uploads/pabrikan_logos/' . $nama_file_baru));
             }
 
             return redirect()
@@ -105,45 +102,40 @@ class PabrikanController extends Controller
     public function update(UpdatePabrikanRequest $request, Pabrikan $pabrikan)
     {
         try {
-            // Memulai transaksi database
             DB::beginTransaction();
 
             $data = $request->validated();
-            $old_logo_path = $pabrikan->logo_pabrikan; // Simpan path logo lama
-            $new_logo_path = null; // Path logo baru jika diupload
+            $old_logo_path = $pabrikan->logo_pabrikan; 
+            $nama_file_baru = null;
 
-            // Proses upload logo_pabrikan
             if ($request->hasFile('logo_pabrikan')) {
-                // Upload logo baru
-                $new_logo_path = $request->file('logo_pabrikan')
-                    ->store('pabrikan_logos', 'public');
-                $data['logo_pabrikan'] = $new_logo_path;
+                $file = $request->file('logo_pabrikan');
+                $nama_file_baru = time() . '_' . $file->getClientOriginalName();
+                
+                // Upload file baru ke folder uploads
+                $file->move(public_path('uploads/pabrikan_logos'), $nama_file_baru);
+                $data['logo_pabrikan'] = 'uploads/pabrikan_logos/' . $nama_file_baru;
+
+                // Hapus logo lama dari folder public jika ada
+                if ($old_logo_path && file_exists(public_path($old_logo_path))) {
+                    unlink(public_path($old_logo_path));
+                }
             }
 
-            // Update record Pabrikan
             $pabrikan->update($data);
-            
-            // Logika spesifikasi dihilangkan karena tidak relevan untuk Pabrikan
 
-            // Hapus logo lama jika logo baru berhasil diupload
-            if ($new_logo_path && $old_logo_path && Storage::disk('public')->exists($old_logo_path)) {
-                Storage::disk('public')->delete($old_logo_path);
-            }
-
-            // Menyelesaikan transaksi
             DB::commit();
 
             return redirect()
-                ->route('pabrikan.show', $pabrikan->pabrikan_id) // Sesuaikan dengan nama route Anda
+                ->route('pabrikan.show', $pabrikan->pabrikan_id)
                 ->with('success', 'Pabrikan berhasil diupdate');
 
         } catch (\Exception $e) {
-            // Membatalkan transaksi jika terjadi error
             DB::rollBack();
 
-            // Hapus logo baru jika proses update gagal
-            if (isset($new_logo_path) && Storage::disk('public')->exists($new_logo_path)) {
-                Storage::disk('public')->delete($new_logo_path);
+            // Hapus logo baru jika proses DB gagal
+            if ($nama_file_baru && file_exists(public_path('uploads/pabrikan_logos/' . $nama_file_baru))) {
+                unlink(public_path('uploads/pabrikan_logos/' . $nama_file_baru));
             }
 
             return redirect()
@@ -162,8 +154,9 @@ class PabrikanController extends Controller
                     ->with('error', 'Tidak dapat menghapus pabrikan yang memiliki produk');
             }
 
-            if ($pabrikan->logo_pabrikan) {
-                Storage::disk('public')->delete($pabrikan->logo_pabrikan);
+            // Hapus file fisik dari folder uploads
+            if ($pabrikan->logo_pabrikan && file_exists(public_path($pabrikan->logo_pabrikan))) {
+                unlink(public_path($pabrikan->logo_pabrikan));
             }
 
             $pabrikan->delete();

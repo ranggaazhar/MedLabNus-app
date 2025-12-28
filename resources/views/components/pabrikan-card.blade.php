@@ -7,7 +7,7 @@
     <div class="flex items-center justify-between mb-3">
         <div class="flex items-center space-x-2">
             @if ($pabrikan->logo_pabrikan)
-                <img src="{{ asset('storage/' . $pabrikan->logo_pabrikan) }}"
+                <img src="{{ asset($pabrikan->logo_pabrikan) }}"
                     alt="{{ $pabrikan->nama_pabrikan }}"
                     class="h-8 w-auto max-h-8 object-contain"> 
             @else

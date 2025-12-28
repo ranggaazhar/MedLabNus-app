@@ -104,19 +104,19 @@
                                 @if(is_array($gambarTambahan) && count($gambarTambahan) > 0)
                                 <div class="flex gap-4 mt-6 justify-center flex-wrap">
                                     <button 
-                                        @click="currentImage = '{{ asset('storage/' . $produk->gambar_utama) }}'"
-                                        :class="currentImage === '{{ asset('storage/' . $produk->gambar_utama) }}' ? 'ring-2 ring-[#B1252E]' : 'ring-1 ring-gray-200'"
+                                        @click="currentImage = '{{ asset($produk->gambar_utama) }}'"
+                                        :class="currentImage === '{{ asset($produk->gambar_utama) }}' ? 'ring-2 ring-[#B1252E]' : 'ring-1 ring-gray-200'"
                                         class="w-20 h-20 rounded-lg overflow-hidden hover:ring-2 hover:ring-[#B1252E] transition-all"
                                     >
-                                        <img src="{{ asset('storage/' . $produk->gambar_utama) }}" alt="Main" class="w-full h-full object-cover">
+                                        <img src="{{ asset($produk->gambar_utama) }}" alt="Main" class="w-full h-full object-cover">
                                     </button>
                                     @foreach($gambarTambahan as $gambar)
                                     <button 
-                                        @click="currentImage = '{{ asset('storage/' . $gambar) }}'"
-                                        :class="currentImage === '{{ asset('storage/' . $gambar) }}' ? 'ring-2 ring-[#B1252E]' : 'ring-1 ring-gray-200'"
+                                        @click="currentImage = '{{ asset($gambar) }}'"
+                                        :class="currentImage === '{{ asset($gambar) }}' ? 'ring-2 ring-[#B1252E]' : 'ring-1 ring-gray-200'"
                                         class="w-20 h-20 rounded-lg overflow-hidden hover:ring-2 hover:ring-[#B1252E] transition-all"
                                     >
-                                        <img src="{{ asset('storage/' . $gambar) }}" alt="Thumbnail" class="w-full h-full object-cover">
+                                        <img src="{{ asset($gambar) }}" alt="Thumbnail" class="w-full h-full object-cover">
                                     </button>
                                     @endforeach
                                 </div>
@@ -272,7 +272,7 @@
                         {{-- Saya pakai bg-gray-100 agar abu-abunya pas (tidak terlalu gelap, tidak terlalu terang) --}}
                         <div class="aspect-square bg-gray-100 p-6 flex items-center justify-center overflow-hidden relative">
                             @if($related->gambar_utama)
-                                <img src="{{ asset('storage/' . $related->gambar_utama) }}"
+                                <img src="{{ asset($related->gambar_utama) }}"
                                     alt="{{ $related->nama_produk }}"
                                     {{-- mix-blend-multiply: OPSI TAMBAHAN, agar background putih pada gambar JPG menyatu dengan abu-abu (opsional) --}}
                                     class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500">
@@ -308,7 +308,7 @@
             
             return {
                 activeTab: defaultTab,
-                currentImage: '{{ $produk->gambar_utama ? asset("storage/" . $produk->gambar_utama) : asset("images/default-product.png") }}'
+                currentImage: '{{ $produk->gambar_utama ? asset($produk->gambar_utama) : asset("images/default-product.png") }}'
             }
         }
     </script>

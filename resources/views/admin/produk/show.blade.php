@@ -33,7 +33,7 @@
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                 <h3 class="text-lg font-bold text-gray-800 mb-4">Gambar Produk</h3>
                 @if($produk->gambar_utama)
-                    <img src="{{ asset('storage/' . $produk->gambar_utama) }}" 
+                    <img src="{{ asset($produk->gambar_utama) }}" 
                         alt="{{ $produk->nama_produk }}"
                         class="w-full h-64 object-cover rounded-lg border-2 border-gray-200">
                 @else

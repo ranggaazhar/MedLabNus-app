@@ -1,10 +1,10 @@
 <aside id="sidebar" 
     class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 
             transform transition-transform duration-300 
-            -translate-x-full md:translate-x-0 flex flex-col">
+            -translate-x-full md:translate-x-0 flex flex-col font-sans">
     
-    {{-- HEADER (TIDAK DIUBAH POSISINYA) --}}
-    <div class="flex items-center gap-3 px-6 h-16 border-b border-gray-100">
+    {{-- HEADER LOGO --}}
+    <div class="flex items-center gap-3 px-6 h-16 border-b border-gray-100 flex-shrink-0">
         <img src="{{ asset('images/logo2.png') }}" 
             alt="Logo Medlab" 
             class="w-8 h-8 rounded-full object-cover flex-shrink-0">
@@ -15,55 +15,49 @@
     </div>
 
     {{-- MENU ITEMS --}}
-    {{-- Penjelasan Logika Alignment:
-         1. Header menggunakan px-6 (padding kiri 1.5rem / 24px).
-         2. Agar lurus, konten menu harus mulai di titik 24px juga.
-         3. Tombol menu (<a>) memiliki padding internal p-3 (0.75rem / 12px) untuk efek hover.
-         4. Maka, Container Nav harus menggunakan px-3 (12px).
-         5. Hasil: 12px (Nav) + 12px (Tombol) = 24px (Lurus dengan Logo).
-    --}}
-    <nav class="flex-1 overflow-y-auto px-3 mt-6">
+    {{-- Tambahkan class 'block' untuk mematikan 'flex' dari CSS luar --}}
+    <div class="flex-1 overflow-y-auto px-3 mt-6 block">
         
         {{-- Label "MAIN MENU" --}}
-        {{-- Diberi px-3 agar sejajar dengan ikon tombol --}}
-        <p class="px-3 text-xs text-gray-400 font-semibold uppercase mb-2">
-            Main Menu
-        </p>
-        
-        <div class="space-y-1">
-            @php 
-                $isProductActive = request()->routeIs('produk.*');
-                $isPabrikanActive = request()->routeIs('pabrikan.*');
-                $isDashboardStrict = request()->routeIs('dashboard');
-                
-                $isActiveDashboard = $isDashboardStrict || (!$isProductActive && !$isPabrikanActive);
-            @endphp
+        {{-- Kita bungkus label dan menu dalam div dengan class flex-col agar pasti lurus ke bawah --}}
+        <div class="flex flex-col w-full">
+            <p class="px-3 text-xs text-gray-400 font-semibold uppercase mb-4 block leading-none">
+                Main Menu
+            </p>
             
-            {{-- 1. Link Dashboard --}}
-            <a href="{{ route('dashboard') }}" 
-                class="flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors
-                {{ $isActiveDashboard ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
+            <div class="space-y-1 flex flex-col w-full">
+                @php 
+                    $isProductActive = request()->routeIs('produk.*');
+                    $isPabrikanActive = request()->routeIs('pabrikan.*');
+                    $isDashboardStrict = request()->routeIs('dashboard');
+                    $isActiveDashboard = $isDashboardStrict || (!$isProductActive && !$isPabrikanActive);
+                @endphp
                 
-                 {{-- Icon Pabrikan dari folder public/css --}}
-                <img src="{{ asset('icons/dashboard.svg') }}" 
-                     alt="Pabrikan Icon" 
-                     class="w-6 h-6 object-contain">
+                {{-- 1. Link Dashboard --}}
+                {{-- Gunakan !flex untuk memaksa display flex milik Tailwind --}}
+                <a href="{{ route('dashboard') }}" 
+                    class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
+                    {{ $isActiveDashboard ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
+                    
+                    <img src="{{ asset('icons/dashboard.svg') }}" 
+                         alt="Dashboard Icon" 
+                         class="w-6 h-6 object-contain flex-shrink-0 {{ $isActiveDashboard ? '' : 'opacity-50' }}">
+                    
+                    <span class="block">Dashboard</span>
+                </a>
                 
-                Dashboard
-            </a>
-            
-            {{-- 2. Link Pabrikan --}}
-            <a href="{{ route('pabrikan.index') }}" 
-                class="flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors
-                {{ $isPabrikanActive ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
-                
-                <img src="{{ asset('icons/pabrik.svg') }}" 
-                     alt="Pabrikan Icon" 
-                     class="w-6 h-6 object-contain">
-                
-                Pabrikan
-            </a>
+                {{-- 2. Link Pabrikan --}}
+                <a href="{{ route('pabrikan.index') }}" 
+                    class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
+                    {{ $isPabrikanActive ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
+                    
+                    <img src="{{ asset('icons/pabrik.svg') }}" 
+                         alt="Pabrikan Icon" 
+                         class="w-6 h-6 object-contain flex-shrink-0 {{ $isPabrikanActive ? '' : 'opacity-50' }}">
+                    
+                    <span class="block">Pabrikan</span>
+                </a>
+            </div>
         </div>
-        
-    </nav>
+    </div>
 </aside>

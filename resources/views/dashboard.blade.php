@@ -192,7 +192,7 @@
                     <td class="py-4 px-6">
                         <div class="flex items-center gap-4">
                             @if($item->gambar_utama)
-                                <img src="{{ asset('storage/' . $item->gambar_utama) }}" alt="{{ $item->nama_produk }}"
+                                <img src="{{ asset($item->gambar_utama) }}" alt="{{ $item->nama_produk }}"
                                     class="w-10 h-10 rounded-full object-cover border-2 border-red-200">
                             @else
                                 <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center border border-red-200">

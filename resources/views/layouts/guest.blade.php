@@ -36,37 +36,32 @@
 
 <body class="font-sans text-gray-900 antialiased bg-white h-full selection:bg-green-100 selection:text-green-900">
 
-    {{-- CONTAINER UTAMA (Relative untuk menampung Absolute) --}}
-    <div class="relative flex w-full min-h-screen overflow-hidden">
+    {{-- CONTAINER UTAMA --}}
+    <div class="relative flex w-full min-h-screen overflow-x-hidden">
 
-        {{--
-        BAGIAN KIRI: FORM
-        - Width 50%: Memberi ruang agar form tidak tertutup gambar yang menimpa.
-        - z-10: Berada di layer bawah.
+        {{-- 
+            BAGIAN KIRI: FORM 
+            REVISI: 
+            - px-6 (Mobile): Agar form lebih luas di layar HP.
+            - lg:w-[50%]: Tetap setengah layar saat di desktop.
         --}}
-        <div class="w-full lg:w-[50%] flex flex-col justify-center px-8 sm:px-12 lg:px-20 py-10 bg-white z-10 relative">
+        <div class="w-full lg:w-[50%] flex flex-col justify-center px-6 sm:px-12 lg:px-20 py-10 bg-white z-10 relative">
+            {{-- mx-auto membuat form tetap di tengah saat layar kecil --}}
             <div class="w-full max-w-md mx-auto lg:mr-auto lg:ml-0">
                 {{ $slot }}
             </div>
         </div>
 
-        {{--
-        BAGIAN KANAN: GAMBAR FULL & MENIMPA
-        - absolute top-0 right-0 h-full: Menempel penuh dari atas ke bawah di sisi kanan.
-        - w-[55%]: Lebar 55% dari layar (lebih lebar dari setengah) agar terlihat "Full".
-        - rounded-l-[50px]: Memberikan lengkungan besar hanya di sisi kiri.
-        - z-20: Layer di atas form (menimpa background putih).
-        - shadow-2xl: Memberi efek bayangan agar terlihat mengambang di atas putih.
+        {{-- 
+            BAGIAN KANAN: GAMBAR 
+            REVISI: Tetap tersembunyi di mobile (hidden), muncul di desktop (lg:block).
         --}}
-        <div
-            class="hidden lg:block absolute top-0 right-0 w-[55%] h-full z-20 shadow-2xl rounded-l-[50px] overflow-hidden">
+        <div class="hidden lg:block absolute top-0 right-0 w-[55%] h-full z-20 shadow-2xl rounded-l-[50px] overflow-hidden">
             <img src="{{ asset('images/login.png') }}" alt="Medlab Nusantara"
                 class="w-full h-full object-cover object-center">
-            {{-- Overlay halus supaya gambar menyatu --}}
             <div class="absolute inset-0 bg-black/5"></div>
         </div>
 
     </div>
 </body>
-
 </html>
