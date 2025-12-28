@@ -67,28 +67,31 @@
         </div>
     @endif
 
-    {{-- 2. TAB NAVIGATION --}}
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 px-6 mb-6">
-        <nav class="-mb-px grid grid-cols-3 w-full" aria-label="Tabs">
+   <div class="bg-white rounded-xl shadow-sm border border-gray-100 px-6 mb-6 !block">
+            {{--
+            1. Mengubah <nav> menjadi <div> untuk menghindari selektor CSS global 'nav'
+                    2. Menambahkan !grid untuk memaksa layout grid tetap 3 kolom
+                    --}}
+                    <div class="-mb-px !grid grid-cols-3 w-full !flex-row" aria-label="Tabs">
 
-            {{-- Tab 1: Info Dasar --}}
-            <button type="button" data-tab="info-dasar"
-                class="tab-btn justify-self-start py-4 px-2 border-b-2 font-bold text-sm transition-colors duration-200 border-red-600 text-gray-900">
-                INFO DASAR
-            </button>
+                        {{-- Tab 1: Info Dasar --}}
+                        <button type="button" data-tab="info-dasar"
+                            class="tab-btn !flex justify-self-start py-4 px-2 border-b-2 font-bold text-sm transition-colors duration-200 border-red-600 text-gray-900 outline-none">
+                            <span class="block">INFO DASAR</span>
+                        </button>
 
-            {{-- Tab 2: Spesifikasi --}}
-            <button type="button" data-tab="spesifikasi"
-                class="tab-btn justify-self-center py-4 px-2 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors duration-200">
-                SPESIFIKASI
-            </button>
+                        {{-- Tab 2: Spesifikasi --}}
+                        <button type="button" data-tab="spesifikasi"
+                            class="tab-btn !flex justify-self-center py-4 px-2 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors duration-200 outline-none">
+                            <span class="block">SPESIFIKASI</span>
+                        </button>
 
-            {{-- Tab 3: Gambar --}}
-            <button type="button" data-tab="gambar"
-                class="tab-btn justify-self-end py-4 px-2 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors duration-200">
-                GAMBAR
-            </button>
-        </nav>
+                        {{-- Tab 3: Gambar --}}
+                        <button type="button" data-tab="gambar"
+                            class="tab-btn !flex justify-self-end py-4 px-2 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors duration-200 outline-none">
+                            <span class="block">GAMBAR</span>
+                        </button>
+                    </div>
     </div>
 
     {{-- 3. CONTENT WRAPPER --}}

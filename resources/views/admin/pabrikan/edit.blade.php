@@ -129,7 +129,7 @@
                         <p class="text-sm font-medium text-gray-700 mb-3">Logo Saat Ini:</p>
                         <div class="relative inline-block">
                             {{-- Asumsikan 'storage' sudah di-link ke 'public/storage' --}}
-                            <img id="currentLogo" src="{{ asset('storage/' . $pabrikan->logo_pabrikan) }}" 
+                            <img id="currentLogo" src="{{ asset($pabrikan->logo_pabrikan) }}" 
                                 alt="{{ $pabrikan->nama_pabrikan }} Logo" 
                                 class="h-20 w-auto object-contain rounded-lg border border-gray-300 p-2 bg-white">
                             

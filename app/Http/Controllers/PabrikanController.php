@@ -127,7 +127,7 @@ class PabrikanController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('pabrikan.show', $pabrikan->pabrikan_id)
+                ->route('pabrikan.index', $pabrikan->pabrikan_id)
                 ->with('success', 'Pabrikan berhasil diupdate');
 
         } catch (\Exception $e) {
