@@ -8,6 +8,7 @@
     {{-- 🔴 FAVICON 🔴 --}}
     <link rel="icon" type="image/png" href="{{ asset('images/logo2.png') }}">
     <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo2.png') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
   
