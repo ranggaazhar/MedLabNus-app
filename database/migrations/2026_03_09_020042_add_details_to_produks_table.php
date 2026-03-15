@@ -12,7 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('produks', function (Blueprint $table) {
-            //
+            // Kolom Satuan (Penting untuk keterangan di PDF Penawaran: Box, Set, Unit, dll)
+            $table->string('satuan', 50)->default('Unit')->after('kategori');
+
+            // Harga Acuan Internal (Hanya dilihat Admin untuk bahan 'Edit & Preview' Penawaran)
+            // Menggunakan decimal agar presisi untuk perhitungan keuangan
+            $table->decimal('harga_acuan', 15, 2)->default(0)->after('satuan');
+
+            // Stok Minimal (Sebagai threshold/batas peringatan stok tipis di Dashboard Admin)
+            $table->integer('stok_minimal')->default(0)->after('harga_acuan');
+            
+            // Kode Produk / SKU (Opsional, sangat berguna untuk pencarian cepat di gudang)
+            $table->string('kode_produk')->nullable()->unique()->after('produk_id');
         });
     }
 
@@ -22,7 +33,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('produks', function (Blueprint $table) {
-            //
+            $table->dropColumn(['satuan', 'harga_acuan', 'stok_minimal', 'kode_produk']);
         });
     }
 };

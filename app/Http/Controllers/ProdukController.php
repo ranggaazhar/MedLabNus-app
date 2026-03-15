@@ -13,17 +13,17 @@ use Illuminate\Support\Facades\DB;
 use App\Exports\ProdukExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class ProdukController extends Controller
 {
     public function checkNamaProduk(Request $request)
     {
         $nama = $request->input('nama_produk');
-        $produkId = $request->input('produk_id'); // untuk update
+        $produkId = $request->input('produk_id');
 
         $query = Produk::where('nama_produk', $nama);
 
-        // Jika update, exclude produk yang sedang diedit
         if ($produkId) {
             $query->where('produk_id', '!=', $produkId);
         }
@@ -32,6 +32,7 @@ class ProdukController extends Controller
 
         return response()->json(['exists' => $exists]);
     }
+
     public function export(Request $request)
     {
         $kategori = $request->query('kategori', 'semua');
@@ -42,7 +43,6 @@ class ProdukController extends Controller
         return Excel::download(new ProdukExport($kategori, $search), $filename);
     }
 
-
     public function create()
     {
         $pabrikans = Pabrikan::orderBy('nama_pabrikan')->get();
@@ -51,66 +51,58 @@ class ProdukController extends Controller
 
     public function store(StoreProdukRequest $request)
     {
-        // 1. Log Data Masuk
         Log::info('--- PROSES STORE PRODUK DIMULAI ---');
-        Log::info('Data Request:', $request->all());
 
         try {
             DB::beginTransaction();
 
-            // 2. Cek Validasi
             $data = $request->validated();
-            Log::info('Data tervalidasi:', $data);
+
+            // Kolom baru sudah otomatis masuk lewat $request->validated() 
+            // jika sudah ditambahkan di StoreProdukRequest
 
             $nama_file_baru = null;
-
             if ($request->hasFile('gambar_utama')) {
                 $file = $request->file('gambar_utama');
                 $nama_file_baru = time() . '_' . $file->getClientOriginalName();
-
-                Log::info('Mencoba upload gambar:', ['nama' => $nama_file_baru]);
-
-                // PINDAHKAN KE PUBLIC/uploads/products
                 $file->move(public_path('uploads/products'), $nama_file_baru);
                 $data['gambar_utama'] = 'uploads/products/' . $nama_file_baru;
-
-                Log::info('Gambar berhasil diupload ke: ' . $data['gambar_utama']);
             }
 
-            // 3. Log sebelum Insert ke Database
-            Log::info('Mencoba insert ke tabel produks...');
             $produk = Produk::create($data);
             Log::info('Produk Berhasil Dibuat. ID Produk: ' . $produk->produk_id);
 
+            // --- LOGIKA STOK AWAL ---
+            if ($request->has('stok_awal') && $request->stok_awal > 0) {
+                $produk->mutasiStok()->create([
+                    'jumlah'     => $request->stok_awal,
+                    'tipe'       => 'masuk',
+                    'keterangan' => 'Pemasukan stok awal produk',
+                    'role_id'    => Auth::id(),
+                    'role_type'  => get_class(Auth::user()),
+                ]);
+                Log::info('Stok awal dicatat: ' . $request->stok_awal);
+            }
+
             if ($request->has('spesifikasi') && is_array($request->spesifikasi)) {
-                Log::info('Mencoba simpan spesifikasi...');
                 foreach ($request->spesifikasi as $index => $spec) {
                     if (!empty($spec['nama_spesifikasi']) && !empty($spec['nilai'])) {
                         $produk->spesifikasis()->create([
                             'nama_spesifikasi' => $spec['nama_spesifikasi'],
                             'nilai' => $spec['nilai']
                         ]);
-                        Log::info("Spesifikasi ke-{$index} disimpan.");
                     }
                 }
             }
 
             DB::commit();
-            Log::info('--- DATABASE COMMITTED (DATA MASUK) ---');
-
-            return redirect()->route('produk.index')->with('success', 'Produk berhasil ditambahkan');
-
+            return redirect()->route('produk.index')->with('success', 'Produk dan stok awal berhasil ditambahkan');
         } catch (\Exception $e) {
             DB::rollBack();
-
-            // 4. Log Error secara Detail
-            Log::error('--- PROSES STORE GAGAL ---');
             Log::error('Pesan Error: ' . $e->getMessage());
-            Log::error('Trace Error: ' . $e->getTraceAsString());
 
             if ($nama_file_baru && file_exists(public_path('uploads/products/' . $nama_file_baru))) {
                 unlink(public_path('uploads/products/' . $nama_file_baru));
-                Log::info('File gambar dihapus kembali karena rollback.');
             }
 
             return redirect()->back()->withInput()->with('error', 'Gagal: ' . $e->getMessage());
@@ -119,7 +111,8 @@ class ProdukController extends Controller
 
     public function show(Produk $produk)
     {
-        $produk->load(['pabrikan', 'spesifikasis']);
+        // Memuat stok mutasi juga agar bisa menampilkan angka stok real-time di Admin
+        $produk->load(['pabrikan', 'spesifikasis', 'mutasiStok']);
         return view('admin.produk.show', compact('produk'));
     }
 
@@ -142,12 +135,9 @@ class ProdukController extends Controller
             if ($request->hasFile('gambar_utama')) {
                 $file = $request->file('gambar_utama');
                 $nama_file_baru = time() . '_' . $file->getClientOriginalName();
-
-                // Upload file baru
                 $file->move(public_path('uploads/products'), $nama_file_baru);
                 $data['gambar_utama'] = 'uploads/products/' . $nama_file_baru;
 
-                // Hapus file lama jika ada
                 if ($old_image_path && file_exists(public_path($old_image_path))) {
                     unlink(public_path($old_image_path));
                 }
@@ -168,8 +158,7 @@ class ProdukController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('produk.show', $produk->produk_id)->with('success', 'Produk diupdate');
-
+            return redirect()->route('produk.show', $produk->produk_id)->with('success', 'Produk berhasil diupdate');
         } catch (\Exception $e) {
             DB::rollBack();
             if ($nama_file_baru && file_exists(public_path('uploads/products/' . $nama_file_baru))) {
@@ -184,77 +173,64 @@ class ProdukController extends Controller
         try {
             DB::beginTransaction();
 
-            if ($produk->gambar_utama && Storage::disk('public')->exists($produk->gambar_utama)) {
-                Storage::disk('public')->delete($produk->gambar_utama);
+            if ($produk->gambar_utama && file_exists(public_path($produk->gambar_utama))) {
+                unlink(public_path($produk->gambar_utama));
             }
 
             $produk->delete();
-
             DB::commit();
 
-            return redirect()
-                ->route('produk.index')
-                ->with('success', 'Produk berhasil dihapus');
-
+            return redirect()->route('produk.index')->with('success', 'Produk berhasil dihapus');
         } catch (\Exception $e) {
             DB::rollBack();
-
-            return redirect()
-                ->back()
-                ->with('error', 'Gagal menghapus produk: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menghapus produk: ' . $e->getMessage());
         }
     }
 
-    /**
-     * Display a listing of products for public view
-     */
     public function publicIndex(Request $request)
     {
-        // 1. Ambil SEMUA produk untuk filtering Client-Side oleh Alpine.js
-        $produks = Produk::with('pabrikan')
+        // Load mutasiStok agar accessor total_stok bekerja dengan efisien (Eager Loading)
+        $produks = Produk::with(['pabrikan', 'mutasiStok'])
             ->orderBy('nama_produk', 'asc')
             ->get();
 
-        // 2. Tentukan status awal filter dari URL (digunakan untuk inisialisasi Alpine)
         $activeCategory = strtolower($request->query('kategori') ?? 'semua');
         $searchQuery = $request->query('search') ?? '';
 
-        // 3. Transform data untuk JavaScript (Produk JSON)
         $productsJson = $produks->map(function ($produk) {
             return [
                 'id' => $produk->produk_id,
                 'name' => $produk->nama_produk,
                 'brand' => $produk->pabrikan ? $produk->pabrikan->nama_pabrikan : 'Unknown',
                 'description' => $produk->deskripsi_singkat ?? 'No description available',
-                // Pastikan kategori di JSON selalu lowercase untuk konsistensi filter
                 'kategori' => strtolower($produk->kategori),
+                'satuan' => $produk->satuan,
+                // Kita tambahkan status stok untuk UI Alpine.js
+                'stock' => $produk->total_stok,
                 'image' => $produk->gambar_utama
-                    ? asset($produk->gambar_utama) // Hapus 'storage/' di sini
+                    ? asset($produk->gambar_utama)
                     : asset('images/default-product.png'),
             ];
         });
 
-        // Kirim data ke view
         return view('public.products', [
             'productsJson' => $productsJson,
             'activeCategory' => $activeCategory,
             'searchQuery' => $searchQuery,
         ]);
     }
+
     public function publicShow($produk_id)
     {
-        // Load produk dengan relasi
-        $produk = Produk::with(['pabrikan', 'spesifikasis'])
+        $produk = Produk::with(['pabrikan', 'spesifikasis', 'mutasiStok'])
             ->findOrFail($produk_id);
 
-        // Get related products (same category, exclude current)
         $relatedProducts = Produk::with('pabrikan')
             ->where('kategori', $produk->kategori)
             ->where('produk_id', '!=', $produk_id)
             ->limit(4)
             ->get();
 
-        // Format spesifikasi menjadi HTML
         $spesifikasiHtml = '';
         if ($produk->spesifikasis && $produk->spesifikasis->count() > 0) {
             $spesifikasiHtml .= '<div class="space-y-3">';
@@ -269,11 +245,8 @@ class ProdukController extends Controller
             $spesifikasiHtml = '<p class="text-gray-500">Spesifikasi tidak tersedia.</p>';
         }
 
-        // Assign formatted HTML ke produk
         $produk->spesifikasi_formatted = $spesifikasiHtml;
 
         return view('public.product-detail', compact('produk', 'relatedProducts'));
     }
-
-
 }

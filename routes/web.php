@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\PabrikanController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\SpesifikasiController;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
    
 Route::middleware('auth:admin')->group(function () {
 
@@ -59,6 +61,9 @@ Route::middleware('auth:admin')->group(function () {
     Route::put('/spesifikasi/{spesifikasi}', [SpesifikasiController::class, 'update'])->name('spesifikasi.update');
     Route::patch('/spesifikasi/{spesifikasi}', [SpesifikasiController::class, 'update'])->name('spesifikasi.update.patch');
     Route::delete('/spesifikasi/{spesifikasi}', [SpesifikasiController::class, 'destroy'])->name('spesifikasi.destroy');
+
+    Route::get('/logs', [LogController::class, 'index'])->name('log.index');
+    Route::get('/logs/{id}', [LogController::class, 'show'])->name('log.show');
 });
 
 require __DIR__.'/auth.php';
