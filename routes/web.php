@@ -6,8 +6,10 @@ use App\Http\Controllers\PabrikanController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\StokMutasiController;
 use App\Http\Controllers\SpesifikasiController;
 use Illuminate\Support\Facades\Route;
+
 
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
@@ -64,6 +66,7 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::get('/logs', [LogController::class, 'index'])->name('log.index');
     Route::get('/logs/{id}', [LogController::class, 'show'])->name('log.show');
+    Route::get('/stok-mutasi', [StokMutasiController::class, 'index'])->name('stok-mutasi.index');
 });
 
 require __DIR__.'/auth.php';

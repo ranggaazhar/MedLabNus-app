@@ -76,4 +76,10 @@ class StokMutasi extends Model
     {
         return $this->morphTo();
     }
+
+    public function user(): BelongsTo
+    {
+        // Parameter: Model tujuan, foreign_key di stok_mutasi, owner_key di users
+        return $this->belongsTo(User::class, 'role_id', 'id');
+    }
 }

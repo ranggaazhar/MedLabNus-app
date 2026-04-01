@@ -108,4 +108,14 @@ class Produk extends Model
         // Menjumlahkan kolom 'jumlah' (positif dan negatif) dari semua mutasi
         return $this->mutasiStok()->sum('jumlah');
     }
+
+    // Di Model Produk.php
+    public function getTotalStokAttribute()
+    {
+        // Hitung (Total Masuk) - (Total Keluar)
+        $masuk = $this->mutasiStok()->where('tipe', 'masuk')->sum('jumlah');
+        $keluar = $this->mutasiStok()->where('tipe', 'keluar')->sum('jumlah');
+
+        return $masuk - $keluar;
+    }
 }

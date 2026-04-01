@@ -128,7 +128,47 @@ class ProdukController extends Controller
         try {
             DB::beginTransaction();
 
+            // 1. Ambil data yang telah divalidasi oleh Request
             $data = $request->validated();
+
+            // --- LOGIKA TRANSFORMASI DATA KE STOK MUTASI ---
+
+            // A. Cek input 'stok_awal' (Penambahan Stok Fisik manual)
+            if ($request->filled('stok_awal') && $request->stok_awal > 0) {
+                $produk->mutasiStok()->create([
+                    'produk_id'  => $produk->produk_id,
+                    'jumlah'     => $request->stok_awal,
+                    'tipe'       => 'masuk',
+                    'keterangan' => 'Penambahan stok fisik melalui pengeditan produk',
+                    'role_id'    => Auth::id(),
+                    'role_type'  => get_class(Auth::user()),
+                ]);
+            }
+
+            // B. Cek perubahan Stok Minimal (Transformasi Data Otomatis)
+            $stokMinLama = (int) $produk->getOriginal('stok_minimal');
+            $stokMinBaru = (int) $request->input('stok_minimal');
+
+            if ($stokMinBaru !== $stokMinLama) {
+                // Hitung selisih agar Sum Otomatis di tabel stok bekerja
+                $selisih = $stokMinBaru - $stokMinLama;
+
+                $produk->mutasiStok()->create([
+                    'produk_id'  => $produk->produk_id,
+                    'jumlah'     => abs($selisih), // Menggunakan angka positif untuk record
+                    'tipe'       => $selisih > 0 ? 'masuk' : 'keluar',
+                    'keterangan' => "Transformasi Data: Perubahan batas stok minimal dari {$stokMinLama} ke {$stokMinBaru}",
+                    'role_id'    => Auth::id(),
+                    'role_type'  => get_class(Auth::user()),
+                ]);
+            }
+
+            // --- LOGIKA UPDATE DATA PRODUK ---
+
+            // Hapus stok_awal dari array data agar tidak error saat update tabel produks
+            unset($data['stok_awal']);
+
+            // Handle Gambar Utama
             $old_image_path = $produk->gambar_utama;
             $nama_file_baru = null;
 
@@ -143,8 +183,10 @@ class ProdukController extends Controller
                 }
             }
 
+            // Eksekusi Update ke Tabel Produks
             $produk->update($data);
 
+            // Update Spesifikasi (Delete & Insert ulang)
             if ($request->has('spesifikasi') && is_array($request->spesifikasi)) {
                 $produk->spesifikasis()->delete();
                 foreach ($request->spesifikasi as $spec) {
@@ -158,16 +200,20 @@ class ProdukController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('produk.show', $produk->produk_id)->with('success', 'Produk berhasil diupdate');
+            return redirect()->route('produk.show', $produk->produk_id)
+                ->with('success', 'Produk diperbarui dan riwayat mutasi telah dicatat.');
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('Gagal Update Produk: ' . $e->getMessage());
+
             if ($nama_file_baru && file_exists(public_path('uploads/products/' . $nama_file_baru))) {
                 unlink(public_path('uploads/products/' . $nama_file_baru));
             }
+
             return redirect()->back()->withInput()->with('error', 'Gagal: ' . $e->getMessage());
         }
     }
-
+    
     public function destroy(Produk $produk)
     {
         try {
