@@ -23,19 +23,27 @@
                 @php
                     $isProductActive = request()->routeIs('produk.*');
                     $isPabrikanActive = request()->routeIs('pabrikan.*');
+                    
+                    // 🌟 1. DAFTARKAN LOGIKA AKTIF UNTUK ROUTE PENAWARAN ADMIN
+                    $isPenawaranActive = request()->routeIs('admin.penawaran.*'); 
+                    
                     $isAuditActive = request()->routeIs('log.index'); // Spatie Audit
                     $isMutasiActive = request()->routeIs('stok-mutasi.*'); // Stok Mutasi
                     $isLogGroupActive = $isAuditActive || $isMutasiActive;
-                    
+
                     $isDashboardStrict = request()->routeIs('dashboard');
-                    $isActiveDashboard = $isDashboardStrict || (!$isProductActive && !$isPabrikanActive && !$isLogGroupActive);
+                    
+                    // 🌟 2. TAMBAHKAN COCOKAN NEGASI agar Dashboard tidak ikut menyala saat menu penawaran diakses
+                    $isActiveDashboard =
+                        $isDashboardStrict || (!$isProductActive && !$isPabrikanActive && !$isPenawaranActive && !$isLogGroupActive);
                 @endphp
 
                 {{-- 1. Link Dashboard --}}
                 <a href="{{ route('dashboard') }}"
                     class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
                     {{ $isActiveDashboard ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
-                    <img src="{{ asset('icons/dashboard.svg') }}" class="w-6 h-6 object-contain flex-shrink-0 {{ $isActiveDashboard ? '' : 'opacity-50' }}">
+                    <img src="{{ asset('icons/dashboard.svg') }}"
+                        class="w-6 h-6 object-contain flex-shrink-0 {{ $isActiveDashboard ? '' : 'opacity-50' }}">
                     <span>Dashboard</span>
                 </a>
 
@@ -43,40 +51,63 @@
                 <a href="{{ route('pabrikan.index') }}"
                     class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
                     {{ $isPabrikanActive ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
-                    <img src="{{ asset('icons/pabrik.svg') }}" class="w-6 h-6 object-contain flex-shrink-0 {{ $isPabrikanActive ? '' : 'opacity-50' }}">
+                    <img src="{{ asset('icons/pabrik.svg') }}"
+                        class="w-6 h-6 object-contain flex-shrink-0 {{ $isPabrikanActive ? '' : 'opacity-50' }}">
                     <span>Pabrikan</span>
                 </a>
 
-                {{-- 3. Group Log Aktivitas (Dropdown) --}}
+                {{-- 🌟 3. TAMBAHAN: LINK PENAWARAN (TEPAT DI BAWAH PABRIKAN) --}}
+                <a href="{{ route('admin.penawaran.index') }}"
+                    class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
+                    {{ $isPenawaranActive ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
+                    <div class="w-6 h-6 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-file-invoice text-lg {{ $isPenawaranActive ? 'text-red-700' : 'text-gray-400' }}"></i>
+                    </div>
+                    <span>Penawaran</span>
+                </a>
+
+                {{-- 4. Group Log Aktivitas (Dropdown) --}}
                 <div class="w-full">
-                    <button @click="openLog = !openLog" 
+                    <button @click="openLog = !openLog"
                         class="!flex items-center justify-between p-3 rounded-lg text-sm font-medium transition-colors w-full
                         {{ $isLogGroupActive ? 'bg-gray-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
-                        
+
                         <div class="flex items-center gap-3">
                             <div class="w-6 h-6 flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-history text-lg {{ $isLogGroupActive ? 'text-red-600' : 'text-gray-400' }}"></i>
+                                <i
+                                    class="fas fa-history text-lg {{ $isLogGroupActive ? 'text-red-600' : 'text-gray-400' }}"></i>
                             </div>
                             <span>Log Aktivitas</span>
                         </div>
 
                         {{-- Icon Panah --}}
-                        <i class="fas fa-chevron-down text-xs transition-transform duration-200" :class="openLog ? 'rotate-180' : ''"></i>
+                        <i class="fas fa-chevron-down text-xs transition-transform duration-200"
+                            :class="openLog ? 'rotate-180' : ''"></i>
                     </button>
 
                     {{-- Anakan Menu --}}
-                    <div x-show="openLog" x-cloak class="mt-1 ml-9 space-y-1">
+                    <div x-show="openLog" x-cloak class="mt-1 ml-4 space-y-1 border-l-2 border-gray-100 pl-4">
+
                         {{-- Anak 1: Audit Trail --}}
-                        <a href="{{ route('log.index') }}" 
-                            class="block p-2 text-sm rounded-lg transition-colors {{ $isAuditActive ? 'text-red-600 font-bold' : 'text-gray-500 hover:text-gray-800' }}">
-                            • Audit Trail
+                        <a href="{{ route('log.index') }}"
+                            class="flex items-center gap-3 p-2 text-sm rounded-lg transition-all 
+        {{ $isAuditActive ? 'text-red-700 bg-red-50 font-bold' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50' }}">
+                            <div class="w-5 h-5 flex items-center justify-center">
+                                <i class="fas fa-clipboard-check text-base"></i>
+                            </div>
+                            <span>Riwayat Aktifitas</span>
                         </a>
-                        
+
                         {{-- Anak 2: Stok Mutasi --}}
-                        <a href="{{ route('stok-mutasi.index') }}" 
-                            class="block p-2 text-sm rounded-lg transition-colors {{ $isMutasiActive ? 'text-red-600 font-bold' : 'text-gray-500 hover:text-gray-800' }}">
-                            • Stok Mutasi
+                        <a href="{{ route('stok-mutasi.index') }}"
+                            class="flex items-center gap-3 p-2 text-sm rounded-lg transition-all 
+        {{ $isMutasiActive ? 'text-red-700 bg-red-50 font-bold' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50' }}">
+                            <div class="w-5 h-5 flex items-center justify-center">
+                                <i class="fas fa-boxes-stacked text-base"></i>
+                            </div>
+                            <span>Stok Mutasi</span>
                         </a>
+
                     </div>
                 </div>
 

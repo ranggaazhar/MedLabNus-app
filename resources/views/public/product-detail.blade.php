@@ -163,7 +163,8 @@
     @php
         $rawSpecs = trim(strip_tags($produk->spesifikasi_formatted));
         // Kita anggap "ada" jika tidak kosong DAN tidak mengandung kata "tidak tersedia"
-        $showSpecs = !empty($produk->spesifikasi_formatted) &&
+        $showSpecs =
+            !empty($produk->spesifikasi_formatted) &&
             $rawSpecs !== '' &&
             !str_contains(strtolower($rawSpecs), 'tidak tersedia');
     @endphp
@@ -201,26 +202,29 @@
                             </div>
 
                             {{-- Thumbnail Gallery --}}
-                            @if($produk->gambar_tambahan)
+                            @if ($produk->gambar_tambahan)
                                 @php
                                     $gambarTambahan = is_string($produk->gambar_tambahan)
                                         ? json_decode($produk->gambar_tambahan, true)
                                         : $produk->gambar_tambahan;
                                 @endphp
 
-                                @if(is_array($gambarTambahan) && count($gambarTambahan) > 0)
+                                @if (is_array($gambarTambahan) && count($gambarTambahan) > 0)
                                     <div class="flex gap-4 mt-6 justify-center flex-wrap">
                                         <button @click="currentImage = '{{ asset($produk->gambar_utama) }}'"
-                                            :class="currentImage === '{{ asset($produk->gambar_utama) }}' ? 'ring-2 ring-[#B1252E]' : 'ring-1 ring-gray-200'"
+                                            :class="currentImage === '{{ asset($produk->gambar_utama) }}' ?
+                                                'ring-2 ring-[#B1252E]' : 'ring-1 ring-gray-200'"
                                             class="w-20 h-20 rounded-lg overflow-hidden hover:ring-2 hover:ring-[#B1252E] transition-all">
                                             <img src="{{ asset($produk->gambar_utama) }}" alt="Main"
                                                 class="w-full h-full object-cover">
                                         </button>
-                                        @foreach($gambarTambahan as $gambar)
+                                        @foreach ($gambarTambahan as $gambar)
                                             <button @click="currentImage = '{{ asset($gambar) }}'"
-                                                :class="currentImage === '{{ asset($gambar) }}' ? 'ring-2 ring-[#B1252E]' : 'ring-1 ring-gray-200'"
+                                                :class="currentImage === '{{ asset($gambar) }}' ? 'ring-2 ring-[#B1252E]' :
+                                                    'ring-1 ring-gray-200'"
                                                 class="w-20 h-20 rounded-lg overflow-hidden hover:ring-2 hover:ring-[#B1252E] transition-all">
-                                                <img src="{{ asset($gambar) }}" alt="Thumbnail" class="w-full h-full object-cover">
+                                                <img src="{{ asset($gambar) }}" alt="Thumbnail"
+                                                    class="w-full h-full object-cover">
                                             </button>
                                         @endforeach
                                     </div>
@@ -234,7 +238,7 @@
 
                         {{-- Company Logo --}}
                         <div class="flex items-center gap-3 mb-8">
-                            @if(file_exists(public_path('images/logo2.png')))
+                            @if (file_exists(public_path('images/logo2.png')))
                                 <img src="{{ asset('images/logo2.png') }}" alt="PT Medlab Nusantara Logo"
                                     class="h-12 w-auto">
                             @else
@@ -268,16 +272,18 @@
                         <div class="mb-8 animate-fade-in-up delay-700">
                             <div class="flex gap-6 border-b border-gray-200 mb-6">
                                 {{-- TAB SPESIFIKASI: Gunakan variabel $showSpecs --}}
-                                @if($showSpecs)
+                                @if ($showSpecs)
                                     <button @click="activeTab = 'spesifikasi'"
-                                        :class="activeTab === 'spesifikasi' ? 'border-[#B1252E] text-[#B1252E]' : 'border-transparent text-gray-500 hover:text-gray-700'"
+                                        :class="activeTab === 'spesifikasi' ? 'border-[#B1252E] text-[#B1252E]' :
+                                            'border-transparent text-gray-500 hover:text-gray-700'"
                                         class="pb-4 px-2 border-b-2 font-semibold transition-all uppercase tracking-wide">
                                         Spesifikasi
                                     </button>
                                 @endif
 
                                 <button @click="activeTab = 'informasi'"
-                                    :class="activeTab === 'informasi' ? 'border-[#B1252E] text-[#B1252E]' : 'border-transparent text-gray-500 hover:text-gray-700'"
+                                    :class="activeTab === 'informasi' ? 'border-[#B1252E] text-[#B1252E]' :
+                                        'border-transparent text-gray-500 hover:text-gray-700'"
                                     class="pb-4 px-2 border-b-2 font-semibold transition-all uppercase tracking-wide">
                                     Informasi
                                 </button>
@@ -286,7 +292,7 @@
                             {{-- Tab Content --}}
                             <div class="min-h-[200px]">
                                 {{-- KONTEN SPESIFIKASI: Gunakan variabel $showSpecs --}}
-                                @if($showSpecs)
+                                @if ($showSpecs)
                                     <div x-show="activeTab === 'spesifikasi'"
                                         class="tab-content text-gray-700 leading-relaxed">
                                         {!! $produk->spesifikasi_formatted !!}
@@ -294,18 +300,20 @@
                                 @endif
 
                                 <div x-show="activeTab === 'informasi'" {{-- x-cloak hanya jika specs tampil --}}
-                                    @if($showSpecs) x-cloak @endif class="tab-content text-gray-700 leading-relaxed">
-                                    @if($produk->deskripsi_singkat)
+                                    @if ($showSpecs) x-cloak @endif
+                                    class="tab-content text-gray-700 leading-relaxed">
+                                    @if ($produk->deskripsi_singkat)
                                         <p>{{ $produk->deskripsi_singkat }}</p>
                                     @else
-                                        <p class="text-gray-500">Informasi detail mengenai produk ini akan segera tersedia.
+                                        <p class="text-gray-500">Informasi detail mengenai produk ini akan segera
+                                            tersedia.
                                         </p>
                                     @endif
                                 </div>
                             </div>
                         </div>
 
-                        @php
+                        {{-- @php
                             // 1. Ambil nomor dari variabel (pastikan variabel ini ada isinya)
                             // Jika Anda menulis manual, pastikan HANYA ANGKA: "6282177629753"
                             $nomorTujuan = "6282177629753";
@@ -317,24 +325,24 @@
                                 "• Produk: " . $produk->nama_produk . "\n" .
                                 "• Kategori: " . ucfirst($produk->kategori) . "\n\n" .
                                 "Mohon informasi detail spesifikasi dan penawaran harganya. Terima kasih.";
-                        @endphp
+                        @endphp --}}
 
                         <div class="mb-8 animate-scale-in">
-                            {{-- Menggunakan http_build_query agar encoding URL lebih sempurna --}}
-                            <a href="https://wa.me/{{ $cleanPhone }}?{{ http_build_query(['text' => $pesanWA]) }}"
-                                target="_blank" {{-- Ukuran dikecilkan: px-6 py-3 (sebelumnya px-7 py-5) dan text-base
-                                (sebelumnya text-lg) --}}
+                            {{-- Tambahan attribute data-gambar --}}
+                            <button type="button" id="btnMintaPenawaran" data-id="{{ $produk->produk_id }}"
+                                data-nama="{{ $produk->nama_produk }}" data-gambar="{{ $produk->gambar_utama }}"
+                                {{-- <-- Ini tambahannya --}} onclick="tambahKePenawaran(this)"
                                 class="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#B1252E] to-[#8f1d24] text-white rounded-full text-base font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 w-full lg:w-auto">
 
-                                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round">
-                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                    <circle cx="9" cy="21" r="1"></circle>
+                                    <circle cx="20" cy="21" r="1"></circle>
+                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                                 </svg>
 
-                                Minta Penawaran
+                                Add to Cart
 
                                 <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform"
                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -343,7 +351,7 @@
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                     <polyline points="12 5 19 12 12 19"></polyline>
                                 </svg>
-                            </a>
+                            </button>
                         </div>
 
                         {{-- Share Section --}}
@@ -390,15 +398,16 @@
             </div>
 
             {{-- Related Products --}}
-            @if($relatedProducts->count() > 0)
+            @if ($relatedProducts->count() > 0)
                 <div class="mt-20 animate-fade-in-up delay-1000">
                     <div class="flex items-center justify-between mb-8">
                         <h2 class="text-3xl font-bold text-gray-900">Produk Terkait</h2>
                         <a href="{{ route('products.public') }}"
                             class="text-[#B1252E] hover:underline font-semibold flex items-center gap-2 transition-colors duration-300 hover:text-[#8f1e26]">
                             Lihat Semua
-                            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                                 <polyline points="12 5 19 12 12 19"></polyline>
                             </svg>
@@ -406,7 +415,7 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        @foreach($relatedProducts as $related)
+                        @foreach ($relatedProducts as $related)
                             <a href="{{ route('products.show', $related->produk_id) }}"
                                 class="group block bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
 
@@ -414,13 +423,15 @@
                                 {{-- Saya pakai bg-gray-100 agar abu-abunya pas (tidak terlalu gelap, tidak terlalu terang) --}}
                                 <div
                                     class="aspect-square bg-gray-100 p-6 flex items-center justify-center overflow-hidden relative">
-                                    @if($related->gambar_utama)
-                                        <img src="{{ asset($related->gambar_utama) }}" alt="{{ $related->nama_produk }}" {{--
+                                    @if ($related->gambar_utama)
+                                        <img src="{{ asset($related->gambar_utama) }}"
+                                            alt="{{ $related->nama_produk }}" {{--
                                             mix-blend-multiply: OPSI TAMBAHAN, agar background putih pada gambar JPG menyatu dengan
                                             abu-abu (opsional) --}}
                                             class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500">
                                     @else
-                                        <div class="w-full h-full flex items-center justify-center bg-gray-200 rounded-xl">
+                                        <div
+                                            class="w-full h-full flex items-center justify-center bg-gray-200 rounded-xl">
                                             <span class="text-gray-400 text-sm font-medium">No Image</span>
                                         </div>
                                     @endif
@@ -441,24 +452,97 @@
                 </div>
             @endif
         </div>
+     <x-cart-modal :relatedProducts="$relatedProducts" />
     </main>
 
     {{-- Footer --}}
     <x-footer />
 
     <script>
+        function tambahKePenawaran(button) {
+            const produkId = button.getAttribute('data-id');
+            const namaProduk = button.getAttribute('data-nama');
+            const gambarUtama = button.getAttribute('data-gambar');
+
+            let cart = JSON.parse(localStorage.getItem('keranjang_penawaran')) || [];
+            const existingIndex = cart.findIndex(item => item.id_produk === produkId);
+
+            let totalJumlah = 1;
+
+            if (existingIndex > -1) {
+                cart[existingIndex].jumlah += 1;
+                totalJumlah = cart[existingIndex].jumlah;
+            } else {
+                cart.push({
+                    id_produk: produkId,
+                    nama_produk: namaProduk,
+                    gambar_utama: gambarUtama,
+                    jumlah: 1
+                });
+            }
+
+            localStorage.setItem('keranjang_penawaran', JSON.stringify(cart));
+
+            if (typeof updateCartBadge === 'function') {
+                updateCartBadge();
+            }
+
+            // SET DATA KE MODAL
+            document.getElementById('modalProductName').innerText = namaProduk;
+            document.getElementById('modalProductQty').innerText = totalJumlah;
+
+            let imageUrl = '/images/default-product.png';
+            if (gambarUtama) {
+                imageUrl = gambarUtama.startsWith('uploads/') ? `/${gambarUtama}` : `/uploads/products/${gambarUtama}`;
+            }
+            document.getElementById('modalProductImg').src = imageUrl;
+
+            // MUNCULKAN MODAL
+            document.getElementById('cartModal').classList.remove('hidden');
+        }
+
+        function closeCartModal() {
+            document.getElementById('cartModal').classList.add('hidden');
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('cartModal');
+            if (event.target == modal) {
+                modal.classList.add('hidden');
+            }
+        }
+
         function productDetailApp() {
-            // LOGIC FIX: Sinkronkan dengan logika PHP di atas
             const hasSpecs = @json($showSpecs);
             const defaultTab = hasSpecs ? 'spesifikasi' : 'informasi';
 
             return {
                 activeTab: defaultTab,
-                currentImage: '{{ $produk->gambar_utama ? asset($produk->gambar_utama) : asset("images/default-product.png") }}'
+                currentImage: '{{ $produk->gambar_utama ? asset($produk->gambar_utama) : asset('images/default-product.png') }}'
             }
         }
-    </script>
 
+        function updateCartBadge() {
+            const badge = document.getElementById('cart-count');
+            if (!badge) return;
+
+            const cart = JSON.parse(localStorage.getItem('keranjang_penawaran')) || [];
+
+            // Menampilkan total jenis produk unik di keranjang
+            const totalJenisProduk = cart.length;
+
+            if (totalJenisProduk > 0) {
+                badge.innerText = totalJenisProduk;
+                badge.classList.remove('hidden');
+                badge.classList.add('inline-flex');
+            } else {
+                badge.classList.add('hidden');
+                badge.classList.remove('inline-flex');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', updateCartBadge);
+    </script>
 </body>
 
 </html>

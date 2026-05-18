@@ -33,17 +33,30 @@
         <main class="{{ isset($header) ? '' : 'pt-20' }}">
             {{ $slot }}
         </main>
-
-        {{-- Footer Sederhana Tema Merah --}}
-        <footer class="bg-white border-t border-gray-200 py-8 mt-12">
-            <div class="max-w-7xl mx-auto px-4 text-center">
-                <p class="text-gray-500 text-sm">
-                    &copy; {{ date('Y') }} <span class="text-[#B1252E] font-bold">PT Medlab Nusantara</span>. All
-                    rights reserved.
-                </p>
-            </div>
-        </footer>
     </div>
+    <script>
+        function updateCartBadge() {
+            const badge = document.getElementById('cart-count');
+            if (!badge) return;
+
+            // Ambil data dari LocalStorage browser
+            const cart = JSON.parse(localStorage.getItem('keranjang_penawaran')) || [];
+            const totalJenisProduk = cart.length;
+
+            // Logika Menampilkan / Menyembunyikan Badge Lingkaran Merah
+            if (totalJenisProduk > 0) {
+                badge.innerText = totalJenisProduk;
+                badge.classList.remove('hidden');
+                badge.classList.add('inline-flex');
+            } else {
+                badge.classList.add('hidden');
+                badge.classList.remove('inline-flex');
+            }
+        }
+
+        // Jalankan otomatis setiap kali halaman apa saja selesai di-load
+        document.addEventListener('DOMContentLoaded', updateCartBadge);
+    </script>
 
     @if (session('success'))
         <script>

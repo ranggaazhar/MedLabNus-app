@@ -7,35 +7,49 @@
     x-data="{ mobileMenuOpen: false }">
     
     <div class="w-full px-6 lg:px-12 py-1"> 
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between md:grid md:grid-cols-3">
 
-            {{-- 1. LOGO --}}
-            <a href="{{ route('welcome') }}"
-                class="flex items-center transition-transform duration-300 hover:scale-105">
-                @if (file_exists(public_path('images/logo2.png')))
-                    <img src="{{ asset('images/logo2.png') }}" alt="PT Medlab Nusantara" class="h-10 md:h-12 w-auto">
-                @else
-                    <div class="w-10 h-10 bg-[#B1252E] rounded-lg flex items-center justify-center shadow-md">
-                        <span class="text-white text-lg font-bold">M</span>
-                    </div>
-                @endif
-            </a>
+            {{-- 1. LOGO (Kiri) --}}
+            <div class="flex md:justify-start">
+                <a href="{{ route('welcome') }}"
+                    class="flex items-center transition-transform duration-300 hover:scale-105">
+                    @if (file_exists(public_path('images/logo2.png')))
+                        <img src="{{ asset('images/logo2.png') }}" alt="PT Medlab Nusantara" class="h-10 md:h-12 w-auto">
+                    @else
+                        <div class="w-10 h-10 bg-[#B1252E] rounded-lg flex items-center justify-center shadow-md">
+                            <span class="text-white text-lg font-bold">M</span>
+                        </div>
+                    @endif
+                </a>
+            </div>
 
-            {{-- 2. DESKTOP MENU --}}
-            <ul class="hidden md:flex items-center gap-10">
-                <li><a href="{{ route('welcome') }}" class="text-sm font-bold transition-colors {{ $active === 'home' ? 'text-[#B1252E]' : 'text-gray-600 hover:text-[#B1252E]' }}">Home</a></li>
-                <li><a href="{{ route('welcome') }}#visi-misi-section" class="text-sm font-bold transition-colors {{ $active === 'visi-misi' ? 'text-[#B1252E]' : 'text-gray-600 hover:text-[#B1252E]' }}">Visi & Misi</a></li>
-                <li><a href="{{ route('welcome') }}#product-section" class="text-sm font-bold transition-colors {{ $active === 'products' ? 'text-[#B1252E]' : 'text-gray-600 hover:text-[#B1252E]' }}">Products</a></li>
-            </ul>
+            {{-- 2. DESKTOP MENU (Tengah Sempurna) --}}
+            <div class="hidden md:flex justify-center">
+                <ul class="flex items-center gap-10">
+                    <li><a href="{{ route('welcome') }}" class="text-sm font-bold transition-colors {{ $active === 'home' ? 'text-[#B1252E]' : 'text-gray-600 hover:text-[#B1252E]' }}">Home</a></li>
+                    <li><a href="{{ route('welcome') }}#visi-misi-section" class="text-sm font-bold transition-colors {{ $active === 'visi-misi' ? 'text-[#B1252E]' : 'text-gray-600 hover:text-[#B1252E]' }}">Visi & Misi</a></li>
+                    <li><a href="{{ route('welcome') }}#product-section" class="text-sm font-bold transition-colors {{ $active === 'products' ? 'text-[#B1252E]' : 'text-gray-600 hover:text-[#B1252E]' }}">Products</a></li>
+                </ul>
+            </div>
 
-            {{-- 3. RIGHT ACTIONS --}}
-            <div class="flex items-center gap-3">
+            {{-- 3. RIGHT ACTIONS (Kanan) --}}
+            @php $user = Auth::guard('web')->user(); @endphp
+
+            <div class="flex items-center justify-end gap-3">
                 
-                {{-- Hanya cek Guard WEB (User Biasa) --}}
-                @php $user = Auth::guard('web')->user(); @endphp
-
                 {{-- DESKTOP ACTIONS --}}
                 <div class="hidden md:flex items-center gap-5">
+                    
+                    {{-- 🛒 PERUBAHAN: IKON KERANJANG DESKTOP DIKONDISIKAN HANYA JIKA USER SUDAH LOGIN --}}
+                    @if ($user)
+                        <a href="{{ route('penawaran.keranjang') }}" class="relative p-2 top-1 text-gray-600 hover:text-[#B1252E] transition-colors">
+                            <i class="fa-solid fa-cart-shopping text-xl"></i>
+                            <span id="cart-count" class="absolute -top-1 -right-1 hidden justify-center items-center px-1.5 py-0.5 text-[10px] font-bold leading-none text-white bg-[#B1252E] rounded-full min-w-[18px] h-[18px]">
+                                0
+                            </span>
+                        </a>
+                    @endif
+
                     @if ($user)
                         <div class="relative" x-data="{ open: false }">
                             <button @click="open = !open" @click.away="open = false"
@@ -81,6 +95,19 @@
                 <a href="{{ route('welcome') }}#visi-misi-section" class="px-5 py-3 rounded-xl hover:bg-red-50 font-bold text-gray-700">Visi & Misi</a>
                 <a href="{{ route('welcome') }}#product-section" class="px-5 py-3 rounded-xl hover:bg-red-50 font-bold text-gray-700">Products</a>
                 
+                {{-- 🛒 PERUBAHAN: LINK KERANJANG MOBILE JUGA DIKONDISIKAN HANYA JIKA LOGIN --}}
+                @if ($user)
+                    <a href="{{ route('penawaran.keranjang') }}" class="px-5 py-3 rounded-xl hover:bg-red-50 font-bold text-gray-700 flex justify-between items-center">
+                        <span>Keranjang Penawaran</span>
+                        <div class="relative">
+                            <i class="fa-solid fa-cart-shopping text-[#B1252E] text-lg"></i>
+                            <span id="cart-count-mobile" class="absolute -top-2 -right-2 hidden justify-center items-center px-1 py-0.5 text-[9px] font-bold leading-none text-white bg-[#B1252E] rounded-full min-w-[16px] h-[16px]">
+                                0
+                            </span>
+                        </div>
+                    </a>
+                @endif
+
                 <div class="h-px bg-gray-100 my-3 mx-5"></div>
 
                 <a href="{{ route('products.public') }}" class="mx-5 mb-4 flex items-center justify-center gap-2 px-4 py-3 bg-[#B1252E] text-white rounded-xl font-bold">
@@ -108,3 +135,47 @@
         </div>
     </div>
 </nav>
+
+{{-- 🛠️ SCRIPT JAVASCRIPT DINAMIS UNTUK MENGHITUNG ISI KERANJANG SINKRON DENGAN HALAMAN DETAIL --}}
+<script>
+    function updateCartBadge() {
+        // Ambil data keranjang dari localStorage browser pelanggan
+        const cart = JSON.parse(localStorage.getItem('keranjang_penawaran')) || [];
+        
+        // Menghitung total QUANTITY semua produk (misal: 1 produk BA200 + 1 Erlenmeyer = 2 item)
+        // Jika Anda ingin menghitung jumlah baris jenis produknya saja, ganti baris ini menjadi: const totalItems = cart.length;
+        const totalItems = cart.reduce((total, item) => total + parseInt(item.jumlah || 0), 0);
+
+        // Update Badge Desktop jika elemennya ada di halaman
+        const badgeDesktop = document.getElementById('cart-count');
+        if (badgeDesktop) {
+            if (totalItems > 0) {
+                badgeDesktop.innerText = totalItems;
+                badgeDesktop.classList.remove('hidden');
+                badgeDesktop.classList.add('inline-flex');
+            } else {
+                badgeDesktop.classList.add('hidden');
+                badgeDesktop.classList.remove('inline-flex');
+            }
+        }
+
+        // Update Badge Mobile jika elemennya ada di halaman
+        const badgeMobile = document.getElementById('cart-count-mobile');
+        if (badgeMobile) {
+            if (totalItems > 0) {
+                badgeMobile.innerText = totalItems;
+                badgeMobile.classList.remove('hidden');
+                badgeMobile.classList.add('inline-flex');
+            } else {
+                badgeMobile.classList.add('hidden');
+                badgeMobile.classList.remove('inline-flex');
+            }
+        }
+    }
+
+    // Jalankan fungsi saat halaman pertama kali selesai dimuat oleh browser
+    document.addEventListener('DOMContentLoaded', updateCartBadge);
+
+    // Daftarkan fungsi ke objek window agar bisa diakses/dipanggil dari halaman detail produk setelah klik tombol
+    window.updateCartBadge = updateCartBadge;
+</script>

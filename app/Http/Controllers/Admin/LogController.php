@@ -21,7 +21,7 @@ class LogController extends Controller
                     });
             })
             ->latest()
-            ->paginate(20)
+            ->paginate(10)
             ->withQueryString(); // Menjaga keyword search tetap ada saat pindah halaman pagination
 
         return view('admin.log.index', compact('logs', 'search'));

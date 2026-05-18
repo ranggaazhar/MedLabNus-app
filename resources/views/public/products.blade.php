@@ -657,6 +657,29 @@
             }
         }
     </script>
+    <script>
+        function updateCartBadge() {
+            const badge = document.getElementById('cart-count');
+            if (!badge) return; // Mencegah error jika elemen belum termuat
+
+            // Baca array data penawaran dari LocalStorage browser
+            const cart = JSON.parse(localStorage.getItem('keranjang_penawaran')) || [];
+            const totalJenisProduk = cart.length; 
+
+            // Logika kontrol kelas Tailwind (Tampilkan / Sembunyikan lingkaran merah)
+            if (totalJenisProduk > 0) {
+                badge.innerText = totalJenisProduk;
+                badge.classList.remove('hidden');
+                badge.classList.add('inline-flex'); 
+            } else {
+                badge.classList.add('hidden');
+                badge.classList.remove('inline-flex'); 
+            }
+        }
+
+        // Eksekusi fungsi langsung setelah DOM selesai di-render
+        document.addEventListener('DOMContentLoaded', updateCartBadge);
+    </script>
 
 </body>
 

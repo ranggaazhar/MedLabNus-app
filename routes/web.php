@@ -6,8 +6,10 @@ use App\Http\Controllers\PabrikanController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\AdminPenawaranController;
 use App\Http\Controllers\Admin\StokMutasiController;
 use App\Http\Controllers\SpesifikasiController;
+use App\Http\Controllers\User\PenawaranController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -24,6 +26,12 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+Route::post('/penawaran/store', [PenawaranController::class, 'store'])->name('penawaran.store');
+
+// Tempat pelanggan melihat daftar produk yang mereka pilih sebelum di-submit
+Route::get('/keranjang', [PenawaranController::class, 'keranjang'])->name('penawaran.keranjang');
 
    
 Route::middleware('auth:admin')->group(function () {
@@ -67,6 +75,11 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/logs', [LogController::class, 'index'])->name('log.index');
     Route::get('/logs/{id}', [LogController::class, 'show'])->name('log.show');
     Route::get('/stok-mutasi', [StokMutasiController::class, 'index'])->name('stok-mutasi.index');
+
+    Route::get('/penawaran', [AdminPenawaranController::class, 'index'])->name('admin.penawaran.index');
+    Route::get('/penawaran/{id}', [AdminPenawaranController::class, 'show'])->name('admin.penawaran.show');
+    Route::patch('/penawaran/{id}/status', [AdminPenawaranController::class, 'updateStatus'])->name('admin.penawaran.updateStatus');
+    Route::delete('/penawaran/{id}', [AdminPenawaranController::class, 'destroy'])->name('admin.penawaran.destroy');
 });
 
 require __DIR__.'/auth.php';
