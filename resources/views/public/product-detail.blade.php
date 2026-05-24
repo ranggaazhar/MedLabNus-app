@@ -328,30 +328,57 @@
                         @endphp --}}
 
                         <div class="mb-8 animate-scale-in">
-                            {{-- Tambahan attribute data-gambar --}}
-                            <button type="button" id="btnMintaPenawaran" data-id="{{ $produk->produk_id }}"
-                                data-nama="{{ $produk->nama_produk }}" data-gambar="{{ $produk->gambar_utama }}"
-                                {{-- <-- Ini tambahannya --}} onclick="tambahKePenawaran(this)"
-                                class="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#B1252E] to-[#8f1d24] text-white rounded-full text-base font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 w-full lg:w-auto">
+                            @auth
+                                {{-- JIKA USER SUDAH LOGIN: Jalankan fungsi tambah keranjang seperti biasa --}}
+                                <button type="button" id="btnMintaPenawaran" data-id="{{ $produk->produk_id }}"
+                                    data-nama="{{ $produk->nama_produk }}" data-gambar="{{ $produk->gambar_utama }}"
+                                    onclick="tambahKePenawaran(this)"
+                                    class="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#B1252E] to-[#8f1d24] text-white rounded-full text-base font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 w-full lg:w-auto">
 
-                                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <circle cx="9" cy="21" r="1"></circle>
-                                    <circle cx="20" cy="21" r="1"></circle>
-                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                                </svg>
+                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <circle cx="9" cy="21" r="1"></circle>
+                                        <circle cx="20" cy="21" r="1"></circle>
+                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                    </svg>
 
-                                Add to Cart
+                                    Add to Cart
 
-                                <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                    <polyline points="12 5 19 12 12 19"></polyline>
-                                </svg>
-                            </button>
+                                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </button>
+                            @endauth
+
+                            @guest
+                                {{-- JIKA USER BELUM LOGIN: Alihkan langsung ke halaman login --}}
+                                <button type="button" onclick="window.location.href='{{ route('login') }}'"
+                                    class="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#B1252E] to-[#8f1d24] text-white rounded-full text-base font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 w-full lg:w-auto">
+
+                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <circle cx="9" cy="21" r="1"></circle>
+                                        <circle cx="20" cy="21" r="1"></circle>
+                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                    </svg>
+
+                                    Add to Cart
+
+                                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </button>
+                            @endguest
                         </div>
 
                         {{-- Share Section --}}
@@ -452,20 +479,21 @@
                 </div>
             @endif
         </div>
-     <x-cart-modal :relatedProducts="$relatedProducts" />
+        <x-cart-modal :relatedProducts="$relatedProducts" />
     </main>
 
     {{-- Footer --}}
     <x-footer />
 
     <script>
+        const CART_KEY = 'keranjang_penawaran_{{ auth()->id() ?? "guest" }}';
         function tambahKePenawaran(button) {
             const produkId = button.getAttribute('data-id');
             const namaProduk = button.getAttribute('data-nama');
             const gambarUtama = button.getAttribute('data-gambar');
 
-            let cart = JSON.parse(localStorage.getItem('keranjang_penawaran')) || [];
-            const existingIndex = cart.findIndex(item => item.id_produk === produkId);
+            let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+            const existingIndex = cart.findIndex(item => item.produk_id === produkId);
 
             let totalJumlah = 1;
 
@@ -474,14 +502,14 @@
                 totalJumlah = cart[existingIndex].jumlah;
             } else {
                 cart.push({
-                    id_produk: produkId,
+                    produk_id: produkId,
                     nama_produk: namaProduk,
                     gambar_utama: gambarUtama,
                     jumlah: 1
                 });
             }
 
-            localStorage.setItem('keranjang_penawaran', JSON.stringify(cart));
+            localStorage.setItem(CART_KEY, JSON.stringify(cart));
 
             if (typeof updateCartBadge === 'function') {
                 updateCartBadge();
@@ -526,7 +554,7 @@
             const badge = document.getElementById('cart-count');
             if (!badge) return;
 
-            const cart = JSON.parse(localStorage.getItem('keranjang_penawaran')) || [];
+            const cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
 
             // Menampilkan total jenis produk unik di keranjang
             const totalJenisProduk = cart.length;

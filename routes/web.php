@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\StokMutasiController;
 use App\Http\Controllers\SpesifikasiController;
 use App\Http\Controllers\User\PenawaranController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AdminInvoiceController;
 
 
 
@@ -33,7 +34,7 @@ Route::post('/penawaran/store', [PenawaranController::class, 'store'])->name('pe
 // Tempat pelanggan melihat daftar produk yang mereka pilih sebelum di-submit
 Route::get('/keranjang', [PenawaranController::class, 'keranjang'])->name('penawaran.keranjang');
 
-   
+
 Route::middleware('auth:admin')->group(function () {
 
 
@@ -80,6 +81,28 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/penawaran/{id}', [AdminPenawaranController::class, 'show'])->name('admin.penawaran.show');
     Route::patch('/penawaran/{id}/status', [AdminPenawaranController::class, 'updateStatus'])->name('admin.penawaran.updateStatus');
     Route::delete('/penawaran/{id}', [AdminPenawaranController::class, 'destroy'])->name('admin.penawaran.destroy');
+
+
+    // 1. Read (Daftar Utama & Detail)
+    Route::get('invoices', [AdminInvoiceController::class, 'index'])->name('admin.invoice.index');
+
+    Route::get('invoices/create', [AdminInvoiceController::class, 'create'])->name('admin.invoice.create');
+    Route::get('invoices/{id}', [AdminInvoiceController::class, 'show'])->name('admin.invoice.show');
+
+    // 2. Create (Form & Proses Simpan)
+
+    Route::post('invoices', [AdminInvoiceController::class, 'store'])->name('admin.invoice.store');
+
+    // 3. Update Status Pembayaran (Lunas / Batal)
+    Route::patch('invoices/{id}/update-status', [AdminInvoiceController::class, 'updateStatus'])->name('admin.invoice.update-status');
+
+    // 4. Delete (Hapus Permanen / Audit Trail)
+    Route::delete('invoices/{id}', [AdminInvoiceController::class, 'destroy'])->name('admin.invoice.destroy');
+
+    // 5. Fitur Cetak / Unduh Dokumen PDF
+    Route::get('invoices/{id}/download-pdf', [AdminInvoiceController::class, 'generatePdf'])->name('admin.invoice.download-pdf');
+    // Letakkan route ini di dalam group middleware admin kamu, di atas route {id}
+    Route::patch('invoices/{id}/cancel', [AdminInvoiceController::class, 'cancel'])->name('admin.invoice.cancel');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

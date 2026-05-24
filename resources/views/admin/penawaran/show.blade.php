@@ -143,9 +143,6 @@
                         <div class="text-sm font-black text-gray-800">
                             {{ $item->produk->nama_produk ?? 'Produk Tidak Ditemukan / Terhapus' }}
                         </div>
-                        <div class="text-[10px] text-gray-400 font-medium mt-0.5">
-                            ID Referensi: {{ $item->produk_id }}
-                        </div>
                     </td>
                     {{-- PABRIKAN --}}
                     <td class="px-6 py-4">

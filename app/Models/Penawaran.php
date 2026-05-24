@@ -26,12 +26,17 @@ class Penawaran extends Model
     {
         return $this->hasMany(\App\Models\PenawaranItem::class, 'penawaran_id');
     }
-    
+
     /**
      * Relasi balik ke User/Pelanggan yang login
      */
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function invoice()
+    {
+        return $this->hasOne(\App\Models\Invoice::class, 'penawaran_id');
     }
 }

@@ -66,9 +66,6 @@
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
     <div class="p-5 border-b border-gray-50 flex justify-between items-center bg-white">
         <h3 class="font-bold text-gray-800 uppercase text-xs tracking-widest">Daftar Dokumen Masuk</h3>
-        <span class="text-[10px] font-bold text-red-600 bg-red-50 px-3 py-1 rounded-full italic">
-            Total: {{ $penawarans->count() }} Data Permintaan
-        </span>
     </div>
     
     <div class="overflow-x-auto">

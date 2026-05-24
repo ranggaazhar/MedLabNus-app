@@ -24,8 +24,9 @@
                     $isProductActive = request()->routeIs('produk.*');
                     $isPabrikanActive = request()->routeIs('pabrikan.*');
                     
-                    // 🌟 1. DAFTARKAN LOGIKA AKTIF UNTUK ROUTE PENAWARAN ADMIN
+                    // 🌟 DAFTARKAN LOGIKA AKTIF
                     $isPenawaranActive = request()->routeIs('admin.penawaran.*'); 
+                    $isInvoiceActive = request()->routeIs('admin.invoice.*'); 
                     
                     $isAuditActive = request()->routeIs('log.index'); // Spatie Audit
                     $isMutasiActive = request()->routeIs('stok-mutasi.*'); // Stok Mutasi
@@ -33,9 +34,9 @@
 
                     $isDashboardStrict = request()->routeIs('dashboard');
                     
-                    // 🌟 2. TAMBAHKAN COCOKAN NEGASI agar Dashboard tidak ikut menyala saat menu penawaran diakses
+                    // 🌟 COCOKAN NEGASI agar Dashboard tidak ikut menyala saat menu lain diakses
                     $isActiveDashboard =
-                        $isDashboardStrict || (!$isProductActive && !$isPabrikanActive && !$isPenawaranActive && !$isLogGroupActive);
+                        $isDashboardStrict || (!$isProductActive && !$isPabrikanActive && !$isPenawaranActive && !$isInvoiceActive && !$isLogGroupActive);
                 @endphp
 
                 {{-- 1. Link Dashboard --}}
@@ -56,7 +57,7 @@
                     <span>Pabrikan</span>
                 </a>
 
-                {{-- 🌟 3. TAMBAHAN: LINK PENAWARAN (TEPAT DI BAWAH PABRIKAN) --}}
+                {{-- 3. LINK PENAWARAN --}}
                 <a href="{{ route('admin.penawaran.index') }}"
                     class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
                     {{ $isPenawaranActive ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
@@ -66,7 +67,17 @@
                     <span>Penawaran</span>
                 </a>
 
-                {{-- 4. Group Log Aktivitas (Dropdown) --}}
+                {{-- 4. LINK INVOICE --}}
+                <a href="{{ route('admin.invoice.index') }}"
+                    class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
+                    {{ $isInvoiceActive ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
+                    <div class="w-6 h-6 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-file-invoice-dollar text-lg {{ $isInvoiceActive ? 'text-red-700' : 'text-gray-400' }}"></i>
+                    </div>
+                    <span>Invoice</span>
+                </a>
+
+                {{-- 5. Group Log Aktivitas (Dropdown) --}}
                 <div class="w-full">
                     <button @click="openLog = !openLog"
                         class="!flex items-center justify-between p-3 rounded-lg text-sm font-medium transition-colors w-full

@@ -76,6 +76,17 @@ class AdminPenawaranController extends Controller
         ));
     }
 
+    public function show($id)
+    {
+        // Mengambil data penawaran beserta relasi user pengaju, item keranjang, dan data produk terkaitnya
+        $penawaran = Penawaran::with(['user', 'items.produk.pabrikan'])->findOrFail($id);
+
+        // Menghitung total kuantitas unit alat kesehatan di dalam dokumen ini sebagai metadata tambahan
+        $totalQty = collect($penawaran->items)->sum('jumlah');
+
+        return view('admin.penawaran.show', compact('penawaran', 'totalQty'));
+    }
+
     /**
      * Mengubah status penawaran berdasarkan hasil nego WA
      */

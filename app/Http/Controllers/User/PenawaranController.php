@@ -36,7 +36,20 @@ class PenawaranController extends Controller
             $penawaran = new Penawaran();
             $penawaran->user_id = Auth::id();
             $penawaran->nama_pelanggan = $request->nama_pelanggan;
-            $penawaran->whatsapp_pelanggan = $request->whatsapp_pelanggan;
+
+            // 🛠️ PROSES PENYESUAIAN NOMOR WHATSAPP (Menambahkan prefix 62) 🛠️
+            $nomor_hp = $request->whatsapp_pelanggan;
+
+            // Antisipasi jika user refleks mengetik 0 atau 62 di input text
+            if (str_starts_with($nomor_hp, '0')) {
+                $nomor_hp = substr($nomor_hp, 1); // Hapus angka 0 di depan
+            } elseif (str_starts_with($nomor_hp, '62')) {
+                $nomor_hp = substr($nomor_hp, 2); // Hapus angka 62 di depan supaya tidak double menjadi 6262
+            }
+
+            // Gabungkan prefix 62 dengan nomor yang sudah bersih, lalu simpan ke database
+            $penawaran->whatsapp_pelanggan = '62' . $nomor_hp;
+            // -------------------------------------------------------------
 
             // Buat kode penawaran terlebih dahulu
             $kodePenawaran = 'PNW-' . strtoupper(Str::random(6));
@@ -104,7 +117,7 @@ class PenawaranController extends Controller
         // 2. Jika database masih kosong, langsung oper collection kosong agar tidak error
         if (!$baseProduct) {
             $relatedProducts = collect();
-            return view('frontend.penawaran.keranjang', compact('relatedProducts'));
+            return view('components.keranjang.penawaran', compact('relatedProducts'));
         }
 
         // 3. Ambil produk terkait berdasarkan 'pabrikan_id' yang sama (Bukan kategori_id)
