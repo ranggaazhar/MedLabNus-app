@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Manajemen Permintaan Penawaran Harga')
+@section('title', 'List Penawaran')
 
 @section('content')
 <div class="mb-6">
@@ -69,7 +69,7 @@
     </div>
     
     <div class="overflow-x-auto">
-        <table class="w-full text-left">
+        <table class="w-full text-left table-penawaran">
             <thead class="bg-gray-50/50">
                 <tr>
                     <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase">Waktu Masuk</th>
@@ -84,7 +84,7 @@
                 @forelse($penawarans as $penawaran)
                 <tr class="hover:bg-gray-50/30 transition">
                     {{-- Waktu & Operator --}}
-                    <td class="px-6 py-4">
+                    <td class="px-6 py-4" data-label="Waktu Masuk">
                         <div class="text-sm font-bold text-gray-700">{{ $penawaran->created_at->translatedFormat('d M Y, H:i') }}</div>
                         <div class="text-[10px] text-gray-400 flex items-center gap-1 mt-1 font-medium">
                             <i class="fas fa-user text-[8px]"></i> Akun: {{ $penawaran->user->name ?? 'Guest/Public' }}
@@ -92,14 +92,14 @@
                     </td>
                     
                     {{-- Kode Dokumen --}}
-                    <td class="px-6 py-4">
+                    <td class="px-6 py-4" data-label="Kode">
                         <span class="font-mono font-black text-sm text-gray-800 bg-gray-100 px-2 py-1 rounded">
                             {{ $penawaran->kode_penawaran }}
                         </span>
                     </td>
                     
                     {{-- Data Instansi/Pelanggan --}}
-                    <td class="px-6 py-4">
+                    <td class="px-6 py-4" data-label="Pelanggan">
                         <div class="text-sm font-black text-gray-800">{{ $penawaran->nama_pelanggan }}</div>
                         <div class="text-[10px] text-gray-500 font-bold flex items-center gap-1 mt-0.5">
                             <i class="fab fa-whatsapp text-emerald-500 text-xs"></i> {{ $penawaran->whatsapp_pelanggan }}
@@ -107,7 +107,7 @@
                     </td>
                     
                     {{-- Status Dokumen --}}
-                    <td class="px-6 py-4 text-center">
+                    <td class="px-6 py-4 text-center" data-label="Status">
                         @if($penawaran->status == 'pending')
                             <span class="px-2 py-1 rounded text-[9px] font-black uppercase tracking-tighter bg-amber-50 text-amber-600 border border-amber-100">
                                 Pending
@@ -124,7 +124,7 @@
                     </td>
                     
                     {{-- File PDF --}}
-                    <td class="px-6 py-4 text-center">
+                    <td class="px-6 py-4 text-center" data-label="File Dokumen">
                         @if($penawaran->file_pdf)
                             <a href="{{ asset('uploads/pdf_penawaran/' . $penawaran->file_pdf) }}" target="_blank" 
                                class="inline-flex items-center gap-1 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 px-2.5 py-1.5 rounded-lg transition">
@@ -136,7 +136,7 @@
                     </td>
                     
                     {{-- Tombol Manajemen Kontrol --}}
-                    <td class="px-6 py-4 text-right">
+                    <td class="px-6 py-4 text-right" data-label="Aksi">
                         <div class="flex items-center justify-end gap-2">
                             <a href="{{ route('admin.penawaran.show', $penawaran->id) }}" 
                                class="px-3 py-1.5 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg text-xs font-bold transition flex items-center gap-1">
@@ -162,16 +162,22 @@
             </tbody>
         </table>
     </div>
+
+    @if($penawarans->hasPages())
+    <div class="p-5 border-t border-gray-50">
+        {{ $penawarans->withQueryString()->links() }}
+    </div>
+    @endif
 </div>
 
 {{-- GRAFIK VISUALISASI DIBAWAH --}}
-<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-    <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
+    <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-3">
         <div>
-            <h3 class="text-lg font-bold text-gray-800 italic">Inbound RFQ Analytics</h3>
-            <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest">Visualisasi Tren Permintaan Penawaran Masuk</p>
+            <h3 class="text-base sm:text-lg font-bold text-gray-800 italic">Inbound RFQ Analytics</h3>
+            <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-0.5">Visualisasi Tren Permintaan Penawaran Masuk</p>
         </div>
-        <div class="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100">
+        <div class="flex items-center gap-3 bg-gray-50 px-3 py-1.5 rounded-xl border border-gray-100 self-start md:self-center">
             <div class="flex items-center gap-1.5">
                 <div class="w-2.5 h-2.5 rounded-full bg-red-600 shadow-sm"></div>
                 <span class="text-[9px] font-black text-gray-500 uppercase">Total Permintaan Masuk</span>
@@ -179,59 +185,104 @@
         </div>
     </div>
     
-    <div id="chart-penawaran" class="w-full" style="min-height: 350px;"></div>
+    <div id="chart-penawaran" class="w-full"></div>
 </div>
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        var isMobile = window.innerWidth < 768;
+
         var options = {
             series: [{
                 name: 'Dokumen Masuk',
-                data: @json($totals) {{-- Menyuntikkan array total data per hari dari Controller --}}
+                data: @json($totals)
             }],
             chart: {
                 type: 'area',
-                height: 350,
+                height: isMobile ? 220 : 320,
                 fontFamily: 'Plus Jakarta Sans, sans-serif',
                 toolbar: { show: false },
-                zoom: { enabled: false }
+                zoom: { enabled: false },
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 600
+                }
             },
-            colors: ['#DC2626'], {{-- Warna merah korporat PT Medlab Nusantara --}}
+            colors: ['#DC2626'],
             fill: {
                 type: 'gradient',
                 gradient: {
                     shadeIntensity: 1,
-                    opacityFrom: 0.3,
-                    opacityTo: 0.02,
+                    opacityFrom: 0.25,
+                    opacityTo: 0.01,
                     stops: [0, 90, 100]
                 }
             },
-            stroke: { curve: 'smooth', width: 3.5 },
+            stroke: { curve: 'smooth', width: isMobile ? 2.5 : 3.5 },
             dataLabels: { enabled: false },
             xaxis: {
-                categories: @json($days), {{-- Menyuntikkan label tanggal dinamis dari rentang pilihan admin --}}
-                labels: { style: { colors: '#94A3B8', fontWeight: 700, fontSize: '10px' } },
+                categories: @json($days),
+                labels: {
+                    rotate: isMobile ? -45 : 0,
+                    rotateAlways: isMobile,
+                    hideOverlappingLabels: true,
+                    trim: true,
+                    style: {
+                        colors: '#94A3B8',
+                        fontWeight: 700,
+                        fontSize: isMobile ? '9px' : '10px'
+                    }
+                },
                 axisBorder: { show: false },
-                axisTicks: { show: false }
+                axisTicks: { show: false },
+                tickAmount: isMobile ? 5 : undefined
             },
             yaxis: {
-                labels: { style: { colors: '#94A3B8', fontWeight: 700, fontSize: '10px' } },
+                labels: {
+                    style: { colors: '#94A3B8', fontWeight: 700, fontSize: '10px' },
+                    offsetX: isMobile ? -8 : 0
+                },
                 forceNiceScale: true,
                 min: 0
             },
             grid: {
                 borderColor: '#F8FAFC',
                 strokeDashArray: 6,
-                padding: { top: 0, right: 0, bottom: 0, left: 10 }
+                padding: {
+                    top: 0,
+                    right: isMobile ? 4 : 8,
+                    bottom: isMobile ? 10 : 0,
+                    left: isMobile ? 0 : 10
+                }
             },
             tooltip: {
                 theme: 'light',
                 style: { fontSize: '12px' },
                 y: { formatter: function(val) { return val + " Berkas" } }
             },
-            legend: { show: false }
+            legend: { show: false },
+            responsive: [{
+                breakpoint: 768,
+                options: {
+                    chart: { height: 220 },
+                    xaxis: {
+                        labels: {
+                            rotate: -45,
+                            rotateAlways: true,
+                            hideOverlappingLabels: true,
+                            trim: true,
+                            style: { fontSize: '9px' }
+                        },
+                        tickAmount: 5
+                    },
+                    grid: {
+                        padding: { right: 4, bottom: 10, left: 0 }
+                    }
+                }
+            }]
         };
 
         var chart = new ApexCharts(document.querySelector("#chart-penawaran"), options);
@@ -239,4 +290,4 @@
     });
 </script>
 @endpush
-@endsection
+@endsection

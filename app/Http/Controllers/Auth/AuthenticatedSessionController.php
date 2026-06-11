@@ -16,27 +16,29 @@ class AuthenticatedSessionController extends Controller
         return view('auth.login');
     }
 
-    public function store(Request $request): RedirectResponse
+   public function store(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
-        // 1. Coba Login sebagai Admin
+        // 1. Coba Login sebagai Staff Internal (Admin / Gudang berada di tabel & guard yang sama)
         if (Auth::guard('admin')->attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            // Menggunakan name route 'dashboard' yang mengarah ke /admin/dashboard
-            return redirect()->route('dashboard')->with('success', 'Selamat Datang Admin!');
+            
+            // Ambil data user internal yang baru saja login
+            $user = Auth::guard('admin')->user();
+
+            // REDIRECT DINAMIS BERDASARKAN ROLE
+            if ($user->role === 'gudang') {
+                return redirect()->route('gudang.dashboard')->with('success', 'Selamat Datang Staf Gudang!');
+            }
+
+            return redirect()->route('admin.dashboard')->with('success', 'Selamat Datang Admin!');
         }
 
-        // // 2. Coba Login sebagai Gudang (Aktifkan jika sudah siap)
-        // if (Auth::guard('gudang')->attempt($credentials, $request->boolean('remember'))) {
-        //     $request->session()->regenerate();
-        //     return redirect()->route('gudang.dashboard')->with('success', 'Selamat Datang Staf Gudang!');
-        // }
-
-        // 3. Coba Login sebagai User Biasa
+        // 2. Coba Login sebagai User Biasa / Pelanggan (Guard Web)
         if (Auth::guard('web')->attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
             return redirect()->route('welcome')->with('success', 'Login Berhasil!');

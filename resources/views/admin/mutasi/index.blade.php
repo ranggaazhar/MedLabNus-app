@@ -5,7 +5,7 @@
 @section('content')
 <div class="mb-6">
     <h1 class="text-2xl font-bold text-gray-800">Riwayat Mutasi Stok</h1>
-    <p class="text-sm text-gray-500 font-medium italic">Audit Trail Logistik PT Medlab Nusantara</p>
+    <p class="text-sm text-gray-500 font-medium italic">Riwayat Stok PT Medlab Nusantara</p>
 </div>
 
 {{-- FILTER SECTION --}}
@@ -54,7 +54,7 @@
         </span>
     </div>
     <div class="overflow-x-auto">
-        <table class="w-full text-left">
+        <table class="w-full text-left table-mutasi">
             <thead class="bg-gray-50/50">
                 <tr>
                     <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase">Waktu & Admin</th>
@@ -67,28 +67,28 @@
             <tbody class="divide-y divide-gray-50">
                 @forelse($mutasis as $mutasi)
                 <tr class="hover:bg-gray-50/30 transition">
-                    <td class="px-6 py-4">
+                    <td class="px-6 py-4" data-label="Waktu & Admin">
                         <div class="text-sm font-bold text-gray-700">{{ $mutasi->created_at->translatedFormat('d M Y, H:i') }}</div>
                         <div class="text-[10px] text-gray-400 flex items-center gap-1 mt-1 font-medium">
                             <i class="fas fa-user-edit text-[8px]"></i> {{ $mutasi->user->name ?? 'System' }}
                         </div>
                     </td>
-                    <td class="px-6 py-4">
+                    <td class="px-6 py-4" data-label="Produk">
                         <div class="text-sm font-black text-gray-800">{{ $mutasi->produk->nama_produk ?? 'N/A' }}</div>
                         <div class="text-[10px] text-red-500 font-bold uppercase">{{ $mutasi->produk->pabrikan->nama_pabrikan ?? '-' }}</div>
                     </td>
-                    <td class="px-6 py-4 text-center">
+                    <td class="px-6 py-4 text-center" data-label="Tipe">
                         <span class="px-2 py-1 rounded text-[9px] font-black uppercase tracking-tighter border
                             {{ $mutasi->tipe == 'masuk' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-red-50 text-red-600 border-red-100' }}">
                             {{ $mutasi->tipe }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 text-right">
+                    <td class="px-6 py-4 text-right" data-label="Qty">
                         <span class="text-sm font-black {{ $mutasi->tipe == 'masuk' ? 'text-emerald-600' : 'text-red-600' }}">
                             {{ $mutasi->tipe == 'masuk' ? '+' : '-' }}{{ number_format($mutasi->jumlah) }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 text-[11px] text-gray-500 italic max-w-[200px] truncate">
+                    <td class="px-6 py-4 text-[11px] text-gray-500 italic max-w-[200px] truncate" data-label="Catatan">
                         {{ $mutasi->keterangan }}
                     </td>
                 </tr>
@@ -106,13 +106,13 @@
 </div>
 
 {{-- GRAFIK VISUALISASI (DIBAWAH) --}}
-<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-    <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
+    <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-3">
         <div>
-            <h3 class="text-lg font-bold text-gray-800 italic">Inventory Trend Analysis</h3>
-            <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest">Visualisasi Pergerakan Stok Medlab</p>
+            <h3 class="text-base sm:text-lg font-bold text-gray-800 italic">Inventory Trend Analysis</h3>
+            <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-0.5">Visualisasi Pergerakan Stok Medlab</p>
         </div>
-        <div class="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100">
+        <div class="flex items-center gap-3 bg-gray-50 px-3 py-1.5 rounded-xl border border-gray-100 self-start md:self-center">
             <div class="flex items-center gap-1.5">
                 <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm"></div>
                 <span class="text-[9px] font-black text-gray-500 uppercase">In</span>
@@ -125,13 +125,15 @@
         </div>
     </div>
     
-    <div id="chart-mutasi" class="w-full" style="min-height: 350px;"></div>
+    <div id="chart-mutasi" class="w-full"></div>
 </div>
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        var isMobile = window.innerWidth < 768;
+
         var options = {
             series: [{
                 name: 'Barang Masuk',
@@ -142,43 +144,82 @@
             }],
             chart: {
                 type: 'area',
-                height: 350,
+                height: isMobile ? 220 : 320,
                 fontFamily: 'Plus Jakarta Sans, sans-serif',
                 toolbar: { show: false },
-                zoom: { enabled: false }
+                zoom: { enabled: false },
+                animations: { enabled: true, easing: 'easeinout', speed: 600 }
             },
             colors: ['#10B981', '#DC2626'],
             fill: {
                 type: 'gradient',
                 gradient: {
                     shadeIntensity: 1,
-                    opacityFrom: 0.3,
-                    opacityTo: 0.02,
+                    opacityFrom: 0.25,
+                    opacityTo: 0.01,
                     stops: [0, 90, 100]
                 }
             },
-            stroke: { curve: 'smooth', width: 3.5 },
+            stroke: { curve: 'smooth', width: isMobile ? 2.5 : 3.5 },
             dataLabels: { enabled: false },
             xaxis: {
                 categories: @json($days),
-                labels: { style: { colors: '#94A3B8', fontWeight: 700, fontSize: '10px' } },
+                labels: {
+                    rotate: isMobile ? -45 : 0,
+                    rotateAlways: isMobile,
+                    hideOverlappingLabels: true,
+                    trim: true,
+                    style: {
+                        colors: '#94A3B8',
+                        fontWeight: 700,
+                        fontSize: isMobile ? '9px' : '10px'
+                    }
+                },
                 axisBorder: { show: false },
-                axisTicks: { show: false }
+                axisTicks: { show: false },
+                tickAmount: isMobile ? 5 : undefined
             },
             yaxis: {
-                labels: { style: { colors: '#94A3B8', fontWeight: 700, fontSize: '10px' } }
+                labels: {
+                    style: { colors: '#94A3B8', fontWeight: 700, fontSize: '10px' },
+                    offsetX: isMobile ? -8 : 0
+                }
             },
             grid: {
                 borderColor: '#F8FAFC',
                 strokeDashArray: 6,
-                padding: { top: 0, right: 0, bottom: 0, left: 10 }
+                padding: {
+                    top: 0,
+                    right: isMobile ? 4 : 8,
+                    bottom: isMobile ? 10 : 0,
+                    left: isMobile ? 0 : 10
+                }
             },
             tooltip: {
                 theme: 'light',
                 style: { fontSize: '12px' },
                 y: { formatter: function(val) { return val + " Unit" } }
             },
-            legend: { show: false }
+            legend: { show: false },
+            responsive: [{
+                breakpoint: 768,
+                options: {
+                    chart: { height: 220 },
+                    xaxis: {
+                        labels: {
+                            rotate: -45,
+                            rotateAlways: true,
+                            hideOverlappingLabels: true,
+                            trim: true,
+                            style: { fontSize: '9px' }
+                        },
+                        tickAmount: 5
+                    },
+                    grid: {
+                        padding: { right: 4, bottom: 10, left: 0 }
+                    }
+                }
+            }]
         };
 
         var chart = new ApexCharts(document.querySelector("#chart-mutasi"), options);

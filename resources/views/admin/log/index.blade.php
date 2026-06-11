@@ -35,7 +35,7 @@
 {{-- 2. LOG TABLE CARD --}}
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
+        <table class="w-full text-left border-collapse table-log">
             <thead class="bg-gray-50/50 border-b border-gray-100">
                 <tr>
                     <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Waktu</th>
@@ -49,11 +49,11 @@
             <tbody class="divide-y divide-gray-50">
                 @forelse($logs as $log)
                     <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
+                        <td class="px-6 py-4 text-sm text-gray-600 whitespace-nowrap" data-label="Waktu">
                             <span class="block font-bold text-gray-800">{{ $log->created_at->format('d/m/Y') }}</span>
                             <span class="text-[10px] font-bold text-gray-400 italic">{{ $log->created_at->format('H:i') }} WIB</span>
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4" data-label="Admin">
                             <div class="flex items-center gap-2">
                                 <div class="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-600 font-black text-xs border border-red-100 uppercase">
                                     {{ substr($log->causer->name ?? 'S', 0, 1) }}
@@ -61,7 +61,7 @@
                                 <span class="text-sm font-bold text-gray-700">{{ $log->causer->name ?? 'System' }}</span>
                             </div>
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4" data-label="Aktivitas">
                             @php
                                 $badgeColor = match($log->event) {
                                     'created' => 'bg-emerald-50 text-emerald-600 border-emerald-100',
@@ -74,12 +74,12 @@
                                 {{ $log->description }}
                             </span>
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4" data-label="Modul">
                             <span class="text-[11px] font-bold text-gray-500 uppercase bg-gray-100 px-2 py-0.5 rounded italic">
                                 {{ str_replace('App\Models\\', '', $log->subject_type) }}
                             </span>
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4" data-label="Detail">
                             @if($log->event == 'updated' && isset($log->changes['attributes']))
                                 <p class="text-[11px] text-gray-500 line-clamp-1 italic font-medium">
                                     Mengubah: <span class="text-red-500">{{ implode(', ', array_keys($log->changes['attributes'])) }}</span>
@@ -88,7 +88,7 @@
                                 <span class="text-[11px] text-gray-400 font-medium">- No Changes -</span>
                             @endif
                         </td>
-                        <td class="px-6 py-4 text-center">
+                        <td class="px-6 py-4 text-center" data-label="Aksi">
                             <a href="{{ route('log.show', $log->id) }}" class="w-8 h-8 inline-flex items-center justify-center rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-all shadow-sm">
                                 <i class="fas fa-eye text-xs"></i>
                             </a>

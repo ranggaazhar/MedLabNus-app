@@ -70,7 +70,7 @@
     {{-- TABLE SECTION (CLEAN WHITE) --}}
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
+            <table class="w-full text-left border-collapse table-invoice">
                 <thead class="bg-white border-b border-gray-50">
                     <tr>
                         <th class="py-4 px-6 text-[10px] font-black text-gray-300 uppercase tracking-wider">Info Dokumen</th>
@@ -85,7 +85,7 @@
                         <tr class="hover:bg-gray-50/50 transition-colors">
 
                             {{-- Kode & Tanggal Invoice --}}
-                            <td class="py-4 px-6">
+                            <td class="py-4 px-6" data-label="Info Dokumen">
                                 <div class="flex items-center gap-3">
                                     <div class="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center border border-red-100 text-red-600">
                                         <i class="fas fa-file-invoice"></i>
@@ -108,7 +108,7 @@
                             </td>
 
                             {{-- Total Tagihan Finansial --}}
-                            <td class="py-4 px-6 font-bold text-gray-900 text-sm" data-label="Total">
+                            <td class="py-4 px-6 font-bold text-gray-900 text-sm" data-label="Total Tagihan">
                                 Rp {{ number_format($item->total_harga, 0, ',', '.') }}
                             </td>
 
@@ -130,7 +130,7 @@
                             </td>
 
                             {{-- Actions --}}
-                            <td class="py-4 px-6" data-label="Action">
+                            <td class="py-4 px-6" data-label="Aksi">
                                 <div class="flex items-center justify-end gap-4">
                                     
                                     {{-- Tombol Batal (Hanya muncul jika status pending) --}}

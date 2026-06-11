@@ -36,9 +36,15 @@ class AdminPenawaranController extends Controller
             $query->where('status', $request->status);
         }
 
-        // Filter list tabel berdasarkan date picker juga agar sinkron
-        $query->whereBetween('created_at', [$startDate, $endDate]);
-        $penawarans = $query->get();
+        // Filter list tabel HANYA jika ada input dari form (agar semua data muncul default jika tidak difilter)
+        if ($startDateInput) {
+            $query->where('created_at', '>=', Carbon::parse($startDateInput)->startOfDay());
+        }
+        if ($endDateInput) {
+            $query->where('created_at', '<=', Carbon::parse($endDateInput)->endOfDay());
+        }
+
+        $penawarans = $query->paginate(10);
 
         // 3. LOGIKA GRAFIK: Ambil tren statistik penawaran per hari dalam rentang tanggal
         $chartDataRaw = Penawaran::select(

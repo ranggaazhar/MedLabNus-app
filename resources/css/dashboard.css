@@ -49,3 +49,184 @@
         content: ''; /* Hapus label untuk kolom Product */
     }
 }
+
+
+/* ============================================================ */
+/* --- CSS Mobile Card View: Tabel Penawaran & Invoice --- */
+/* ============================================================ */
+
+@media (max-width: 768px) {
+
+    /* ── SHARED: Sembunyikan header tabel ── */
+    .table-penawaran thead,
+    .table-invoice thead {
+        display: none;
+    }
+
+    /* ── SHARED: Setiap baris jadi card ── */
+    .table-penawaran tbody tr,
+    .table-invoice tbody tr {
+        display: block;
+        margin-bottom: 1rem;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 1rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+    }
+
+    /* ── SHARED: Setiap kolom jadi baris di dalam card ── */
+    .table-penawaran tbody td,
+    .table-invoice tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: right !important;
+        padding: 0.65rem 1rem;
+        border-bottom: 1px solid #f3f4f6;
+        font-size: 0.8125rem;
+    }
+
+    /* ── SHARED: Label kolom (dari data-label) di sebelah kiri ── */
+    .table-penawaran tbody td::before,
+    .table-invoice tbody td::before {
+        content: attr(data-label);
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 0.625rem;  /* 10px */
+        letter-spacing: 0.05em;
+        color: #9ca3af;
+        flex-shrink: 0;
+        margin-right: 0.75rem;
+        text-align: left;
+    }
+
+    /* ── SHARED: Baris terakhir tanpa garis bawah ── */
+    .table-penawaran tbody td:last-child,
+    .table-invoice tbody td:last-child {
+        border-bottom: none;
+    }
+
+    /* ── SHARED: Baris pertama (Info Dokumen / Waktu Masuk) rata kiri, tanpa label ── */
+    .table-penawaran tbody td:first-child,
+    .table-invoice tbody td:first-child {
+        text-align: left !important;
+        background: #fafafa;
+        padding: 0.85rem 1rem;
+        border-bottom: 1px solid #f3f4f6;
+    }
+    .table-penawaran tbody td:first-child::before,
+    .table-invoice tbody td:first-child::before {
+        content: '';
+        display: none;
+    }
+
+    /* ── INVOICE: Aksi group rata kanan ── */
+    .table-invoice tbody td:last-child > div,
+    .table-penawaran tbody td:last-child > div {
+        justify-content: flex-end;
+        width: 100%;
+    }
+}
+
+
+/* ============================================================ */
+/* --- CSS Mobile Card View: Tabel Log & Mutasi Stok --- */
+/* ============================================================ */
+
+@media (max-width: 768px) {
+
+    /* ── Sembunyikan header tabel ── */
+    .table-log thead,
+    .table-mutasi thead {
+        display: none;
+    }
+
+    /* ── Setiap baris jadi card ── */
+    .table-log tbody tr,
+    .table-mutasi tbody tr {
+        display: block;
+        margin-bottom: 1rem;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 1rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+    }
+
+    /* ── Setiap kolom jadi baris dalam card ── */
+    .table-log tbody td,
+    .table-mutasi tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: right !important;
+        padding: 0.65rem 1rem;
+        border-bottom: 1px solid #f3f4f6;
+        font-size: 0.8125rem;
+        white-space: normal;
+    }
+
+    /* ── Label dari data-label di sebelah kiri ── */
+    .table-log tbody td::before,
+    .table-mutasi tbody td::before {
+        content: attr(data-label);
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 0.625rem;
+        letter-spacing: 0.05em;
+        color: #9ca3af;
+        flex-shrink: 0;
+        margin-right: 0.75rem;
+        text-align: left;
+    }
+
+    /* ── Baris terakhir tanpa garis bawah ── */
+    .table-log tbody td:last-child,
+    .table-mutasi tbody td:last-child {
+        border-bottom: none;
+    }
+
+    /* ── Baris pertama (Waktu) rata kiri penuh, tanpa label ── */
+    .table-log tbody td:first-child,
+    .table-mutasi tbody td:first-child {
+        text-align: left !important;
+        background: #fafafa;
+        padding: 0.85rem 1rem;
+        border-bottom: 1px solid #f3f4f6;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .table-log tbody td:first-child::before,
+    .table-mutasi tbody td:first-child::before {
+        content: '';
+        display: none;
+    }
+
+    /* ── Aksi di Log: tombol rata kanan ── */
+    .table-log tbody td:last-child {
+        justify-content: flex-end;
+    }
+
+    /* ── Mutasi: qty dan tipe tampil lebih besar ── */
+    .table-mutasi tbody td[data-label="Qty"],
+    .table-mutasi tbody td[data-label="Tipe"] {
+        font-size: 0.875rem;
+    }
+
+    /* ── Catatan di mutasi: wrap text ── */
+    .table-mutasi tbody td[data-label="Catatan"] {
+        max-width: 100%;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        flex-direction: column;
+        align-items: flex-start;
+        font-style: italic;
+        color: #6b7280;
+        font-size: 0.75rem;
+    }
+    .table-mutasi tbody td[data-label="Catatan"]::before {
+        margin-bottom: 0.25rem;
+    }
+}

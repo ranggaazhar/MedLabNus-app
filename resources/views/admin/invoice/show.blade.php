@@ -23,22 +23,24 @@
                     <p class="text-gray-400 text-xs mt-1 uppercase tracking-widest font-bold">Dibuat pada
                         {{ $invoice->created_at->format('d M Y, H:i') }}</p>
                 </div>
-                <div class="flex items-center gap-3">
-                    @if ($invoice->status_pembayaran == 'lunas')
-                        <span
-                            class="px-4 py-1.5 rounded-lg text-xs font-black uppercase bg-emerald-50 text-emerald-700 border border-emerald-100">Lunas</span>
-                    @elseif($invoice->status_pembayaran == 'batal')
-                        <span
-                            class="px-4 py-1.5 rounded-lg text-xs font-black uppercase bg-rose-50 text-rose-700 border border-rose-100">Batal</span>
-                    @else
-                        <span
-                            class="px-4 py-1.5 rounded-lg text-xs font-black uppercase bg-amber-50 text-amber-700 border border-amber-100">Pending</span>
-                    @endif
+                <div class="flex flex-col items-end gap-3">
+                    <div class="flex items-center gap-3">
+                        @if ($invoice->status_pembayaran == 'lunas')
+                            <span
+                                class="px-4 py-1.5 rounded-lg text-xs font-black uppercase bg-emerald-50 text-emerald-700 border border-emerald-100">Lunas</span>
+                        @elseif($invoice->status_pembayaran == 'batal')
+                            <span
+                                class="px-4 py-1.5 rounded-lg text-xs font-black uppercase bg-rose-50 text-rose-700 border border-rose-100">Batal</span>
+                        @else
+                            <span
+                                class="px-4 py-1.5 rounded-lg text-xs font-black uppercase bg-amber-50 text-amber-700 border border-amber-100">Pending</span>
+                        @endif
 
-                    <a href="{{ route('admin.invoice.download-pdf', $invoice->id) }}"
-                        class="px-4 py-2 bg-red-700 text-white rounded-lg text-xs font-bold hover:bg-red-800 transition">
-                        <i class="fas fa-file-pdf mr-2"></i> Download PDF
-                    </a>
+                        <a href="{{ route('admin.invoice.download-pdf', $invoice->id) }}"
+                            class="px-4 py-2 bg-red-700 text-white rounded-lg text-xs font-bold hover:bg-red-800 transition">
+                            <i class="fas fa-file-pdf mr-2"></i> Download PDF
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -95,8 +97,31 @@
                     </table>
                 </div>
 
-                {{-- RINGKASAN HARGA --}}
-                <div class="flex justify-end mt-8">
+                {{-- BOTTOM AREA: UPDATE STATUS & RINGKASAN HARGA --}}
+                <div class="flex flex-col md:flex-row justify-between items-end mt-8 border-t border-gray-50 pt-8">
+                    
+                    {{-- KIRI: UPDATE STATUS --}}
+                    <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                        @if ($invoice->status_pembayaran == 'pending')
+                            <form action="{{ route('admin.invoice.update-status', $invoice->id) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <label class="text-[10px] font-black text-gray-400 uppercase block mb-2 ml-1">Perbarui Status Pembayaran</label>
+                                <div class="flex gap-2">
+                                    <select name="status_pembayaran" class="flex-1 px-3 py-2 bg-gray-50 border-none rounded-lg focus:ring-2 focus:ring-red-500 text-xs font-bold text-gray-700 transition-all">
+                                        <option value="pending" {{ $invoice->status_pembayaran == 'pending' ? 'selected' : '' }}>Pending</option>
+                                        <option value="lunas" {{ $invoice->status_pembayaran == 'lunas' ? 'selected' : '' }}>Lunas</option>
+                                        <option value="batal" {{ $invoice->status_pembayaran == 'batal' ? 'selected' : '' }}>Batal</option>
+                                    </select>
+                                    <button type="submit" class="bg-gray-800 text-white font-bold px-4 py-2 rounded-lg hover:bg-gray-900 transition text-xs shadow-md">
+                                        Simpan
+                                    </button>
+                                </div>
+                            </form>
+                        @endif
+                    </div>
+
+                    {{-- KANAN: RINGKASAN HARGA --}}
                     <div class="w-full md:w-64 space-y-3">
                         <div class="flex justify-between text-sm">
                             <span class="text-gray-400">Subtotal</span>

@@ -22,7 +22,7 @@ Route::get('/products/{produk_id}', [ProdukController::class, 'publicShow'])->na
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth:admin', 'verified'])
-    ->name('dashboard');
+    ->name('admin.dashboard');
 
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -54,7 +54,7 @@ Route::middleware('auth:admin')->group(function () {
 
     // ========== PRODUK ROUTES ==========
     // Map produk index to dashboard controller so dashboard displays product list
-    Route::get('/produk', [DashboardController::class, 'index'])->name('produk.index');
+    Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
     Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.create');
     Route::post('/produk', [ProdukController::class, 'store'])->name('produk.store');
     Route::get('/produk/{produk}', [ProdukController::class, 'show'])->name('produk.show');
@@ -103,6 +103,9 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('invoices/{id}/download-pdf', [AdminInvoiceController::class, 'generatePdf'])->name('admin.invoice.download-pdf');
     // Letakkan route ini di dalam group middleware admin kamu, di atas route {id}
     Route::patch('invoices/{id}/cancel', [AdminInvoiceController::class, 'cancel'])->name('admin.invoice.cancel');
+
+    Route::get('/staff', [App\Http\Controllers\Admin\StaffController::class, 'index'])->name('staff.index');
+    Route::post('/staff', [App\Http\Controllers\Admin\StaffController::class, 'store'])->name('staff.store');
 });
 
 require __DIR__ . '/auth.php';

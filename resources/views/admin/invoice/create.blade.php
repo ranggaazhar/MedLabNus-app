@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Terbitkan Invoice Baru')
+@section('title', 'Tambah Invoice')
 
 @section('content')
 
@@ -34,14 +34,11 @@
                     <div class="relative">
                         <select x-model="penawaran_id" @change="pilihPenawaran()"
                             class="w-full px-4 py-3 rounded-xl text-sm bg-white border border-gray-300 focus:ring-2 focus:ring-red-600 focus:border-red-600 focus:outline-none transition-all appearance-none font-medium text-gray-800 shadow-sm">
-                            <option value="">-- Silahkan Pilih Surat Penawaran --</option>
+                            <option value="">-- Pilih Surat Penawaran --</option>
                             <template x-for="p in daftarPenawaran" :key="p.id">
                                 <option :value="p.id" x-text="(p.kode_penawaran || 'PNW') + ' - ' + p.nama_pelanggan"></option>
                             </template>
                         </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
-                            <i class="fas fa-chevron-down text-xs"></i>
-                        </div>
                     </div>
                 </div>
 
@@ -64,7 +61,7 @@
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-500 mb-1.5">Nama Instansi / Pelanggan</label>
+                                <label class="block text-xs font-semibold text-gray-500 mb-1.5">Nama Pelanggan</label>
                                 <input type="text" x-model="nama_pelanggan" :disabled="!isEditing"
                                     :class="!isEditing ? 'bg-gray-50 text-gray-500 border-gray-200 cursor-not-allowed shadow-inner' : 'bg-white border-gray-300 focus:ring-2 focus:ring-red-600 focus:border-red-600'"
                                     class="w-full px-4 py-2.5 rounded-xl text-sm focus:outline-none transition-all shadow-sm">
@@ -83,8 +80,8 @@
                                     <select x-model="status_pembayaran" :disabled="!isEditing"
                                         :class="!isEditing ? 'bg-gray-50 text-gray-500 border-gray-200 cursor-not-allowed shadow-inner' : 'bg-white border-gray-300 focus:ring-2 focus:ring-red-600 focus:border-red-600'"
                                         class="w-full px-4 py-2.5 rounded-xl text-sm appearance-none focus:outline-none transition-all shadow-sm font-bold">
-                                        <option value="pending">Pending (Menunggu Pembayaran)</option>
-                                        <option value="lunas">Lunas (Sudah Dibayar)</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="lunas">Lunas</option>
                                         <option value="batal">Batal</option>
                                     </select>
                                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4" :class="isEditing ? 'text-gray-500' : 'text-transparent'">

@@ -82,15 +82,15 @@
                 <label class="text-[10px] font-black text-gray-400 uppercase block mb-2">Status Saat Ini</label>
                 @if($penawaran->status == 'pending')
                     <span class="inline-block px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider bg-amber-50 text-amber-600 border border-amber-100">
-                        🔒 Pending (Menunggu Negosiasi)
+                        Pending 
                     </span>
                 @elseif($penawaran->status == 'disetujui')
                     <span class="inline-block px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider bg-emerald-50 text-emerald-600 border border-emerald-100">
-                        ✅ Disetujui (Deal Hasil WA)
+                        Disetujui 
                     </span>
                 @else
                     <span class="inline-block px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider bg-red-50 text-red-600 border border-red-100">
-                        ❌ Dibatalkan / Kedaluwarsa
+                        Dibatalkan 
                     </span>
                 @endif
             </div>
@@ -103,9 +103,8 @@
             <label class="text-[10px] font-black text-gray-400 uppercase block mb-2 ml-1">Perbarui Status Log</label>
             <div class="flex gap-2">
                 <select name="status" class="flex-1 px-3 py-2 bg-gray-50 border-none rounded-lg focus:ring-2 focus:ring-red-500 text-xs font-bold text-gray-700 transition-all">
-                    <option value="pending" {{ $penawaran->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="disetujui" {{ $penawaran->status == 'disetujui' ? 'selected' : '' }}>Disetujui (+)</option>
-                    <option value="dibatalkan" {{ $penawaran->status == 'dibatalkan' ? 'selected' : '' }}>Dibatalkan (-)</option>
+                    <option value="disetujui" {{ $penawaran->status == 'disetujui' ? 'selected' : '' }}>Disetujui</option>
+                    <option value="dibatalkan" {{ $penawaran->status == 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
                 </select>
                 <button type="submit" class="bg-gray-800 text-white font-bold px-4 py-2 rounded-lg hover:bg-gray-900 transition text-xs shadow-md">
                     Simpan

@@ -21,26 +21,35 @@
 
             <div class="space-y-1 flex flex-col w-full" x-data="{ openLog: {{ request()->is('admin/log*') ? 'true' : 'false' }} }">
                 @php
+                    // Ambil data user yang login dari guard admin
+                    $authAdmin = Auth::guard('admin')->user();
+
                     $isProductActive = request()->routeIs('produk.*');
                     $isPabrikanActive = request()->routeIs('pabrikan.*');
-                    
+
                     // 🌟 DAFTARKAN LOGIKA AKTIF
-                    $isPenawaranActive = request()->routeIs('admin.penawaran.*'); 
-                    $isInvoiceActive = request()->routeIs('admin.invoice.*'); 
-                    
+                    $isPenawaranActive = request()->routeIs('admin.penawaran.*');
+                    $isInvoiceActive = request()->routeIs('admin.invoice.*');
+
                     $isAuditActive = request()->routeIs('log.index'); // Spatie Audit
                     $isMutasiActive = request()->routeIs('stok-mutasi.*'); // Stok Mutasi
                     $isLogGroupActive = $isAuditActive || $isMutasiActive;
 
-                    $isDashboardStrict = request()->routeIs('dashboard');
-                    
+                    $isDashboardStrict = request()->routeIs('admin.dashboard');
+
                     // 🌟 COCOKAN NEGASI agar Dashboard tidak ikut menyala saat menu lain diakses
                     $isActiveDashboard =
-                        $isDashboardStrict || (!$isProductActive && !$isPabrikanActive && !$isPenawaranActive && !$isInvoiceActive && !$isLogGroupActive);
+                        $isDashboardStrict ||
+                        (!$isProductActive &&
+                            !$isPabrikanActive &&
+                            !$isPenawaranActive &&
+                            !$isInvoiceActive &&
+                            !$isLogGroupActive &&
+                            !request()->routeIs('admin.staff.*'));
                 @endphp
 
-                {{-- 1. Link Dashboard --}}
-                <a href="{{ route('dashboard') }}"
+                {{-- 1. Link Dashboard (Admin & Gudang Bisa Lihat) --}}
+                <a href="{{ route('admin.dashboard') }}"
                     class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
                     {{ $isActiveDashboard ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
                     <img src="{{ asset('icons/dashboard.svg') }}"
@@ -48,7 +57,17 @@
                     <span>Dashboard</span>
                 </a>
 
-                {{-- 2. Link Pabrikan --}}
+                {{-- 1.5. Link Produk (Admin & Gudang Bisa Lihat) --}}
+                <a href="{{ route('produk.index') }}"
+                    class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
+                    {{ $isProductActive ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
+                    <div class="w-6 h-6 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-boxes text-lg {{ $isProductActive ? 'text-red-700' : 'text-gray-400' }}"></i>
+                    </div>
+                    <span>Produk</span>
+                </a>
+
+                {{-- 2. Link Pabrikan (Admin & Gudang Bisa Lihat) --}}
                 <a href="{{ route('pabrikan.index') }}"
                     class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
                     {{ $isPabrikanActive ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
@@ -57,71 +76,82 @@
                     <span>Pabrikan</span>
                 </a>
 
-                {{-- 3. LINK PENAWARAN --}}
-                <a href="{{ route('admin.penawaran.index') }}"
-                    class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
-                    {{ $isPenawaranActive ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
-                    <div class="w-6 h-6 flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-file-invoice text-lg {{ $isPenawaranActive ? 'text-red-700' : 'text-gray-400' }}"></i>
-                    </div>
-                    <span>Penawaran</span>
-                </a>
-
-                {{-- 4. LINK INVOICE --}}
-                <a href="{{ route('admin.invoice.index') }}"
-                    class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
-                    {{ $isInvoiceActive ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
-                    <div class="w-6 h-6 flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-file-invoice-dollar text-lg {{ $isInvoiceActive ? 'text-red-700' : 'text-gray-400' }}"></i>
-                    </div>
-                    <span>Invoice</span>
-                </a>
-
-                {{-- 5. Group Log Aktivitas (Dropdown) --}}
-                <div class="w-full">
-                    <button @click="openLog = !openLog"
-                        class="!flex items-center justify-between p-3 rounded-lg text-sm font-medium transition-colors w-full
-                        {{ $isLogGroupActive ? 'bg-gray-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
-
-                        <div class="flex items-center gap-3">
-                            <div class="w-6 h-6 flex items-center justify-center flex-shrink-0">
-                                <i
-                                    class="fas fa-history text-lg {{ $isLogGroupActive ? 'text-red-600' : 'text-gray-400' }}"></i>
-                            </div>
-                            <span>Log Aktivitas</span>
+                {{-- ==================== KHUSUS ROLE ADMIN (FINANSIAL & OPERATIONS) ==================== --}}
+                @if ($authAdmin->role === 'admin')
+                    
+                    {{-- 3. LINK PENAWARAN --}}
+                    <a href="{{ route('admin.penawaran.index') }}"
+                        class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
+                        {{ $isPenawaranActive ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
+                        <div class="w-6 h-6 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-file-invoice text-lg {{ $isPenawaranActive ? 'text-red-700' : 'text-gray-400' }}"></i>
                         </div>
+                        <span>Penawaran</span>
+                    </a>
 
-                        {{-- Icon Panah --}}
-                        <i class="fas fa-chevron-down text-xs transition-transform duration-200"
-                            :class="openLog ? 'rotate-180' : ''"></i>
-                    </button>
+                    {{-- 4. LINK INVOICE --}}
+                    <a href="{{ route('admin.invoice.index') }}"
+                        class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
+                        {{ $isInvoiceActive ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
+                        <div class="w-6 h-6 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-file-invoice-dollar text-lg {{ $isInvoiceActive ? 'text-red-700' : 'text-gray-400' }}"></i>
+                        </div>
+                        <span>Invoice</span>
+                    </a>
 
-                    {{-- Anakan Menu --}}
-                    <div x-show="openLog" x-cloak class="mt-1 ml-4 space-y-1 border-l-2 border-gray-100 pl-4">
+                    {{-- Link Manajemen Gudang --}}
+                    <a href="{{ route('staff.index') }}"
+                        class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
+                        {{ request()->routeIs('admin.staff.*') ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
+                        <div class="w-6 h-6 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-user-shield text-lg {{ request()->routeIs('admin.staff.*') ? 'text-red-700' : 'text-gray-400' }}"></i>
+                        </div>
+                        <span>Manajemen Gudang</span>
+                    </a>
 
-                        {{-- Anak 1: Audit Trail --}}
-                        <a href="{{ route('log.index') }}"
-                            class="flex items-center gap-3 p-2 text-sm rounded-lg transition-all 
-        {{ $isAuditActive ? 'text-red-700 bg-red-50 font-bold' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50' }}">
-                            <div class="w-5 h-5 flex items-center justify-center">
-                                <i class="fas fa-clipboard-check text-base"></i>
+                    {{-- 5. Group Log Aktivitas (Dropdown) --}}
+                    <div class="w-full">
+                        <button @click="openLog = !openLog"
+                            class="!flex items-center justify-between p-3 rounded-lg text-sm font-medium transition-colors w-full
+                            {{ $isLogGroupActive ? 'bg-gray-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
+
+                            <div class="flex items-center gap-3">
+                                <div class="w-6 h-6 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-history text-lg {{ $isLogGroupActive ? 'text-red-600' : 'text-gray-400' }}"></i>
+                                </div>
+                                <span>Log Aktivitas</span>
                             </div>
-                            <span>Riwayat Aktifitas</span>
-                        </a>
 
-                        {{-- Anak 2: Stok Mutasi --}}
-                        <a href="{{ route('stok-mutasi.index') }}"
-                            class="flex items-center gap-3 p-2 text-sm rounded-lg transition-all 
-        {{ $isMutasiActive ? 'text-red-700 bg-red-50 font-bold' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50' }}">
-                            <div class="w-5 h-5 flex items-center justify-center">
-                                <i class="fas fa-boxes-stacked text-base"></i>
-                            </div>
-                            <span>Stok Mutasi</span>
-                        </a>
+                            {{-- Icon Panah --}}
+                            <i class="fas fa-chevron-down text-xs transition-transform duration-200"
+                                :class="openLog ? 'rotate-180' : ''"></i>
+                        </button>
 
+                        {{-- Anakan Menu --}}
+                        <div x-show="openLog" x-cloak class="mt-1 ml-4 space-y-1 border-l-2 border-gray-100 pl-4">
+
+                            {{-- Anak 1: Audit Trail --}}
+                            <a href="{{ route('log.index') }}"
+                                class="flex items-center gap-3 p-2 text-sm rounded-lg transition-all 
+                                {{ $isAuditActive ? 'text-red-700 bg-red-50 font-bold' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50' }}">
+                                <div class="w-5 h-5 flex items-center justify-center">
+                                    <i class="fas fa-clipboard-check text-base"></i>
+                                </div>
+                                <span>Riwayat Aktifitas</span>
+                            </a>
+
+                            {{-- Anak 2: Stok Mutasi --}}
+                            <a href="{{ route('stok-mutasi.index') }}"
+                                class="flex items-center gap-3 p-2 text-sm rounded-lg transition-all 
+                                {{ $isMutasiActive ? 'text-red-700 bg-red-50 font-bold' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50' }}">
+                                <div class="w-5 h-5 flex items-center justify-center">
+                                    <i class="fas fa-boxes-stacked text-base"></i>
+                                </div>
+                                <span>Stok Mutasi</span>
+                            </a>
+                        </div>
                     </div>
-                </div>
-
+                @endif
             </div>
         </div>
     </div>
