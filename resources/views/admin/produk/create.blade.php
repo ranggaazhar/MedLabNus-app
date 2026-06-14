@@ -32,7 +32,7 @@
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
             <div class="mb-4 md:mb-0">
                 <p class="text-sm text-gray-500">
-                    <a href="{{ route('dashboard') }}" class="hover:text-red-700 transition duration-150">Dashboard</a>
+                    <a href="{{ route('produk.index') }}" class="hover:text-red-700 transition duration-150">Produk</a>
                     / Add Product
                 </p>
                 <h1 class="text-3xl font-extrabold text-gray-800 mt-1">Tambah Product</h1>

@@ -77,24 +77,25 @@ class AdminInvoiceController extends Controller
     /**
      * Simpan invoice baru beserta kalkulasi nominal otomatis & Audit Trail
      */
-    public function store(Request $request)
+    public function store(\App\Http\Requests\StoreInvoiceRequest $request)
     {
         Log::info('=== INVOICE STORE GENERATION: DATA MASUK ===', $request->all());
 
-        $request->validate([
-            'penawaran_id'         => 'required|integer|exists:penawarans,id',
-            'nama_pelanggan'       => 'required|string|max:255',
-            'whatsapp_pelanggan'   => 'required|string|max:20',
-            'status_pembayaran'    => 'required|in:pending,lunas,batal', // ← FIX 1
-            'items'                => 'required|array|min:1',
-            'items.*.nama'         => 'required|string|max:255',
-            'items.*.jumlah'       => 'required|integer|min:1',
-            'items.*.harga_satuan' => 'required|numeric|min:0',
-        ]);
+        // Validasi sudah ditangani oleh StoreInvoiceRequest
+        $validated = $request->validated();
 
         DB::beginTransaction();
 
         try {
+            // Hitung subtotal, pajak, & total_harga dari request items sebelum simpan invoice
+            $subtotal = 0;
+            foreach ($request->items as $item) {
+                $totalItemHarga = $item['jumlah'] * $item['harga_satuan'];
+                $subtotal += $totalItemHarga;
+            }
+            $pajakPpn   = $subtotal * 0.11;
+            $totalHarga = $subtotal + $pajakPpn;
+
             $invoice = new Invoice();
             $invoice->penawaran_id      = $request->penawaran_id;
             $invoice->nama_pelanggan    = $request->nama_pelanggan;
@@ -120,13 +121,16 @@ class AdminInvoiceController extends Controller
 
             $pdfName         = 'Invoice_' . str_replace('/', '_', $kodeInvoice) . '.pdf';
             $invoice->file_pdf = $pdfName;
+
+            // Set data nominal sebelum save agar langsung ter-log di activity log
+            $invoice->subtotal    = $subtotal;
+            $invoice->pajak_ppn   = $pajakPpn;
+            $invoice->total_harga = $totalHarga;
             $invoice->save();
 
-            // Simpan items & hitung subtotal
-            $subtotal = 0;
+            // Simpan items
             foreach ($request->items as $item) {
                 $totalItemHarga = $item['jumlah'] * $item['harga_satuan'];
-                $subtotal += $totalItemHarga;
 
                 InvoiceItem::create([
                     'invoice_id'       => $invoice->id,
@@ -137,14 +141,6 @@ class AdminInvoiceController extends Controller
                     'total_item_harga' => $totalItemHarga,
                 ]);
             }
-
-            $pajakPpn   = $subtotal * 0.11;
-            $totalHarga = $subtotal + $pajakPpn;
-            $invoice->update([
-                'subtotal'    => $subtotal,
-                'pajak_ppn'   => $pajakPpn,
-                'total_harga' => $totalHarga,
-            ]);
 
             // ← FIX 3: Kurangi stok jika langsung lunas saat pembuatan invoice
             if ($request->status_pembayaran === 'lunas') {
@@ -199,23 +195,15 @@ class AdminInvoiceController extends Controller
                 }
             }
 
-            // Generate PDF — status sudah benar di sini karena diambil dari $request
-            $invoice = Invoice::with(['invoiceItems.produk', 'adminCreator'])->find($invoice->id);
-            $pdf     = Pdf::loadView('pdf.invoice', compact('invoice'));
-            $pdf->setPaper('a4', 'portrait');
-
-            $pdfPath = 'uploads/pdf_invoice/' . $pdfName;
-            if (!file_exists(public_path('uploads/pdf_invoice'))) {
-                mkdir(public_path('uploads/pdf_invoice'), 0777, true);
-            }
-            $pdf->save(public_path($pdfPath));
-
+            // Hapus kode yang menyimpan PDF secara fisik ke folder uploads
+            // File akan digenerate on-the-fly ketika route admin.invoice.download-pdf diakses
+            
             DB::commit();
 
             return response()->json([
                 'success'       => true,
-                'message'       => "Invoice {$kodeInvoice} berhasil diterbitkan & diarsip!",
-                'pdf_url'       => asset($pdfPath),
+                'message'       => "Invoice {$kodeInvoice} berhasil diterbitkan!",
+                'pdf_url'       => route('admin.invoice.download-pdf', $invoice->id),
                 'kode_invoice'  => $invoice->kode_invoice,
             ]);
         } catch (\Exception $e) {

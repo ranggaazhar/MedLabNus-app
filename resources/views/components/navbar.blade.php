@@ -19,6 +19,18 @@
         </h1>
     </div>
 
+@php
+    $currentUser = Auth::guard('admin')->user() ?? auth()->user();
+    $roleName = 'User';
+    if ($currentUser) {
+        if (isset($currentUser->role)) {
+            $roleName = $currentUser->role === 'gudang' ? 'Gudang' : ($currentUser->role === 'admin' ? 'Admin' : ucfirst($currentUser->role));
+        } else {
+            $roleName = 'Pelanggan';
+        }
+    }
+@endphp
+
    {{-- Bagian Kanan: User Profile (Trigger Dropdown) --}}
 <div class="relative flex items-center gap-4">
     
@@ -34,8 +46,8 @@
         <div class="relative">
             <div class="w-9 h-9 rounded-full overflow-hidden ring-2 ring-white shadow-sm">
                 <img 
-                    src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'U') }}&background=0f172a&color=fff&size=128" 
-                    alt="{{ auth()->user()->name ?? 'Pengguna' }}" 
+                    src="https://ui-avatars.com/api/?name={{ urlencode($currentUser->name ?? 'U') }}&background=0f172a&color=fff&size=128" 
+                    alt="{{ $currentUser->name ?? 'Pengguna' }}" 
                     class="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-110">
             </div>
             {{-- Status Indicator (Opsional: Titik hijau menandakan online) --}}
@@ -46,11 +58,11 @@
         <div class="hidden md:flex flex-col items-start text-left">
             {{-- Nama User --}}
             <span class="text-sm font-bold text-gray-700 group-hover:text-gray-900 transition-colors">
-                {{ auth()->user()->name ?? 'Pengguna' }}
+                {{ $currentUser->name ?? 'Pengguna' }}
             </span>
-            {{-- Role/Subtitle Kecil (Opsional, jika tidak ada bisa dihapus) --}}
+            {{-- Role/Subtitle Kecil --}}
             <span class="text-[10px] uppercase tracking-wider text-gray-400 font-medium -mt-0.5">
-                Admin
+                {{ $roleName }}
             </span>
         </div>
 

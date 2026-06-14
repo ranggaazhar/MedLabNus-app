@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Medlab Nusantara') }}</title>
+    <title>{{ config('Medlab Nusantara') }}</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo2.png') }}">
     <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo2.png') }}">
 
@@ -34,7 +34,7 @@
     </style>
 </head>
 
-<body class="font-sans text-gray-900 antialiased bg-white h-full selection:bg-green-100 selection:text-green-900">
+<body class="font-sans text-gray-900 antialiased bg-white h-full selection:bg-red-100 selection:text-red-900">
 
     {{-- CONTAINER UTAMA --}}
     <div class="relative flex w-full min-h-screen overflow-x-hidden">
@@ -47,7 +47,7 @@
         --}}
         <div class="w-full lg:w-[50%] flex flex-col justify-center px-6 sm:px-12 lg:px-20 py-10 bg-white z-10 relative">
             {{-- mx-auto membuat form tetap di tengah saat layar kecil --}}
-            <div class="w-full max-w-md mx-auto lg:mr-auto lg:ml-0">
+            <div class="w-full max-w-md mx-auto lg:mr-auto lg:ml-0 animate-fade-in-up">
                 {{ $slot }}
             </div>
         </div>
@@ -58,8 +58,9 @@
         --}}
         <div class="hidden lg:block absolute top-0 right-0 w-[55%] h-full z-20 shadow-2xl rounded-l-[50px] overflow-hidden">
             <img src="{{ asset('images/login.png') }}" alt="Medlab Nusantara"
-                class="w-full h-full object-cover object-center">
-            <div class="absolute inset-0 bg-black/5"></div>
+                class="w-full h-full object-cover object-center scale-105 hover:scale-100 transition-transform duration-1000 ease-out">
+            <div class="absolute inset-0 bg-red-900/20 mix-blend-multiply"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
         </div>
 
     </div>

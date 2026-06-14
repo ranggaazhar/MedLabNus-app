@@ -94,7 +94,7 @@
 
         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
             <div class="mb-4">
-                <h2 class="text-sm font-bold text-gray-800">Top 5 Produk Terlaris</h2>
+                <h2 class="text-sm font-bold text-gray-800">Top Produk Terlaris</h2>
                 <p class="text-[10px] text-gray-400 mt-0.5">Berdasarkan invoice berstatus lunas</p>
             </div>
             <div class="space-y-3.5">

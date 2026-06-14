@@ -120,11 +120,7 @@ class AdminPenawaranController extends Controller
     {
         $penawaran = Penawaran::findOrFail($id);
 
-        // Hapus file fisik PDF di folder public terlebih dahulu agar tidak memenuhi storage server
-        $pdfPath = public_path('uploads/pdf_penawaran/' . $penawaran->file_pdf);
-        if ($penawaran->file_pdf && file_exists($pdfPath)) {
-            unlink($pdfPath);
-        }
+        // File PDF fisik tidak perlu dihapus karena PDF digenerate on-the-fly
 
         // Karena di database menggunakan foreign key, pastikan relasi itemnya ikut terhapus
         // (Akan otomatis terhapus jika di migration kamu pakai ->onDelete('cascade'))

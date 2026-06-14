@@ -35,10 +35,10 @@
             <div class="mb-4 md:mb-0">
                 {{-- Breadcrumb --}}
                 <p class="text-sm text-gray-500">
-                    <a href="{{ route('dashboard') }}" class="hover:text-red-700 transition duration-150">
-                        Dashboard
+                    <a href="{{ route('pabrikan.index') }}" class="hover:text-red-700 transition duration-150">
+                        Pabrikan
                     </a>
-                    / Add Pabrikan
+                    / Tambah Pabrikan
                 </p>
 
                 {{-- Title & Subtitle --}}

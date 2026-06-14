@@ -176,13 +176,8 @@
 
         {{-- PAGINATION SECTION --}}
         @if ($invoices->hasPages())
-            <div class="flex flex-col md:flex-row justify-between items-center p-4 border-t border-gray-50 bg-gray-50/30">
-                <div class="text-gray-400 text-xs font-medium mb-3 md:mb-0">
-                    Showing <span class="font-bold text-gray-600">{{ $invoices->firstItem() }}</span> - <span class="font-bold text-gray-600">{{ $invoices->lastItem() }}</span> of <span class="font-bold text-gray-600">{{ $invoices->total() }}</span> invoices
-                </div>
-                <div class="flex items-center gap-1">
-                    {{ $invoices->appends(request()->query())->links('pagination::tailwind') }}
-                </div>
+            <div class="px-6 py-2 border-t border-gray-50 bg-gray-50/30">
+                {{ $invoices->appends(request()->query())->links('partials.pagination') }}
             </div>
         @endif
     </div>

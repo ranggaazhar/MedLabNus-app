@@ -16,7 +16,7 @@
     {{-- TOP ACTION ACTION --}}
     <div class="flex items-center gap-3">
         @if($penawaran->file_pdf)
-            <a href="{{ asset('uploads/pdf_penawaran/' . $penawaran->file_pdf) }}" target="_blank" 
+            <a href="{{ route('penawaran.download-pdf', $penawaran->id) }}" target="_blank" 
                class="bg-red-600 text-white font-bold px-4 py-2.5 rounded-lg hover:bg-red-700 transition shadow-lg shadow-red-100 text-sm flex items-center gap-2">
                 <i class="fas fa-file-pdf"></i> Cetak / Unduh PDF Resmi
             </a>

@@ -50,9 +50,11 @@
         </div>
 
         {{-- Pagination Links --}}
-        <div class="mt-8">
-            {{ $pabrikans->links() }}
-        </div>
+        @if ($pabrikans->hasPages())
+            <div class="mt-8 bg-gray-50/30 border border-gray-100 rounded-2xl p-4">
+                {{ $pabrikans->links('partials.pagination') }}
+            </div>
+        @endif
     </div>
 
     {{-- Modal Edit Pabrikan (Tetap di sini, karena ini adalah view utama yang akan memicu modal) --}}

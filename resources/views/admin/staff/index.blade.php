@@ -58,8 +58,8 @@
             </table>
         </div>
         @if($stafGudang->hasPages())
-            <div class="p-4 border-t border-gray-50">
-                {{ $stafGudang->links() }}
+            <div class="px-6 py-2 border-t border-gray-50 bg-gray-50/30">
+                {{ $stafGudang->links('partials.pagination') }}
             </div>
         @endif
     </div>

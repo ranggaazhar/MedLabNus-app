@@ -16,8 +16,11 @@ class AuthenticatedSessionController extends Controller
         return view('auth.login');
     }
 
-   public function store(Request $request): RedirectResponse
+    public function store(LoginRequest $request): RedirectResponse
     {
+        // Aktifkan proteksi rate limiting dari LoginRequest (maks 5 percobaan gagal)
+        $request->ensureIsNotRateLimited();
+
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
@@ -25,8 +28,9 @@ class AuthenticatedSessionController extends Controller
 
         // 1. Coba Login sebagai Staff Internal (Admin / Gudang berada di tabel & guard yang sama)
         if (Auth::guard('admin')->attempt($credentials, $request->boolean('remember'))) {
+            \Illuminate\Support\Facades\RateLimiter::clear($request->throttleKey());
             $request->session()->regenerate();
-            
+
             // Ambil data user internal yang baru saja login
             $user = Auth::guard('admin')->user();
 
@@ -40,9 +44,13 @@ class AuthenticatedSessionController extends Controller
 
         // 2. Coba Login sebagai User Biasa / Pelanggan (Guard Web)
         if (Auth::guard('web')->attempt($credentials, $request->boolean('remember'))) {
+            \Illuminate\Support\Facades\RateLimiter::clear($request->throttleKey());
             $request->session()->regenerate();
             return redirect()->route('welcome')->with('success', 'Login Berhasil!');
         }
+
+        // Semua guard gagal — catat sebagai percobaan gagal
+        \Illuminate\Support\Facades\RateLimiter::hit($request->throttleKey());
 
         return back()->withErrors([
             'email' => 'Kredensial yang diberikan tidak cocok dengan data kami.',

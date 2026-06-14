@@ -35,7 +35,8 @@
                     $isMutasiActive = request()->routeIs('stok-mutasi.*'); // Stok Mutasi
                     $isLogGroupActive = $isAuditActive || $isMutasiActive;
 
-                    $isDashboardStrict = request()->routeIs('admin.dashboard');
+                    $isDashboardStrict = request()->routeIs('admin.dashboard') || request()->routeIs('gudang.dashboard');
+                    $dashboardRoute = ($authAdmin && $authAdmin->role === 'admin') ? route('admin.dashboard') : route('gudang.dashboard');
 
                     // 🌟 COCOKAN NEGASI agar Dashboard tidak ikut menyala saat menu lain diakses
                     $isActiveDashboard =
@@ -49,7 +50,7 @@
                 @endphp
 
                 {{-- 1. Link Dashboard (Admin & Gudang Bisa Lihat) --}}
-                <a href="{{ route('admin.dashboard') }}"
+                <a href="{{ $dashboardRoute }}"
                     class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
                     {{ $isActiveDashboard ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
                     <img src="{{ asset('icons/dashboard.svg') }}"
@@ -75,6 +76,18 @@
                         class="w-6 h-6 object-contain flex-shrink-0 {{ $isPabrikanActive ? '' : 'opacity-50' }}">
                     <span>Pabrikan</span>
                 </a>
+
+                {{-- 3. Link Stok Mutasi (Hanya untuk Gudang, karena Admin mengakses melalui dropdown Log Aktivitas) --}}
+                @if ($authAdmin->role === 'gudang')
+                <a href="{{ route('stok-mutasi.index') }}"
+                    class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
+                    {{ $isMutasiActive ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
+                    <div class="w-6 h-6 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-exchange-alt text-lg {{ $isMutasiActive ? 'text-red-700' : 'text-gray-400' }}"></i>
+                    </div>
+                    <span>Mutasi Stok</span>
+                </a>
+                @endif
 
                 {{-- ==================== KHUSUS ROLE ADMIN (FINANSIAL & OPERATIONS) ==================== --}}
                 @if ($authAdmin->role === 'admin')

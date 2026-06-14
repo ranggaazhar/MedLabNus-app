@@ -49,9 +49,6 @@
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
     <div class="p-5 border-b border-gray-50 flex justify-between items-center bg-white">
         <h3 class="font-bold text-gray-800 uppercase text-xs tracking-widest">Detail Transaksi</h3>
-        <span class="text-[10px] font-bold text-red-600 bg-red-50 px-3 py-1 rounded-full italic">
-            Menampilkan {{ $mutasis->firstItem() ?? 0 }}-{{ $mutasis->lastItem() ?? 0 }} dari {{ $mutasis->total() }} data
-        </span>
     </div>
     <div class="overflow-x-auto">
         <table class="w-full text-left table-mutasi">
@@ -100,8 +97,8 @@
             </tbody>
         </table>
     </div>
-    <div class="p-6 bg-gray-50/50 border-t border-gray-100">
-        {{ $mutasis->links() }}
+    <div class="px-6 py-2 border-t border-gray-100 bg-gray-50/30">
+        {{ $mutasis->links('partials.pagination') }}
     </div>
 </div>
 
@@ -109,18 +106,18 @@
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-3">
         <div>
-            <h3 class="text-base sm:text-lg font-bold text-gray-800 italic">Inventory Trend Analysis</h3>
-            <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-0.5">Visualisasi Pergerakan Stok Medlab</p>
+            <h3 class="text-base sm:text-lg font-bold text-gray-800">Grafik Stok Mutasi</h3>
+            <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-0.5">Visualisasi Stok Medlab Nusantara</p>
         </div>
         <div class="flex items-center gap-3 bg-gray-50 px-3 py-1.5 rounded-xl border border-gray-100 self-start md:self-center">
             <div class="flex items-center gap-1.5">
                 <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm"></div>
-                <span class="text-[9px] font-black text-gray-500 uppercase">In</span>
+                <span class="text-[9px] font-black text-gray-500 uppercase">Masuk</span>
             </div>
             <div class="w-px h-3 bg-gray-200 mx-1"></div>
             <div class="flex items-center gap-1.5">
                 <div class="w-2.5 h-2.5 rounded-full bg-red-600 shadow-sm"></div>
-                <span class="text-[9px] font-black text-gray-500 uppercase">Out</span>
+                <span class="text-[9px] font-black text-gray-500 uppercase">Keluar</span>
             </div>
         </div>
     </div>

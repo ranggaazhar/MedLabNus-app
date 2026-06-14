@@ -18,15 +18,12 @@ class PenawaranController extends Controller
     /**
      * Menyimpan data permintaan penawaran baru dari Pelanggan
      */
-    public function store(Request $request)
+    public function store(\App\Http\Requests\StorePenawaranRequest $request)
     {
         Log::info('=== PENAWARAN STORE: DATA MASUK ===', $request->all());
 
-        $request->validate([
-            'nama_pelanggan' => 'required|string',
-            'whatsapp_pelanggan' => 'required|string',
-            'items' => 'required|array'
-        ]);
+        // Validasi sudah ditangani oleh StorePenawaranRequest
+        $validated = $request->validated();
 
         // 🌟 Mulai transaksi database
         DB::beginTransaction();
@@ -70,26 +67,16 @@ class PenawaranController extends Controller
                 $penawaranItem->save();
             }
 
-            // 3. Ambil data lengkap untuk dilempar ke view PDF
-            $penawaranData = Penawaran::with('items.produk')->find($penawaran->id);
-
-            // 4. Generate & Simpan Fisik File PDF ke Folder Public
-            $pdf = Pdf::loadView('pdf.surat_penawaran', compact('penawaranData'));
-            $pdfPath = 'uploads/pdf_penawaran/' . $pdfName;
-
-            if (!file_exists(public_path('uploads/pdf_penawaran'))) {
-                mkdir(public_path('uploads/pdf_penawaran'), 0777, true);
-            }
-
-            $pdf->save(public_path($pdfPath));
-
+            // Hapus kode yang menyimpan PDF secara fisik
+            // File akan digenerate on-the-fly ketika dibutuhkan
+            
             // Jika semua proses aman, Commit transaksi database
             DB::commit();
 
             return response()->json([
                 'success' => true,
                 'message' => 'Permintaan penawaran berhasil diproses!',
-                'pdf_url' => asset($pdfPath),
+                'pdf_url' => route('penawaran.download-pdf', $penawaran->id),
                 'kode_penawaran' => $penawaran->kode_penawaran
             ]);
         } catch (\Exception $e) {
@@ -108,6 +95,22 @@ class PenawaranController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Generate PDF on the fly tanpa menyimpannya secara fisik di server
+     */
+    public function generatePdf($id)
+    {
+        $penawaranData = Penawaran::with('items.produk')->findOrFail($id);
+        $pdf = Pdf::loadView('pdf.surat_penawaran', compact('penawaranData'));
+        
+        // Atur ukuran kertas
+        $pdf->setPaper('a4', 'portrait');
+
+        // Mengembalikan PDF secara langsung ke browser (stream)
+        return $pdf->stream($penawaranData->file_pdf ?? 'Surat_Penawaran.pdf');
+    }
+
 
     public function keranjang()
     {

@@ -8,7 +8,7 @@
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
         <div>
             <p class="text-sm text-gray-500 mb-1">
-                <a href="{{ route('dashboard') }}" class="hover:text-red-700 transition">Dashboard</a> /
+                <a href="{{ route('admin.dashboard') }}" class="hover:text-red-700 transition">Dashboard</a> /
                 <a href="{{ route('produk.index') }}" class="hover:text-red-700 transition">Produk</a> / Detail
             </p>
             <h1 class="text-3xl font-extrabold text-gray-800 mt-1">Detail Produk</h1>

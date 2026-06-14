@@ -119,7 +119,7 @@ class DashboardController extends Controller
         // Menarik 4 data log aktivitas terbaru beserta relasi user (causer)
         $aktivitasSistem = Activity::with('causer')
                                    ->latest()
-                                   ->take(4)
+                                   ->take(5)
                                    ->get();
 
         // Kirim semua data riil ke View Dashboard Utama Admin

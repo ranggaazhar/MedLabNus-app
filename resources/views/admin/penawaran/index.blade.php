@@ -126,7 +126,7 @@
                     {{-- File PDF --}}
                     <td class="px-6 py-4 text-center" data-label="File Dokumen">
                         @if($penawaran->file_pdf)
-                            <a href="{{ asset('uploads/pdf_penawaran/' . $penawaran->file_pdf) }}" target="_blank" 
+                            <a href="{{ route('penawaran.download-pdf', $penawaran->id) }}" target="_blank" 
                                class="inline-flex items-center gap-1 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 px-2.5 py-1.5 rounded-lg transition">
                                 <i class="fas fa-file-pdf"></i> Lihat PDF
                             </a>
@@ -164,8 +164,8 @@
     </div>
 
     @if($penawarans->hasPages())
-    <div class="p-5 border-t border-gray-50">
-        {{ $penawarans->withQueryString()->links() }}
+    <div class="px-6 py-2 border-t border-gray-50 bg-gray-50/30">
+        {{ $penawarans->withQueryString()->links('partials.pagination') }}
     </div>
     @endif
 </div>
