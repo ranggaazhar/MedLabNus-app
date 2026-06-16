@@ -260,16 +260,16 @@ class AdminInvoiceController extends Controller
                     $produk = $item->produk;
 
                     // Validasi stok mencukupi sebelum dikurangi
-                    if ($produk->stok < $item->jumlah) {
+                    if ($produk->stok_minimal < $item->jumlah) {
                         DB::rollBack();
                         return redirect()->back()->with(
                             'error',
-                            "Stok produk \"{$produk->nama}\" tidak mencukupi. " .
-                                "Stok tersedia: {$produk->stok}, dibutuhkan: {$item->jumlah}."
+                            "Stok produk \"{$produk->nama_produk}\" tidak mencukupi. " .
+                                "Stok tersedia: {$produk->stok_minimal}, dibutuhkan: {$item->jumlah}."
                         );
                     }
 
-                    $produk->stok -= $item->jumlah;
+                    $produk->stok_minimal -= $item->jumlah;
                     $produk->save();
 
                     // ... di dalam loop setelah $produk->save();

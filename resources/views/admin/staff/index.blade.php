@@ -33,6 +33,7 @@
                     <tr class="border-b border-gray-100 text-[10px] font-black text-gray-400 uppercase tracking-wider bg-gray-50/50">
                         <th class="py-3 px-6 font-semibold">Nama Staf</th>
                         <th class="py-3 px-6 font-semibold">Email Karyawan</th>
+                        <th class="py-3 px-6 font-semibold">No. Telp / WA</th>
                         <th class="py-3 px-6 font-semibold">Role Sistem</th>
                         <th class="py-3 px-6 font-semibold">Tanggal Dibuat</th>
                     </tr>
@@ -42,6 +43,9 @@
                         <tr class="hover:bg-gray-50/50 transition-colors">
                             <td class="py-3.5 px-6 font-bold text-gray-700">{{ $staf->name }}</td>
                             <td class="py-3.5 px-6 text-gray-500">{{ $staf->email }}</td>
+                            <td class="py-3.5 px-6 text-gray-600 font-medium">
+                                {{ $staf->no_telp ?? '-' }}
+                            </td>
                             <td class="py-3.5 px-6">
                                 <span class="bg-amber-50 text-amber-700 border border-amber-100 px-2 py-0.5 rounded-md font-bold uppercase tracking-wide text-[10px]">
                                     {{ $staf->role }}
@@ -51,7 +55,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="py-8 text-center text-gray-400 font-medium">Belum ada akun staf gudang yang terdaftar.</td>
+                            <td colspan="5" class="py-8 text-center text-gray-400 font-medium">Belum ada akun staf gudang yang terdaftar.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -87,6 +91,11 @@
                     <div>
                         <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Email Karyawan</label>
                         <input type="email" name="email" required class="w-full bg-gray-50/50 border border-gray-200 text-xs text-gray-700 px-3 py-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#b91c1c]">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">No Telepon</label>
+                        <input type="text" name="no_telp" required placeholder="Contoh: 08123456789" class="w-full bg-gray-50/50 border border-gray-200 text-xs text-gray-700 px-3 py-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-[#b91c1c]">
                     </div>
 
                     <div>

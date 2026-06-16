@@ -22,14 +22,15 @@ class StaffController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:admins',
             'password' => 'required|string|min:8',
+            'no_telp' => 'required|string|max:20|unique:admins',
         ]);
 
-        // Langsung insert dengan role 'gudang' tanpa mengambil dari request
         Admin::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'gudang',     
+            'role' => 'gudang',  
+            'no_telp' => $request->no_telp,
         ]);
 
         return redirect()->route('staff.index')->with('success', 'Akun Staf Gudang Baru Berhasil Dibuat!');

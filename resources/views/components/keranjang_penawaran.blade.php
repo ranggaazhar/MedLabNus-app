@@ -348,7 +348,7 @@
                             localStorage.removeItem(CART_KEY);
                             if (typeof updateCartBadge === 'function') updateCartBadge();
 
-                            const nomorAdmin = "62895380100550";
+                            const nomorAdmin = "6282177629753";
                             const teksPesan = `Halo Admin, saya ingin mengajukan Permintaan Penawaran Harga.
 
 *Data Pemohon:*
