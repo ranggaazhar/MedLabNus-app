@@ -42,7 +42,8 @@ class PabrikanController extends Controller
 
     public function create()
     {
-        return view('admin.pabrikan.create');
+        $countries = $this->getCountries();
+        return view('admin.pabrikan.create', compact('countries'));
     }
 
     public function store(StorePabrikanRequest $request)
@@ -96,7 +97,8 @@ class PabrikanController extends Controller
 
     public function edit(Pabrikan $pabrikan)
     {
-        return view('admin.pabrikan.edit', compact('pabrikan'));
+        $countries = $this->getCountries();
+        return view('admin.pabrikan.edit', compact('pabrikan', 'countries'));
     }
 
     public function update(UpdatePabrikanRequest $request, Pabrikan $pabrikan)
@@ -170,5 +172,32 @@ class PabrikanController extends Controller
                 ->back()
                 ->with('error', 'Gagal menghapus pabrikan: ' . $e->getMessage());
         }
+    }
+
+    protected function getCountries(): array
+    {
+        return [
+            'Afganistan', 'Afrika Selatan', 'Albania', 'Aljazair', 'Amerika Serikat', 'Andorra', 'Angola', 'Antigua dan Barbuda', 'Arab Saudi', 'Argentina', 'Armenia', 'Australia', 'Austria', 'Azerbaijan',
+            'Bahama', 'Bahrain', 'Bangladesh', 'Barbados', 'Belanda', 'Belarus', 'Belgia', 'Belize', 'Benin', 'Bhutan', 'Bolivia', 'Bosnia dan Herzegovina', 'Botswana', 'Brasil', 'Britania Raya (Inggris)', 'Brunei Darussalam', 'Bulgaria', 'Burkina Faso', 'Burundi',
+            'Ceko', 'Chad', 'Chili', 'Denmark', 'Djibouti', 'Dominika',
+            'Ekuador', 'El Salvador', 'Eritrea', 'Estonia', 'Eswatini', 'Ethiopia',
+            'Federasi Mikronesia', 'Fiji', 'Filipina', 'Finlandia', 'Gabon', 'Gambia', 'Georgia', 'Ghana', 'Grenada', 'Guatemala', 'Guinea', 'Guinea-Bissau', 'Guinea Khatulistiwa', 'Guyana',
+            'Haiti', 'Honduras', 'Hungaria',
+            'India', 'Indonesia', 'Irak', 'Iran', 'Irlandia', 'Islandia', 'Israel', 'Italia',
+            'Jamaika', 'Jepang', 'Jerman', 'Yordania',
+            'Kamboja', 'Kamerun', 'Kanada', 'Kazakhstan', 'Kenya', 'Kepulauan Marshall', 'Kepulauan Solomon', 'Kirgizstan', 'Kiribati', 'Kolombia', 'Komoro', 'Republik Kongo', 'Republik Demokratik Kongo', 'Korea Utara', 'Korea Selatan', 'Kosta Rika', 'Kroasia', 'Kuba', 'Kuwait',
+            'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libia', 'Liechtenstein', 'Lituania', 'Luksemburg',
+            'Madagaskar', 'Makau', 'Makedonia Utara', 'Maladewa', 'Malawi', 'Malaysia', 'Mali', 'Malta', 'Maroko', 'Mauritania', 'Mauritius', 'Meksiko', 'Mesir', 'Moldova', 'Monako', 'Mongolia', 'Montenegro', 'Mozambik', 'Myanmar',
+            'Namibia', 'Nauru', 'Nepal', 'Niger', 'Nigeria', 'Nikaragua', 'Norwegia',
+            'Oman', 'Pakistan', 'Palau', 'Panama', 'Pantai Gading', 'Papua Nugini', 'Paraguay', 'Prancis', 'Peru', 'Polandia', 'Portugal',
+            'Qatar',
+            'Rumania', 'Rusia', 'Rwanda',
+            'Saint Kitts dan Nevis', 'Saint Lucia', 'Saint Vincent dan Grenadines', 'Samoa', 'San Marino', 'Sao Tome dan Principe', 'Selandia Baru', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapura', 'Siprus', 'Slovakia', 'Slovenia', 'Somalia', 'Spanyol', 'Sri Lanka', 'Sudan', 'Sudan Selatan', 'Suriname', 'Swedia', 'Swiss', 'Suriah',
+            'Taiwan', 'Tajikistan', 'Tanjung Verde', 'Tanzania', 'Thailand', 'Timor Leste', 'Togo', 'Tonga', 'Trinidad dan Tobago', 'Tunisia', 'Turki', 'Turkmenistan', 'Tuvalu',
+            'Uganda', 'Ukraina', 'Uni Emirat Arab', 'Uruguay', 'Uzbekistan',
+            'Vanuatu', 'Vatikan', 'Venezuela', 'Vietnam',
+            'Yaman', 'Yunani',
+            'Zambia', 'Zimbabwe'
+        ];
     }
 }

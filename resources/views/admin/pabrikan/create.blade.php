@@ -108,14 +108,49 @@
                     @enderror
                 </div>
 
-                {{-- 2. Asal Negara (TEXTFIELD) --}}
-                <div>
-                    <label for="asal_negara" class="block text-sm font-semibold text-gray-700 mb-2">
+                {{-- 2. Asal Negara (DROPDOWN DENGAN PENCARIAN) --}}
+                <div class="relative" id="countryDropdownContainer">
+                    <label for="asal_negara_display" class="block text-sm font-semibold text-gray-700 mb-2">
                         Asal Negara <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" name="asal_negara" id="asal_negara" placeholder="Contoh: Jerman "
-                        value="{{ old('asal_negara') }}" required
-                        class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:border-red-500 focus:ring-red-500 transition duration-150 shadow-sm @error('asal_negara') border-red-500 @enderror">
+                    
+                    {{-- Hidden input untuk form submission --}}
+                    <input type="hidden" name="asal_negara" id="asal_negara" value="{{ old('asal_negara') }}">
+
+                    {{-- Display input yang bertindak sebagai trigger dropdown --}}
+                    <div class="relative cursor-pointer">
+                        <input type="text" id="asal_negara_display" readonly
+                            placeholder="Pilih Negara"
+                            value="{{ old('asal_negara') }}" required
+                            class="w-full border border-gray-300 rounded-lg px-4 py-2.5 pr-10 focus:border-red-500 focus:ring-red-500 transition duration-150 shadow-sm cursor-pointer @error('asal_negara') border-red-500 @enderror">
+                        <div class="absolute right-3 top-3.5 text-gray-400 pointer-events-none">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+
+                    {{-- Panel Dropdown --}}
+                    <div id="countryDropdownPanel" class="hidden absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg p-3">
+                        {{-- Input pencarian --}}
+                        <div class="relative mb-2">
+                            <input type="text" id="countrySearchInput" placeholder="Cari negara..." 
+                                class="w-full border border-gray-200 rounded-md px-3 py-1.5 pl-8 text-sm focus:border-red-500 focus:ring-red-500 focus:outline-none">
+                            <div class="absolute left-2.5 top-2.5 text-gray-400 text-xs">
+                                <i class="fas fa-search"></i>
+                            </div>
+                        </div>
+                        
+                        {{-- List negara scrollable --}}
+                        <ul id="countryList" class="max-h-48 overflow-y-auto space-y-0.5 text-sm text-gray-700">
+                            @foreach($countries as $country)
+                                <li class="country-item px-3 py-2 hover:bg-red-50 hover:text-red-700 rounded-md cursor-pointer transition-colors duration-100" data-value="{{ $country }}">
+                                    {{ $country }}
+                                </li>
+                            @endforeach
+                            <li id="noCountryFound" class="hidden px-3 py-2 text-gray-400 italic text-center">
+                                Negara tidak ditemukan
+                            </li>
+                        </ul>
+                    </div>
 
                     @error('asal_negara')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -347,6 +382,76 @@
                     imagePreview.classList.add('hidden');
                     previewImg.src = '';
                 });
+
+                // --- CUSTOM COUNTRY DROPDOWN LOGIC ---
+                const dropdownContainer = document.getElementById('countryDropdownContainer');
+                const displayInput = document.getElementById('asal_negara_display');
+                const hiddenInput = document.getElementById('asal_negara');
+                const dropdownPanel = document.getElementById('countryDropdownPanel');
+                const searchInput = document.getElementById('countrySearchInput');
+                const countryList = document.getElementById('countryList');
+                const countryItems = countryList.querySelectorAll('.country-item');
+                const noCountryFound = document.getElementById('noCountryFound');
+
+                // Toggle dropdown panel
+                displayInput.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdownPanel.classList.toggle('hidden');
+                    if (!dropdownPanel.classList.contains('hidden')) {
+                        searchInput.focus();
+                        // Reset search
+                        searchInput.value = '';
+                        filterCountries('');
+                    }
+                });
+
+                // Filter countries based on input
+                searchInput.addEventListener('input', function() {
+                    filterCountries(this.value);
+                });
+
+                // Prevent closing when clicking search input or dropdown panel
+                dropdownPanel.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+
+                // Select country on click
+                countryItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        const val = this.getAttribute('data-value');
+                        displayInput.value = val;
+                        hiddenInput.value = val;
+                        dropdownPanel.classList.add('hidden');
+                        
+                        displayInput.classList.remove('border-red-500');
+                    });
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function() {
+                    dropdownPanel.classList.add('hidden');
+                });
+
+                function filterCountries(query) {
+                    const normalizedQuery = query.toLowerCase().trim();
+                    let foundAny = false;
+
+                    countryItems.forEach(item => {
+                        const text = item.textContent.toLowerCase();
+                        if (text.includes(normalizedQuery)) {
+                            item.classList.remove('hidden');
+                            foundAny = true;
+                        } else {
+                            item.classList.add('hidden');
+                        }
+                    });
+
+                    if (foundAny) {
+                        noCountryFound.classList.add('hidden');
+                    } else {
+                        noCountryFound.classList.remove('hidden');
+                    }
+                }
 
                 // --- 3. FORM VALIDATION Akhir ---
                 document.getElementById('pabrikanForm').addEventListener('submit', function (e) {
