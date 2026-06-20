@@ -143,14 +143,24 @@
                                 <i class="fas fa-eye text-[10px]"></i> Detail
                             </a>
 
-                            <form action="{{ route('admin.penawaran.destroy', $penawaran->id) }}" method="POST" 
-                                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus data penawaran ini secara permanen?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Hapus Data">
+                            @if($penawaran->status === 'pending')
+                                {{-- Tombol Hapus AKTIF: hanya untuk status pending --}}
+                                <form action="{{ route('admin.penawaran.destroy', $penawaran->id) }}" method="POST"
+                                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus data penawaran ini secara permanen?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition" title="Hapus Data">
+                                        <i class="fas fa-trash-alt text-xs"></i>
+                                    </button>
+                                </form>
+                            @else
+                                {{-- Tombol Hapus DISABLED: status disetujui / dibatalkan --}}
+                                <button type="button" disabled
+                                    title="Tidak dapat dihapus (status: {{ ucfirst($penawaran->status) }})"
+                                    class="p-1.5 text-gray-300 bg-gray-50 rounded-lg cursor-not-allowed opacity-50">
                                     <i class="fas fa-trash-alt text-xs"></i>
                                 </button>
-                            </form>
+                            @endif
                         </div>
                     </td>
                 </tr>
@@ -174,8 +184,8 @@
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-3">
         <div>
-            <h3 class="text-base sm:text-lg font-bold text-gray-800 italic">Inbound RFQ Analytics</h3>
-            <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-0.5">Visualisasi Tren Permintaan Penawaran Masuk</p>
+            <h3 class="text-base sm:text-lg font-bold text-gray-800">Grafik Penawaran</h3>
+            <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-0.5">Visualisasi Permintaan Penawaran Masuk</p>
         </div>
         <div class="flex items-center gap-3 bg-gray-50 px-3 py-1.5 rounded-xl border border-gray-100 self-start md:self-center">
             <div class="flex items-center gap-1.5">
@@ -290,4 +300,4 @@
     });
 </script>
 @endpush
-@endsection
+@endsection

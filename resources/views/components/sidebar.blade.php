@@ -141,7 +141,15 @@
                         </button>
 
                         {{-- Anakan Menu --}}
-                        <div x-show="openLog" x-cloak class="mt-1 ml-4 space-y-1 border-l-2 border-gray-100 pl-4">
+                        <div x-show="openLog" 
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 transform -translate-y-2"
+                             x-transition:enter-end="opacity-100 transform translate-y-0"
+                             x-transition:leave="transition ease-in duration-150"
+                             x-transition:leave-start="opacity-100 transform translate-y-0"
+                             x-transition:leave-end="opacity-0 transform -translate-y-2"
+                             x-cloak 
+                             class="mt-1 ml-4 space-y-1 border-l-2 border-gray-100 pl-4">
 
                             {{-- Anak 1: Audit Trail --}}
                             <a href="{{ route('log.index') }}"

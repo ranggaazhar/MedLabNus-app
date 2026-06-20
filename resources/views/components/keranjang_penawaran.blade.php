@@ -315,7 +315,11 @@
 
                 const cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
                 if (cart.length === 0) {
-                    alert('Keranjang belanja Anda kosong!');
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Perhatian',
+                        text: 'Keranjang belanja Anda kosong!'
+                    });
                     return;
                 }
 
@@ -336,20 +340,41 @@
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
+                            "Accept": "application/json",
                             "X-CSRF-TOKEN": "{{ csrf_token() }}"
                         },
                         body: JSON.stringify(payload)
                     })
-                    .then(response => response.json())
+                    .then(async response => {
+                        const isJson = response.headers.get('content-type')?.includes('application/json');
+                        const data = isJson ? await response.json() : null;
+
+                        if (!response.ok) {
+                            let errorMsg = 'Terjadi kesalahan pada server.';
+                            if (data) {
+                                if (data.errors) {
+                                    errorMsg = Object.values(data.errors).flat().join('\n');
+                                } else if (data.message) {
+                                    errorMsg = data.message;
+                                }
+                            }
+                            throw new Error(errorMsg);
+                        }
+                        return data;
+                    })
                     .then(data => {
                         if (data.success) {
-                            alert(data.message);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: data.message,
+                                confirmButtonText: 'Lanjut ke WhatsApp'
+                            }).then((result) => {
+                                localStorage.removeItem(CART_KEY);
+                                if (typeof updateCartBadge === 'function') updateCartBadge();
 
-                            localStorage.removeItem(CART_KEY);
-                            if (typeof updateCartBadge === 'function') updateCartBadge();
-
-                            const nomorAdmin = "6282177629753";
-                            const teksPesan = `Halo Admin, saya ingin mengajukan Permintaan Penawaran Harga.
+                                const nomorAdmin = "6282177629753";
+                                const teksPesan = `Halo Admin, saya ingin mengajukan Permintaan Penawaran Harga.
 
 *Data Pemohon:*
 • *Nama Instansi:* ${document.getElementById('nama_pelanggan').value}
@@ -360,16 +385,28 @@
 Silakan unduh lampiran dokumen resmi melalui tautan di bawah ini:
 ${data.pdf_url}
 
-Terma kasih.`;
+Terima kasih.`;
 
-                            const encodePesan = encodeURIComponent(teksPesan);
-                            const urlWhatsApp =
-                                `https://api.whatsapp.com/send?phone=${nomorAdmin}&text=${encodePesan}`;
+                                const encodePesan = encodeURIComponent(teksPesan);
+                                const urlWhatsApp =
+                                    `https://api.whatsapp.com/send?phone=${nomorAdmin}&text=${encodePesan}`;
 
-                            window.location.href = urlWhatsApp;
+                                window.location.href = urlWhatsApp;
+                            });
                         } else {
-                            alert('Gagal mengirim penawaran: ' + data.message);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: 'Gagal mengirim penawaran: ' + data.message
+                            });
                         }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Terjadi Kesalahan',
+                            text: error.message
+                        });
                     });
             });
         });

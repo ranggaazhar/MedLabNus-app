@@ -18,7 +18,7 @@ class StorePenawaranRequest extends FormRequest
     {
         return [
             'nama_pelanggan' => 'required|string',
-            'whatsapp_pelanggan' => 'required|string',
+            'whatsapp_pelanggan' => 'required|string|max:13',
             'items' => 'required|array',
             'items.*.produk_id' => 'required_without:items.*.id_produk',
             'items.*.id_produk' => 'required_without:items.*.produk_id',
@@ -31,6 +31,7 @@ class StorePenawaranRequest extends FormRequest
         return [
             'nama_pelanggan.required' => 'Nama pelanggan wajib diisi.',
             'whatsapp_pelanggan.required' => 'Nomor WhatsApp wajib diisi.',
+            'whatsapp_pelanggan.max' => 'Nomor WhatsApp maksimal 13 digit.',
             'items.required' => 'Minimal harus ada 1 produk yang dipilih.',
             'items.array' => 'Format item tidak valid.',
             'items.*.jumlah.min' => 'Jumlah barang minimal 1.',

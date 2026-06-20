@@ -26,7 +26,18 @@ class EnsureRole
 
         $user = Auth::guard('admin')->user();
 
-        // 2. Cek apakah role user ada di dalam daftar role yang diperbolehkan
+        // 2. Blokir akses jika akun dinonaktifkan (meski sesi masih aktif)
+        if (!$user->is_active) {
+            Auth::guard('admin')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('login')->withErrors([
+                'email' => 'Akun Anda telah dinonaktifkan. Hubungi administrator untuk informasi lebih lanjut.',
+            ]);
+        }
+
+        // 3. Cek apakah role user ada di dalam daftar role yang diperbolehkan
         if (!in_array($user->role, $roles)) {
             abort(403, 'Akses Ditolak: Anda tidak memiliki wewenang untuk membuka halaman ini.');
         }

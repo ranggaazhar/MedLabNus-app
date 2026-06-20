@@ -34,10 +34,6 @@
                         class="px-4 py-2 text-xs font-bold border border-[#B1252E] text-[#B1252E] rounded-full hover:bg-red-50 transition-all">
                         View Cart
                     </a>
-                    <button type="button" onclick="closeCartModal()"
-                        class="px-4 py-2 text-xs font-bold bg-[#B1252E] text-white rounded-full hover:bg-[#8f1d24] shadow-md hover:shadow-lg transition-all">
-                        Buy It Now
-                    </button>
                 </div>
             </div>
         </div>

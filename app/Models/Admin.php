@@ -19,7 +19,9 @@ class Admin extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
         'no_telp',
+        'is_active',
     ];
 
     // Kolom yang harus disembunyikan (tidak muncul saat return JSON/Array)
@@ -32,6 +34,7 @@ class Admin extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed', // Penting di Laravel 10+ agar password otomatis di-hash
+        'is_active' => 'boolean',
     ];
 
     public function mutasiStok()

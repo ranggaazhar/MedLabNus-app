@@ -99,18 +99,18 @@
             </div>
             <div class="space-y-3.5">
                 @forelse ($topProduk as $index => $prod)
-                    <div class="flex items-center justify-between border-b border-gray-50 pb-2.5 last:border-0 last:pb-0">
-                        <div class="flex items-center gap-3">
-                            <div class="w-7 h-7 rounded-lg font-bold text-xs flex items-center justify-center 
+                    <div class="flex items-center justify-between border-b border-gray-50 pb-2.5 last:border-0 last:pb-0 gap-2">
+                        <div class="flex items-center gap-3 min-w-0 flex-1">
+                            <div class="w-7 h-7 rounded-lg font-bold text-xs flex items-center justify-center flex-shrink-0
                                 {{ $index == 0 ? 'bg-red-700 text-white shadow-sm' : 'bg-gray-50 border border-gray-100 text-gray-500' }}">
                                 {{ $index + 1 }}
                             </div>
-                            <div class="max-w-[140px] sm:max-w-none">
-                                <p class="text-xs font-bold text-gray-700 truncate">{{ $prod->nama_produk }}</p>
-                                <p class="text-[10px] text-gray-400 truncate">{{ $prod->pabrikan ? $prod->pabrikan->nama_pabrikan : 'Tanpa Pabrikan' }}</p>
+                            <div class="min-w-0 flex-1">
+                                <p class="text-xs font-bold text-gray-700 truncate" title="{{ $prod->nama_produk }}">{{ $prod->nama_produk }}</p>
+                                <p class="text-[10px] text-gray-400 truncate" title="{{ $prod->pabrikan ? $prod->pabrikan->nama_pabrikan : 'Tanpa Pabrikan' }}">{{ $prod->pabrikan ? $prod->pabrikan->nama_pabrikan : 'Tanpa Pabrikan' }}</p>
                             </div>
                         </div>
-                        <span class="text-[10px] font-black uppercase bg-red-50 border border-red-100 text-red-600 px-2 py-1 rounded-md" title="Kategori: {{ $prod->kategori }}">
+                        <span class="text-[10px] font-black uppercase bg-red-50 border border-red-100 text-red-600 px-2 py-1 rounded-md flex-shrink-0" title="Kategori: {{ $prod->kategori }}">
                             {{ $prod->total_terjual ?? 0 }} Terjual
                         </span>
                     </div>

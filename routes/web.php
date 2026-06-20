@@ -57,6 +57,7 @@ Route::middleware('auth:admin')->group(function () {
 
         Route::get('/staff', [App\Http\Controllers\Admin\StaffController::class, 'index'])->name('staff.index');
         Route::post('/staff', [App\Http\Controllers\Admin\StaffController::class, 'store'])->name('staff.store');
+        Route::patch('/staff/{staff}/toggle-status', [App\Http\Controllers\Admin\StaffController::class, 'toggleStatus'])->name('staff.toggle-status');
     });
 
     // ========== KHUSUS GUDANG (role: gudang, prefix: gudang) ==========

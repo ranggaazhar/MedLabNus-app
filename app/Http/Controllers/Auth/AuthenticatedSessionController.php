@@ -28,11 +28,22 @@ class AuthenticatedSessionController extends Controller
 
         // 1. Coba Login sebagai Staff Internal (Admin / Gudang berada di tabel & guard yang sama)
         if (Auth::guard('admin')->attempt($credentials, $request->boolean('remember'))) {
-            \Illuminate\Support\Facades\RateLimiter::clear($request->throttleKey());
-            $request->session()->regenerate();
-
             // Ambil data user internal yang baru saja login
             $user = Auth::guard('admin')->user();
+
+            // BLOKIR AKUN YANG DINONAKTIFKAN
+            if (!$user->is_active) {
+                Auth::guard('admin')->logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return back()->withErrors([
+                    'email' => 'Akun Anda telah dinonaktifkan. Hubungi administrator untuk informasi lebih lanjut.',
+                ])->onlyInput('email');
+            }
+
+            \Illuminate\Support\Facades\RateLimiter::clear($request->throttleKey());
+            $request->session()->regenerate();
 
             // REDIRECT DINAMIS BERDASARKAN ROLE
             if ($user->role === 'gudang') {

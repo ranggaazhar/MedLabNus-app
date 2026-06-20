@@ -38,7 +38,7 @@
                 <span class="mx-2 text-gray-300">/</span>
                 <span class="text-gray-600">Detail</span>
             </div>
-            <h1 class="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">Detail Produk</h1>
+            <h1 class="text-3xl font-extrabold text-gray-800 mt-1">Detail Produk</h1>
         </div>
 
         <div>

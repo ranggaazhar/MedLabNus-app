@@ -31,8 +31,25 @@ class StaffController extends Controller
             'password' => Hash::make($request->password),
             'role' => 'gudang',  
             'no_telp' => $request->no_telp,
+            'is_active' => true,
         ]);
 
         return redirect()->route('staff.index')->with('success', 'Akun Staf Gudang Baru Berhasil Dibuat!');
+    }
+
+    public function toggleStatus(Admin $staff)
+    {
+        // Pastikan hanya akun gudang yang bisa diubah statusnya
+        if ($staff->role !== 'gudang') {
+            return redirect()->route('staff.index')->with('error', 'Aksi tidak diizinkan.');
+        }
+
+        $staff->is_active = !$staff->is_active;
+        $staff->save();
+
+        $statusLabel = $staff->is_active ? 'diaktifkan' : 'dinonaktifkan';
+        $message = "Akun staf \"{$staff->name}\" berhasil {$statusLabel}.";
+
+        return redirect()->route('staff.index')->with('success', $message);
     }
 }
