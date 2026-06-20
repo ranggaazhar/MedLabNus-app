@@ -34,6 +34,7 @@
                     $isAuditActive = request()->routeIs('log.index'); // Spatie Audit
                     $isMutasiActive = request()->routeIs('stok-mutasi.*'); // Stok Mutasi
                     $isLogGroupActive = $isAuditActive || $isMutasiActive;
+                    $isStaffActive = request()->routeIs('staff.*');
 
                     $isDashboardStrict = request()->routeIs('admin.dashboard') || request()->routeIs('gudang.dashboard');
                     $dashboardRoute = ($authAdmin && $authAdmin->role === 'admin') ? route('admin.dashboard') : route('gudang.dashboard');
@@ -46,7 +47,7 @@
                             !$isPenawaranActive &&
                             !$isInvoiceActive &&
                             !$isLogGroupActive &&
-                            !request()->routeIs('admin.staff.*'));
+                            !$isStaffActive);
                 @endphp
 
                 {{-- 1. Link Dashboard (Admin & Gudang Bisa Lihat) --}}
@@ -115,9 +116,9 @@
                     {{-- Link Manajemen Gudang --}}
                     <a href="{{ route('staff.index') }}"
                         class="!flex items-center gap-3 p-3 rounded-lg text-sm font-medium transition-colors w-full
-                        {{ request()->routeIs('admin.staff.*') ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
+                        {{ $isStaffActive ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-100' }}">
                         <div class="w-6 h-6 flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-user-shield text-lg {{ request()->routeIs('admin.staff.*') ? 'text-red-700' : 'text-gray-400' }}"></i>
+                            <i class="fas fa-user-shield text-lg {{ $isStaffActive ? 'text-red-700' : 'text-gray-400' }}"></i>
                         </div>
                         <span>Manajemen Gudang</span>
                     </a>
