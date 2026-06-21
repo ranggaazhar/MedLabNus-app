@@ -623,7 +623,104 @@
                 // ==========================================
                 // 3. IMAGE PREVIEW (Optimized)
                 // ==========================================
-                // ... (Logika drag-drop kamu sudah bagus, pastikan ID elemen sesuai)
+                const dropZone = document.getElementById('dropZone');
+                const fileInput = document.getElementById('gambar_utama');
+                const imagePreview = document.getElementById('imagePreview');
+                const previewImg = document.getElementById('previewImg');
+                const removeBtn = document.getElementById('removeImageBtn');
+                const uploadIcon = document.getElementById('uploadIcon');
+                const MAX_FILE_SIZE = 10485760; // 10 MB in bytes
+
+                if (dropZone && fileInput) {
+                    // Prevent browser default behaviors
+                    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                        dropZone.addEventListener(eventName, preventDefaults, false);
+                    });
+
+                    function preventDefaults(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+
+                    // Highlight drop zone
+                    ['dragenter', 'dragover'].forEach(eventName => {
+                        dropZone.addEventListener(eventName, () => {
+                            dropZone.classList.add('border-red-500', 'bg-red-50');
+                            if (uploadIcon) {
+                                uploadIcon.classList.remove('text-gray-300');
+                                uploadIcon.classList.add('text-red-500');
+                            }
+                        }, false);
+                    });
+
+                    // Unhighlight drop zone
+                    ['dragleave', 'drop'].forEach(eventName => {
+                        dropZone.addEventListener(eventName, () => {
+                            dropZone.classList.remove('border-red-500', 'bg-red-50');
+                            if (uploadIcon) {
+                                uploadIcon.classList.add('text-gray-300');
+                                uploadIcon.classList.remove('text-red-500');
+                            }
+                        }, false);
+                    });
+
+                    // Handle file drop
+                    dropZone.addEventListener('drop', function (e) {
+                        const dt = e.dataTransfer;
+                        const files = dt.files;
+                        if (files.length > 0) {
+                            fileInput.files = files;
+                            handleFiles(files[0]);
+                        }
+                    }, false);
+
+                    // Handle file browse
+                    fileInput.addEventListener('change', function (e) {
+                        if (this.files.length > 0) {
+                            handleFiles(this.files[0]);
+                        }
+                    });
+
+                    // Fungsi menampilkan preview dan validasi
+                    function handleFiles(file) {
+                        // Validasi tipe file
+                        if (!file.type.startsWith('image/')) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'File harus berupa gambar!'
+                            });
+                            fileInput.value = '';
+                            return;
+                        }
+                        // Validasi ukuran (10MB)
+                        if (file.size > MAX_FILE_SIZE) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Ukuran file maksimal 10MB!'
+                            });
+                            fileInput.value = '';
+                            return;
+                        }
+
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            previewImg.src = e.target.result;
+                            imagePreview.classList.remove('hidden');
+                        }
+                        reader.readAsDataURL(file);
+                    }
+
+                    // Tombol Hapus Preview
+                    if (removeBtn) {
+                        removeBtn.addEventListener('click', function () {
+                            fileInput.value = '';
+                            imagePreview.classList.add('hidden');
+                            previewImg.src = '';
+                        });
+                    }
+                }
 
                 // ==========================================
                 // 4. FORM VALIDATION (Enhanced)

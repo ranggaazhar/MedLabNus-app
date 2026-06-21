@@ -40,8 +40,8 @@
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
             <div class="mb-4 md:mb-0">
                 <p class="text-sm text-gray-500">
-                    <a href="{{ route('dashboard') }}" class="hover:text-red-700 transition duration-150">Dashboard</a> /
-                    Edit
+                    <a href="{{ route('produk.index') }}" class="hover:text-red-700 transition duration-150">Produk</a> /
+                    Edit Product
                 </p>
                 <h1 class="text-3xl font-extrabold text-gray-800 mt-1">Edit Product</h1>
                 <p class="text-gray-500">Perbarui informasi produk medical equipment</p>
@@ -317,7 +317,7 @@
                         <div class="mb-6">
                             <p class="text-sm font-semibold text-gray-700 mb-3">Gambar Saat Ini:</p>
                             <div class="relative inline-block">
-                                <img src="{{ asset('storage/' . $produk->gambar_utama) }}"
+                                <img src="{{ asset($produk->gambar_utama) }}"
                                     alt="{{ $produk->nama_produk }}"
                                     class="h-48 w-auto object-cover rounded-lg border-2 border-gray-200 shadow-md">
                             </div>
@@ -333,21 +333,18 @@
 
                         {{-- Area Drop Zone --}}
                         <div id="dropZone"
-                            class="w-full border-2 border-dashed border-gray-300 rounded-lg p-8 text-center transition-all duration-200 ease-in-out bg-white hover:bg-gray-50 cursor-pointer relative">
-
-                            {{-- Input File Asli (Hidden tapi menutupi seluruh area) --}}
+                            class="w-full border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-red-500 hover:bg-gray-50 transition-colors transition-all duration-200 ease-in-out bg-white">
                             <input type="file" name="gambar_utama" id="gambar_utama" accept="image/*"
-                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-
-                            {{-- Visual Content --}}
-                            <div class="flex flex-col items-center pointer-events-none">
-                                <i id="uploadIcon"
-                                    class="fas fa-cloud-upload-alt text-4xl text-gray-300 mb-2 transition-colors"></i>
-                                <p class="text-sm text-gray-600 mb-1">
-                                    <span class="font-semibold text-red-600">Click to upload</span> or drag and drop
-                                </p>
-                                <p class="text-xs text-gray-400">Max 10 MB files are allowed</p>
-                            </div>
+                                class="hidden">
+                            <label for="gambar_utama" class="cursor-pointer block w-full h-full">
+                                <div class="flex flex-col items-center pointer-events-none">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-300 mb-2 transition-colors"
+                                        id="uploadIcon"></i>
+                                    <p class="text-sm text-gray-600 mb-1">Drag your file here or <span
+                                            class="text-red-600 font-semibold">browse</span></p>
+                                    <p class="text-xs text-gray-400">Max 10 MB files are allowed</p>
+                                </div>
+                            </label>
                         </div>
                         @error('gambar_utama')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -355,17 +352,16 @@
                     </div>
 
                     {{-- Preview Gambar Baru --}}
-                    <div id="imagePreview" class="hidden">
+                    <div id="imagePreview" class="hidden mt-4">
                         <p class="text-sm font-semibold text-gray-700 mb-3">Preview Gambar Baru:</p>
                         <div class="relative inline-block">
-                            <img src="" alt="Preview"
+                            <img id="previewImg" src="" alt="Preview"
                                 class="h-48 w-auto object-cover rounded-lg border-2 border-gray-200 shadow-md">
                             <button type="button" id="removeImageBtn"
                                 class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-2 hover:bg-red-700 transition-colors shadow-lg z-20">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
-                        <p id="fileName" class="text-xs text-gray-500 mt-2 font-medium"></p>
                     </div>
                 </div>
             </div>
@@ -555,47 +551,14 @@
             // ==========================================
             const dropZone = document.getElementById('dropZone');
             const fileInput = document.getElementById('gambar_utama');
-            const preview = document.getElementById('imagePreview');
-            const previewImg = preview.querySelector('img');
+            const imagePreview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
             const removeBtn = document.getElementById('removeImageBtn');
             const uploadIcon = document.getElementById('uploadIcon');
-            const fileNameDisplay = document.getElementById('fileName');
+            const MAX_FILE_SIZE = 10485760; // 10 MB in bytes
 
             if (dropZone && fileInput) {
-                // Fungsi untuk menampilkan preview
-                function showPreview(file) {
-                    if (file) {
-                        if (file.size > 10 * 1024 * 1024) {
-                            Swal.fire('Error', 'Ukuran file maksimal 10MB!', 'error');
-                            resetImage();
-                            return;
-                        }
-
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            previewImg.src = e.target.result;
-                            preview.classList.remove('hidden');
-                            fileNameDisplay.textContent = file.name;
-                        }
-                        reader.readAsDataURL(file);
-                    }
-                }
-
-                // Fungsi Reset Gambar
-                function resetImage() {
-                    fileInput.value = '';
-                    preview.classList.add('hidden');
-                    previewImg.src = '';
-                    fileNameDisplay.textContent = '';
-                }
-
-                // Event Listener untuk Input File Biasa
-                fileInput.addEventListener('change', function(e) {
-                    const file = e.target.files[0];
-                    showPreview(file);
-                });
-
-                // Drag & Drop Events
+                // Prevent browser default behaviors
                 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
                     dropZone.addEventListener(eventName, preventDefaults, false);
                 });
@@ -605,49 +568,83 @@
                     e.stopPropagation();
                 }
 
-                // Highlight Effect
+                // Highlight drop zone
                 ['dragenter', 'dragover'].forEach(eventName => {
-                    dropZone.addEventListener(eventName, highlight, false);
+                    dropZone.addEventListener(eventName, () => {
+                        dropZone.classList.add('border-red-500', 'bg-red-50');
+                        if (uploadIcon) {
+                            uploadIcon.classList.remove('text-gray-300');
+                            uploadIcon.classList.add('text-red-500');
+                        }
+                    }, false);
                 });
 
+                // Unhighlight drop zone
                 ['dragleave', 'drop'].forEach(eventName => {
-                    dropZone.addEventListener(eventName, unhighlight, false);
+                    dropZone.addEventListener(eventName, () => {
+                        dropZone.classList.remove('border-red-500', 'bg-red-50');
+                        if (uploadIcon) {
+                            uploadIcon.classList.add('text-gray-300');
+                            uploadIcon.classList.remove('text-red-500');
+                        }
+                    }, false);
                 });
 
-                function highlight(e) {
-                    dropZone.classList.add('border-red-500', 'bg-red-50');
-                    dropZone.classList.remove('border-gray-300', 'bg-white');
-                    if (uploadIcon) {
-                        uploadIcon.classList.add('text-red-500');
-                        uploadIcon.classList.remove('text-gray-300');
-                    }
-                }
-
-                function unhighlight(e) {
-                    dropZone.classList.remove('border-red-500', 'bg-red-50');
-                    dropZone.classList.add('border-gray-300', 'bg-white');
-                    if (uploadIcon) {
-                        uploadIcon.classList.remove('text-red-500');
-                        uploadIcon.classList.add('text-gray-300');
-                    }
-                }
-
-                // Handle Drop
-                dropZone.addEventListener('drop', handleDrop, false);
-
-                function handleDrop(e) {
+                // Handle file drop
+                dropZone.addEventListener('drop', function (e) {
                     const dt = e.dataTransfer;
                     const files = dt.files;
-
                     if (files.length > 0) {
-                        fileInput.files = files; // Assign files ke input
-                        showPreview(files[0]);
+                        fileInput.files = files;
+                        handleFiles(files[0]);
                     }
+                }, false);
+
+                // Handle file browse
+                fileInput.addEventListener('change', function (e) {
+                    if (this.files.length > 0) {
+                        handleFiles(this.files[0]);
+                    }
+                });
+
+                // Fungsi menampilkan preview dan validasi
+                function handleFiles(file) {
+                    // Validasi tipe file
+                    if (!file.type.startsWith('image/')) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'File harus berupa gambar!'
+                        });
+                        fileInput.value = '';
+                        return;
+                    }
+                    // Validasi ukuran (10MB)
+                    if (file.size > MAX_FILE_SIZE) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Ukuran file maksimal 10MB!'
+                        });
+                        fileInput.value = '';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        previewImg.src = e.target.result;
+                        imagePreview.classList.remove('hidden');
+                    }
+                    reader.readAsDataURL(file);
                 }
 
-                // Remove Button
+                // Tombol Hapus Preview
                 if (removeBtn) {
-                    removeBtn.addEventListener('click', resetImage);
+                    removeBtn.addEventListener('click', function () {
+                        fileInput.value = '';
+                        imagePreview.classList.add('hidden');
+                        previewImg.src = '';
+                    });
                 }
             }
 
